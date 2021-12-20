@@ -15,5 +15,6 @@ typedef struct date
 char **Read_Split_Line_File(FILE *f, int n_campos_max, int *n_campos_lidos, char *separadores);
 int getNumberOfLinesInFile(FILE *f);
 FILE *openFile(char *fileName, char *mode);
+int compareDates(DATE d1, DATE d2);
 
 #endif

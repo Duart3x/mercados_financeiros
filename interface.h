@@ -4,5 +4,7 @@
 #define INTERFACE_H
 
 void drawExchangeRatesTable(EXCHANGERATE *exchangeRate, int linhasLidas);
+void drawExchangeRates(EXCHANGERATE *exchangeRates, int linhasLidas);
+void drawExchangeRate(EXCHANGERATE exchangeRate);
 
 #endif

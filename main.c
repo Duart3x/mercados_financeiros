@@ -11,6 +11,8 @@
 int main(){
     
     EXCHANGERATE *exchangeRate;
+    EXCHANGERATE findExchange;
+
     int linhasLidas;
 
     FILE* fp = openFile("files/exchangeRates.txt", "r");
@@ -18,7 +20,11 @@ int main(){
         return 1;
 
     exchangeRate = readExchangeRatesFile(fp, &linhasLidas);
-    // drawExchangeRatesTable(exchangeRate, linhasLidas);
+    drawExchangeRates(exchangeRate, linhasLidas);
+
+    findExchange = getExchangeRateByDate(exchangeRate, linhasLidas, (DATE){.day = 10, .month = 7, .year = 2003});
+
+    //drawExchangeRate(findExchange);
 
     free(exchangeRate);
     return 0;

@@ -54,3 +54,27 @@ EXCHANGERATE* readExchangeRatesFile(FILE* f, int* linhasLidas)
 
     return exchangeRate;
 }
+
+EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int linhasLidas, DATE date)
+{
+    EXCHANGERATE exchangeRate;
+    int middle = linhasLidas/2;
+
+    if(compareDates(exchangeRates[middle].conversionDate,date) == 0)
+        return exchangeRates[middle];
+    else if(compareDates(exchangeRates[middle].conversionDate,date) == -1)
+    {
+        if(linhasLidas == 1)
+            return exchangeRates[middle];
+        else
+            return getExchangeRateByDate(exchangeRates, middle, date);
+    }
+    else
+    {
+        if(linhasLidas == 1)
+            return exchangeRates[middle];
+        else
+            return getExchangeRateByDate(exchangeRates+middle, linhasLidas-middle, date);
+    }
+}
+

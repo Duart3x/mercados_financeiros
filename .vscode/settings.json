@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "utils.h": "c",
-        "exchangerates.h": "c"
+        "exchangerates.h": "c",
+        "numbers": "c"
     }
 }

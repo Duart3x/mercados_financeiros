@@ -53,3 +53,36 @@ FILE *openFile(char *fileName, char *mode)
     }
     return f;
 }
+
+/**
+ * @brief Compara duas datas
+ * @param d1
+ * @param d2
+ * 
+ * @return 1 se d1 > d2 | 0 se d1 == d2 | -1 se d1 < d2  
+ * 
+ * 
+ * 
+*/
+int compareDates(DATE d1, DATE d2)
+{
+    if (d1.year < d2.year)
+       return -1;
+
+    else if (d1.year > d2.year)
+       return 1;
+
+    if (d1.year == d2.year)
+    {
+         if (d1.month<d2.month)
+              return -1;
+         else if (d1.month>d2.month)
+              return 1;
+         else if (d1.day<d2.day)
+              return -1;
+         else if(d1.day>d2.day)
+              return 1;
+         else
+              return 0;
+    }
+}

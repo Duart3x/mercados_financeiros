@@ -5,8 +5,11 @@
 #include<ctype.h>
 #include"utils.h"
 #include"exchangeRates.h"
+#include"interface.h"
 
-void drawExchangeRatesTable(EXCHANGERATE *exchangeRate, int linhasLidas)
+
+
+void drawExchangeRatesTable(EXCHANGERATE *exchangeRates, int linhasLidas)
 {
     /**
      * Draw table with | and - characters
@@ -14,7 +17,7 @@ void drawExchangeRatesTable(EXCHANGERATE *exchangeRate, int linhasLidas)
      * put fill the rest of the table with the exchangeRate values
     */
    
-   /* int i;
+    int i;
     printf("\n");
     printf("| Data       |");
     for(i = 0; i < EXCHANGES_SIZE; i++)
@@ -27,19 +30,27 @@ void drawExchangeRatesTable(EXCHANGERATE *exchangeRate, int linhasLidas)
 
     for(i = 0; i < linhasLidas; i++)
     {
-        printf("| %02d-%02d-%02d |", exchangeRate[i].conversionDate.day, exchangeRate[i].conversionDate.month, exchangeRate[i].conversionDate.year);
+        printf("| %02d-%02d-%02d |", exchangeRates[i].conversionDate.day, exchangeRates[i].conversionDate.month, exchangeRates[i].conversionDate.year);
         for(int j = 0; j < EXCHANGES_SIZE; j++)
-            printf(" %.2lf   |", exchangeRate[i].currencies[j]);
+            printf(" %.2lf   |", exchangeRates[i].currencies[j]);
         printf("\n");
     }
-*/
+}
+
+void drawExchangeRates(EXCHANGERATE *exchangeRates, int linhasLidas)
+{
     printf("\n\n");
     for (int i = 0; i < linhasLidas; i++)
     {
-        printf("\n[%02d-%02d-%02d]\n", exchangeRate[i].conversionDate.day, exchangeRate[i].conversionDate.month, exchangeRate[i].conversionDate.year);
-        for (int j = 0; j < EXCHANGES_SIZE; j++)
-        {
-            printf("\t%s = %.02f\n", EXCHANGES[j], exchangeRate[i].currencies[j]);
-        }
+        drawExchangeRate(exchangeRates[i]);
+    }
+}
+
+void drawExchangeRate(EXCHANGERATE exchangeRate)
+{
+    printf("\n[%02d-%02d-%02d]\n", exchangeRate.conversionDate.day, exchangeRate.conversionDate.month, exchangeRate.conversionDate.year);
+    for (int j = 0; j < EXCHANGES_SIZE; j++)
+    {
+        printf("\t%s = %.02f\n", EXCHANGES[j], exchangeRate.currencies[j]);
     }
 }
