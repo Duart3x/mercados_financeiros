@@ -4,6 +4,7 @@
         "exchangerates.h": "c",
         "numbers": "c",
         "interface.h": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "conio.h": "c"
     }
 }

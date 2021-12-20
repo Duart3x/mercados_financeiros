@@ -18,6 +18,7 @@ int main(){
     EXCHANGERATE findExchange;
 
     int linhasLidas;
+    int op;
 
     FILE* fp = openFile("files/exchangeRates.txt", "r");
     if(fp == NULL)
@@ -30,7 +31,11 @@ int main(){
 
     //drawExchangeRate(findExchange);
 
-    menuWithExchangeRatesPagination(exchangeRate, linhasLidas);
+    //menuWithExchangeRatesPagination(exchangeRate, linhasLidas);
+
+    char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
+    op = drawMenu(opcoes, 4, "Menu");
+    printf("%d fdp", op);
     
 
     free(exchangeRate);

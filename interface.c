@@ -3,9 +3,16 @@
 #include<malloc.h>
 #include<math.h>
 #include<ctype.h>
+#include<stdlib.h>
+#include<conio.h>
 #include"utils.h"
 #include"exchangeRates.h"
 #include"interface.h"
+
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_ESC 27
+#define KEY_ENTER 13
 
 
 void drawExchangeRatesTable(EXCHANGERATE *exchangeRates, int linhasLidas)
@@ -127,4 +134,53 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLida
 
     } while (opcao != 5);
     
+}
+
+int drawMenu(char *opcoes[], int numOpcoes, char *title)
+{
+    int key = 0;
+    int option = 1;
+    int i;
+
+    do
+    {   
+        system("cls");
+
+        printf("\n  ********\t%s\t********\n", title);
+        printf("  *                            *\n");
+        for (i = 0; i < numOpcoes; i++)
+        {
+            printf("    %s %s\n", (option == i + 1) ? "->": "  ", opcoes[i]);
+        }
+        printf("  *                            *\n");
+        printf("  ******************************\n");
+        key = getch();
+
+        /*printf("\n   ******** Menu Principal ********\n");
+        printf("   *                              *\n");
+        printf("   * %s Opcao 1                   *\n", (option == 1) ? "->": "  ");
+        printf("   * %s Opcao 2                   *\n", (option == 2) ? "->": "  ");
+        printf("   *                              *\n");
+        printf("   ********************************\n");*/
+
+        if (key == KEY_ESC)
+            return 0;
+
+        if(key == KEY_UP)
+        {
+            if(option > 1)
+                option--;
+            else option = 1;
+        }
+
+        if(key == KEY_DOWN)
+        {
+            if(option < numOpcoes)
+                option++;
+            else option = numOpcoes;
+        }
+
+    } while(key != KEY_ENTER);
+
+    return option;
 }
