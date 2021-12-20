@@ -164,7 +164,7 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
         printf("   ********************************\n");*/
 
         if (key == KEY_ESC)
-            return 0;
+            return -1;
 
         if(key == KEY_UP)
         {
