@@ -2,6 +2,8 @@
     "files.associations": {
         "utils.h": "c",
         "exchangerates.h": "c",
-        "numbers": "c"
+        "numbers": "c",
+        "interface.h": "c",
+        "ctype.h": "c"
     }
 }

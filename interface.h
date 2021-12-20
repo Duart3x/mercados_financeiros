@@ -6,5 +6,7 @@
 void drawExchangeRatesTable(EXCHANGERATE *exchangeRate, int linhasLidas);
 void drawExchangeRates(EXCHANGERATE *exchangeRates, int linhasLidas);
 void drawExchangeRate(EXCHANGERATE exchangeRate);
+void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLidas, int paginaAtual, int linhasPorPagina);
+void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLidas);
 
 #endif
