@@ -15,8 +15,9 @@ int main(){
     char* res = setlocale(LC_ALL, ".UTF8");
 	if (res == NULL) puts("setlocale failed");
 
-    EXCHANGERATE *exchangeRate;
+    EXCHANGERATE *exchangeRates;
     EXCHANGERATE findExchange;
+    char** sortedCurrencies;
 
     int numRows;
     int op;
@@ -25,21 +26,29 @@ int main(){
     if(fp == NULL)
         return 1;
 
-    exchangeRate = readExchangeRatesFile(fp, &numRows);
-    // drawExchangeRates(exchangeRate, numRows);
+    exchangeRates = readExchangeRatesFile(fp, &numRows);
+    // drawExchangeRates(exchangeRates, numRows);
 
-    // findExchange = getExchangeRateByDate(exchangeRate, numRows, (DATE){.day = 10, .month = 7, .year = 2003});
+    // findExchange = getExchangeRateByDate(exchangeRates, numRows, (DATE){.day = 10, .month = 7, .year = 2003});
 
     //drawExchangeRate(findExchange);
 
 
-    //menuWithExchangeRatesPagination(exchangeRate, numRows);
+    menuWithExchangeRatesPagination(exchangeRates, numRows);
 
     /*char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
     op = drawMenu(opcoes, 4, "Menu");
     printf("%d fdp", op);*/
-    
 
-    free(exchangeRate);
+    char** clonedCurrencies = cloneCurrenciesArray();
+
+
+    EXCHANGERATE* rates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows, clonedCurrencies);
+
+    
+    free(clonedCurrencies);
+    free(sortedCurrencies);
+
+    free(exchangeRates);
     return 0;
 }

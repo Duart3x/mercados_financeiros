@@ -15,92 +15,103 @@
 #define KEY_ENTER 13
 
 
-void drawExchangeRatesTable(EXCHANGERATE *exchangeRates, int numRows)
-{
-    /**
-     * Draw table with | and - characters
-     * put a header row with: Data | USD | JPY | BGN | CYP | CZK | DKK | EEK | GBP | HUF | LTL | LVL | MTL | PLN | ROL | RON | SEK | SIT | SKK | CHF | ISK | NOK | HRK | RUB | TRL | TRY | AUD | BRL | CAD | CNY | HKD | IDR | ILS | INR | KRW | MXN | MYR | NZD | PHP | SGD | THB | ZAR
-     * put fill the rest of the table with the exchangeRate values
-    */
-   
-    int i;
-    printf("\n");
-    printf("| Data       |");
-    for(i = 0; i < EXCHANGES_SIZE; i++)
-        printf("  %s   |", EXCHANGES[i]);
-    printf("\n");
-    printf("|");
-    for(i = 0; i < 28; i++)
-        printf("---------");
-    printf("|\n");
-
-    for(i = 0; i < numRows; i++)
-    {
-        printf("| %02d-%02d-%02d |", exchangeRates[i].conversionDate.day, exchangeRates[i].conversionDate.month, exchangeRates[i].conversionDate.year);
-        for(int j = 0; j < EXCHANGES_SIZE; j++)
-            printf(" %.2lf   |", exchangeRates[i].currencies[j]);
-        printf("\n");
-    }
-}
-
 void drawExchangeRates(EXCHANGERATE *exchangeRates, int numRows)
 {
     printf("\n\n");
     for (int i = 0; i < numRows; i++)
     {
-        drawExchangeRate(exchangeRates[i]);
+        drawExchangeRate(exchangeRates[i],NULL);
     }
 }
 
-void drawExchangeRate(EXCHANGERATE exchangeRate)
+void drawExchangeRate(EXCHANGERATE exchangeRate, char** sortedCurrencies)
 {
-    int middle = ceil(EXCHANGES_SIZE / 2.0);
+    int middle = ceil(CURRENCIES_SIZE / 2.0);
     printf("\n[%02d-%02d-%02d]\n", exchangeRate.conversionDate.day, exchangeRate.conversionDate.month, exchangeRate.conversionDate.year);
+
     float value1, value2;
     char *strVal1 = malloc(sizeof(char) * 4);
     char *strVal2 = malloc(sizeof(char) * 4);
 
-    strVal1 = NULL;
-    strVal2 = NULL;
-
-    for (int j = 0; j < ceil(EXCHANGES_SIZE / 2.0); j++)
+    if(sortedCurrencies == NULL)
     {
-        value1 = exchangeRate.currencies[j];
-        value2 = exchangeRate.currencies[j + middle];
-
-        if (value1 == -1)
-            strVal1 = "N/A";
-        if (value2 == -1)
-            strVal2 = "N/A";
-
-        if(j + middle > EXCHANGES_SIZE - 1)
-        {
-            if(strVal1 != NULL)
-                printf("\t%s = %s\n", EXCHANGES[j], strVal1);
-            else
-                printf("\t%s = %.02lf\n", EXCHANGES[j], value1);
-        }
-        else
-        {
-            if(strVal1 != NULL && strVal2 != NULL)
-                printf("\t%s = %s \t %s = %s\n", EXCHANGES[j], strVal1, EXCHANGES[j + middle], strVal2);
-            else if(strVal1 != NULL)
-                printf("\t%s = %s \t %s = %.02lf \n", EXCHANGES[j], strVal1, EXCHANGES[j + middle], value2);
-            else if(strVal2 != NULL)
-                printf("\t%s = %.02lf \t %s = %s\n", EXCHANGES[j], value1, EXCHANGES[j + middle], strVal2);
-            else
-                printf("\t%s = %.02lf \t %s = %.02lf\n", EXCHANGES[j], value1, EXCHANGES[j + middle], value2);
-        }
-
         strVal1 = NULL;
         strVal2 = NULL;
-            
+
+        for (int j = 0; j < ceil(CURRENCIES_SIZE / 2.0); j++)
+        {
+            value1 = exchangeRate.currencies[j];
+            value2 = exchangeRate.currencies[j + middle];
+
+            if (value1 == -1)
+                strVal1 = "N/A";
+            if (value2 == -1)
+                strVal2 = "N/A";
+
+            if(j + middle > CURRENCIES_SIZE - 1)
+            {
+                if(strVal1 != NULL)
+                    printf("\t%s = %s\n", CURRENCIES[j], strVal1);
+                else
+                    printf("\t%s = %.02lf\n", CURRENCIES[j], value1);
+            }
+            else
+            {
+                if(strVal1 != NULL && strVal2 != NULL)
+                    printf("\t%s = %s \t %s = %s\n", CURRENCIES[j], strVal1, CURRENCIES[j + middle], strVal2);
+                else if(strVal1 != NULL)
+                    printf("\t%s = %s \t %s = %.02lf \n", CURRENCIES[j], strVal1, CURRENCIES[j + middle], value2);
+                else if(strVal2 != NULL)
+                    printf("\t%s = %.02lf \t %s = %s\n", CURRENCIES[j], value1, CURRENCIES[j + middle], strVal2);
+                else
+                    printf("\t%s = %.02lf \t %s = %.02lf\n", CURRENCIES[j], value1, CURRENCIES[j + middle], value2);
+            }
+
+            strVal1 = NULL;
+            strVal2 = NULL;
+        }
     }
+    else{
+        for (int j = 0; j < ceil(CURRENCIES_SIZE / 2.0); j++)
+        {
+            value1 = exchangeRate.currencies[j];
+            value2 = exchangeRate.currencies[j + middle];
+
+            if (value1 == -1)
+                strVal1 = "N/A";
+            if (value2 == -1)
+                strVal2 = "N/A";
+
+            if(j + middle > CURRENCIES_SIZE - 1)
+            {
+                if(strVal1 != NULL)
+                    printf("\t%s = %s\n", sortedCurrencies[j], strVal1);
+                else
+                    printf("\t%s = %.02lf\n", sortedCurrencies[j], value1);
+            }
+            else
+            {
+                if(strVal1 != NULL && strVal2 != NULL)
+                    printf("\t%s = %s \t %s = %s\n", sortedCurrencies[j], strVal1, sortedCurrencies[j + middle], strVal2);
+                else if(strVal1 != NULL)
+                    printf("\t%s = %s \t %s = %.02lf \n", sortedCurrencies[j], strVal1, sortedCurrencies[j + middle], value2);
+                else if(strVal2 != NULL)
+                    printf("\t%s = %.02lf \t %s = %s\n", sortedCurrencies[j], value1, sortedCurrencies[j + middle], strVal2);
+                else
+                    printf("\t%s = %.02lf \t %s = %.02lf\n", sortedCurrencies[j], value1, sortedCurrencies[j + middle], value2);
+            }
+
+            strVal1 = NULL;
+            strVal2 = NULL;
+        }
+    }
+
+    
     free(strVal1);
     free(strVal2);
 }
 
-void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int paginaAtual, int linhasPorPagina)
+void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int paginaAtual, int linhasPorPagina,char** sortedCurrencies)
 {
     int i;
     printf("\n");
@@ -110,7 +121,7 @@ void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int p
         if(i < numRows)
         {
             printf("-----------------------------------------------------\n");
-            drawExchangeRate(exchangeRates[i]);
+            drawExchangeRate(exchangeRates[i],sortedCurrencies);
         }
     }
 }
@@ -120,10 +131,11 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows)
     int paginaAtual = 0;
     int linhasPorPagina = 5;
     int opcao;
+    char** sortedCurrencies = NULL;
 
     do
     {
-        drawExchangeRatesPagination(exchangeRates, numRows, paginaAtual, linhasPorPagina);
+        drawExchangeRatesPagination(exchangeRates, numRows, paginaAtual, linhasPorPagina,sortedCurrencies);
         printf("\nPagina %04d de %d\n", paginaAtual, (int)ceil((double)numRows / linhasPorPagina)-1);
         printf("%d registos por pagina\n", linhasPorPagina);
 
@@ -158,7 +170,7 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows)
                 scanf("%d", &linhasPorPagina);
                 break;
             case 5:
-                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows);
+                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows,sortedCurrencies);
                 break;
             case 6:
                 exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, numRows);
