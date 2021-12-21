@@ -22,7 +22,6 @@ typedef struct Good{
 } GOOD;
 
 
-
 void newGoodQuestionaire();
 
 #endif

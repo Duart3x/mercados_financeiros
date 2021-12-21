@@ -40,13 +40,8 @@ int main(){
     op = drawMenu(opcoes, 4, "Menu");
     printf("%d fdp", op);*/
 
-    char** clonedCurrencies = cloneCurrenciesArray();
-
-
-    EXCHANGERATE* rates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows, clonedCurrencies);
-
+    newGoodQuestionaire();
     
-    free(clonedCurrencies);
     free(sortedCurrencies);
 
     free(exchangeRates);
