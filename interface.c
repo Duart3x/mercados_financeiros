@@ -224,3 +224,35 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
 
     return option;
 }
+
+/**
+ * @brief Mostra um erro a vermelho na consola e espera que o utilizador clique ENTER para continuar ou ESC para cancelar a ação que estaria a fazer.
+ * @param msg
+ * 
+ * @return false se o utilizador clicou ESC, true se clicou ENTER ou qq outra tecla
+*/
+bool handleError(char *msg)
+{
+    int key = 0;
+
+    setTextRed();
+    printf("\n%s.\n", msg);
+    resetText();
+    printf("\nClica em qualquer [ENTER] para continuar ou [ESC] para cancelar.");
+    key = getch();
+
+    if(key == KEY_ESC)
+        return false;
+    else if(key == KEY_ENTER)
+        return true;
+}
+
+
+void setTextRed () {
+  printf("\033[1;31m");
+}
+
+
+void resetText () {
+  printf("\033[0m");
+}

@@ -38,6 +38,8 @@ int main(){
     /*char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
     op = drawMenu(opcoes, 4, "Menu");
     printf("%d fdp", op);*/
+
+    newGoodQuestionaire();
     
 
     free(exchangeRate);

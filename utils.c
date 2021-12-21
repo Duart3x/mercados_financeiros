@@ -96,7 +96,7 @@ char* replaceChar(char* str, char find, char replace){
     return str;
 }
 
-BOOLEAN contaisNumber(char *str)
+bool contaisNumber(char *str)
 {
     int i;
     for (i = 0; i < strlen(str); i++)
