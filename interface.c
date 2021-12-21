@@ -150,10 +150,11 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
         printf("  *                            *\n");
         for (i = 0; i < numOpcoes; i++)
         {
-            printf("    %s %s\n", (option == i + 1) ? "->": "  ", opcoes[i]);
+            printf("    %s %s\n", (option == i + 1) ? "-> [x]": "   [ ]", opcoes[i]);
         }
         printf("  *                            *\n");
         printf("  ******************************\n");
+        printf("Use as setas para selecionar uma opção. ENTER para confimar. ESC para sair.\n");
         key = getch();
 
         /*printf("\n   ******** Menu Principal ********\n");
