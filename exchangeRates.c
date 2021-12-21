@@ -39,7 +39,7 @@ EXCHANGERATE* readExchangeRatesFile(FILE* f, int* linhasLidas)
                 if(strcmp(V[i],"N/A") == 0)
                     exchangeRate[n].currencies[i-1] = -1;
                 else
-                    exchangeRate[n].currencies[i-1] = atof(replace_char(V[i], '.',','));
+                    exchangeRate[n].currencies[i-1] = atof(replaceChar(V[i], '.',','));
             }
         }
 

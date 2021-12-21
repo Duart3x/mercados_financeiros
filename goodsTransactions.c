@@ -5,7 +5,7 @@
 
 void newGoodQuestionaire() {
     GOOD good;
-    bool isValid = true;
+    BOOLEAN isValid = true;
 
     printf("*** Registo de novo bem ***\n");
 
@@ -22,14 +22,13 @@ void newGoodQuestionaire() {
             return;
         }
 
-        if(isalpha(good.name) == 0) {
+        if(contaisNumber(good.name) == true) {
             printf("Identificador só pode conter letras.\n");
             isValid = false;
             return;
         }
 
-        good.name = toupper(good.name);
-        isValid
+        good.name = strToUpper(good.name);
     } while (!isValid);
     
 

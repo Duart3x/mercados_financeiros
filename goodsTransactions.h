@@ -5,6 +5,10 @@
 #ifndef GOODSTRANSACTIONS_H
 #define GOODSTRANSACTIONS_H
 
+typedef enum marketType{
+    cripto,stocks,bonds,commodities,other
+} MARKETTYPE;
+
 typedef struct Good{
     DATE obsDate;
     MARKETTYPE marketType;
@@ -17,9 +21,7 @@ typedef struct Good{
     int volume;
 } GOOD;
 
-typedef enum marketType{
-    cripto,stocks,bonds,commodities,other
-} MARKETTYPE;
+
 
 void newGoodQuestionaire();
 
