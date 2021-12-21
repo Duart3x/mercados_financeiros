@@ -6,7 +6,7 @@
 #include"utils.h"
 #include"exchangeRates.h"
 
-EXCHANGERATE* readExchangeRatesFile(FILE* f, int* linhasLidas)
+EXCHANGERATE* readExchangeRatesFile(FILE* f, int* numRows)
 {
     EXCHANGERATE *exchangeRate;
     int nCamposLidos;
@@ -50,38 +50,42 @@ EXCHANGERATE* readExchangeRatesFile(FILE* f, int* linhasLidas)
         n++;
 	}
 	fclose(f);	
-    *linhasLidas = n;
+    *numRows = n;
 
     return exchangeRate;
 }
 
-EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int linhasLidas, DATE date)
+EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DATE date)
 {
     EXCHANGERATE exchangeRate;
-    int middle = linhasLidas/2;
+    int middle = numRows/2;
 
     if(compareDates(exchangeRates[middle].conversionDate,date) == 0)
         return exchangeRates[middle];
     else if(compareDates(exchangeRates[middle].conversionDate,date) == -1)
     {
-        if(linhasLidas == 1)
+        if(numRows == 1)
             return exchangeRates[middle];
         else
             return getExchangeRateByDate(exchangeRates, middle, date);
     }
     else
     {
-        if(linhasLidas == 1)
+        if(numRows == 1)
             return exchangeRates[middle];
         else
-            return getExchangeRateByDate(exchangeRates+middle, linhasLidas-middle, date);
+            return getExchangeRateByDate(exchangeRates+middle, numRows-middle, date);
     }
 }
 
-EXCHANGERATE* sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int linhasLidas){
+EXCHANGERATE* sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int numRows){
+    for (int i = 0; i < numRows; i++)
+    {
+        /* code */
+    }
     
 }
 
-EXCHANGERATE* sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int linhasLidas){
+EXCHANGERATE* sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows){
 
 }

@@ -18,22 +18,22 @@ int main(){
     EXCHANGERATE *exchangeRate;
     EXCHANGERATE findExchange;
 
-    int linhasLidas;
+    int numRows;
     int op;
 
     FILE* fp = openFile("files/exchangeRates.txt", "r");
     if(fp == NULL)
         return 1;
 
-    exchangeRate = readExchangeRatesFile(fp, &linhasLidas);
-    // drawExchangeRates(exchangeRate, linhasLidas);
+    exchangeRate = readExchangeRatesFile(fp, &numRows);
+    // drawExchangeRates(exchangeRate, numRows);
 
-    // findExchange = getExchangeRateByDate(exchangeRate, linhasLidas, (DATE){.day = 10, .month = 7, .year = 2003});
+    // findExchange = getExchangeRateByDate(exchangeRate, numRows, (DATE){.day = 10, .month = 7, .year = 2003});
 
     //drawExchangeRate(findExchange);
 
 
-    //menuWithExchangeRatesPagination(exchangeRate, linhasLidas);
+    //menuWithExchangeRatesPagination(exchangeRate, numRows);
 
     /*char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
     op = drawMenu(opcoes, 4, "Menu");

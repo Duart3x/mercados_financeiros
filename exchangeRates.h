@@ -25,9 +25,9 @@ typedef enum currency{
 static const char EXCHANGES[EXCHANGES_SIZE][4] = {"USD", "JPY", "BGN", "CYP", "CZK", "DKK", "EEK", "GBP", "HUF", "LTL", "LVL", "MTL", "PLN", "ROL", "RON", "SEK", "SIT", "SKK", "CHF", "ISK", "NOK", "HRK", "RUB", "TRL", "TRY", "AUD", "BRL", "CAD", "CNY", "HKD", "IDR", "ILS", "INR", "KRW", "MXN", "MYR", "NZD", "PHP", "SGD", "THB", "ZAR"};
 
 
-EXCHANGERATE* readExchangeRatesFile(FILE* f, int* linhasLidas);
-EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int linhasLidas, DATE date);
-EXCHANGERATE* sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int linhasLidas);
-EXCHANGERATE* sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int linhasLidas);
+EXCHANGERATE* readExchangeRatesFile(FILE* f, int* numRows);
+EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DATE date);
+EXCHANGERATE* sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int numRows);
+EXCHANGERATE* sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows);
 
 #endif

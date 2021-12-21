@@ -15,7 +15,7 @@
 #define KEY_ENTER 13
 
 
-void drawExchangeRatesTable(EXCHANGERATE *exchangeRates, int linhasLidas)
+void drawExchangeRatesTable(EXCHANGERATE *exchangeRates, int numRows)
 {
     /**
      * Draw table with | and - characters
@@ -34,7 +34,7 @@ void drawExchangeRatesTable(EXCHANGERATE *exchangeRates, int linhasLidas)
         printf("---------");
     printf("|\n");
 
-    for(i = 0; i < linhasLidas; i++)
+    for(i = 0; i < numRows; i++)
     {
         printf("| %02d-%02d-%02d |", exchangeRates[i].conversionDate.day, exchangeRates[i].conversionDate.month, exchangeRates[i].conversionDate.year);
         for(int j = 0; j < EXCHANGES_SIZE; j++)
@@ -43,10 +43,10 @@ void drawExchangeRatesTable(EXCHANGERATE *exchangeRates, int linhasLidas)
     }
 }
 
-void drawExchangeRates(EXCHANGERATE *exchangeRates, int linhasLidas)
+void drawExchangeRates(EXCHANGERATE *exchangeRates, int numRows)
 {
     printf("\n\n");
-    for (int i = 0; i < linhasLidas; i++)
+    for (int i = 0; i < numRows; i++)
     {
         drawExchangeRate(exchangeRates[i]);
     }
@@ -100,14 +100,14 @@ void drawExchangeRate(EXCHANGERATE exchangeRate)
     free(strVal2);
 }
 
-void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLidas, int paginaAtual, int linhasPorPagina)
+void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int paginaAtual, int linhasPorPagina)
 {
     int i;
     printf("\n");
 
     for(i = paginaAtual * linhasPorPagina; i < (paginaAtual * linhasPorPagina) + linhasPorPagina; i++)
     {
-        if(i < linhasLidas)
+        if(i < numRows)
         {
             printf("-----------------------------------------------------\n");
             drawExchangeRate(exchangeRates[i]);
@@ -115,7 +115,7 @@ void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLidas, i
     }
 }
 
-void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLidas)
+void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows)
 {
     int paginaAtual = 0;
     int linhasPorPagina = 5;
@@ -123,8 +123,8 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLida
 
     do
     {
-        drawExchangeRatesPagination(exchangeRates, linhasLidas, paginaAtual, linhasPorPagina);
-        printf("\nPagina %04d de %d\n", paginaAtual, (int)ceil((double)linhasLidas / linhasPorPagina)-1);
+        drawExchangeRatesPagination(exchangeRates, numRows, paginaAtual, linhasPorPagina);
+        printf("\nPagina %04d de %d\n", paginaAtual, (int)ceil((double)numRows / linhasPorPagina)-1);
         printf("%d registos por pagina\n", linhasPorPagina);
 
         printf("\n\n");
@@ -158,10 +158,10 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLida
                 scanf("%d", &linhasPorPagina);
                 break;
             case 5:
-                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, linhasLidas);
+                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows);
                 break;
             case 6:
-                exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, linhasLidas);
+                exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, numRows);
                 break;
             case 0:
                 break;
