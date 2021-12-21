@@ -27,5 +27,7 @@ static const char EXCHANGES[EXCHANGES_SIZE][4] = {"USD", "JPY", "BGN", "CYP", "C
 
 EXCHANGERATE* readExchangeRatesFile(FILE* f, int* linhasLidas);
 EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int linhasLidas, DATE date);
+EXCHANGERATE* sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int linhasLidas);
+EXCHANGERATE* sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int linhasLidas);
 
 #endif

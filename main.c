@@ -6,13 +6,14 @@
 #include<locale.h>
 #include"utils.h"
 #include"exchangeRates.h"
+#include"goodsTransactions.h"
 #include"interface.h"
 
 
 
 int main(){
-
-    setlocale(LC_ALL, "Portuguese");
+    char* res = setlocale(LC_ALL, ".UTF8");
+	if (res == NULL) puts("setlocale failed");
 
     EXCHANGERATE *exchangeRate;
     EXCHANGERATE findExchange;
@@ -31,11 +32,12 @@ int main(){
 
     //drawExchangeRate(findExchange);
 
+
     //menuWithExchangeRatesPagination(exchangeRate, linhasLidas);
 
-    char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
+    /*char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
     op = drawMenu(opcoes, 4, "Menu");
-    printf("%d fdp", op);
+    printf("%d fdp", op);*/
     
 
     free(exchangeRate);
