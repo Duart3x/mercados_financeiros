@@ -31,11 +31,12 @@ int main(){
 
     //drawExchangeRate(findExchange);
 
-    //menuWithExchangeRatesPagination(exchangeRate, linhasLidas);
 
-    char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
+    menuWithExchangeRatesPagination(exchangeRate, linhasLidas);
+
+    /*char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
     op = drawMenu(opcoes, 4, "Menu");
-    printf("%d fdp", op);
+    printf("%d fdp", op);*/
     
 
     free(exchangeRate);

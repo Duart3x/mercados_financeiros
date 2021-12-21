@@ -1,2 +1,2 @@
-Duarte-> gcc -fdiagnostics-color=always -g *.c -o C:\Users\Duarte Santos\Desktop\mercados_financeiros\bin\main.exe & .\bin\main.exe 
+Duarte-> gcc -fdiagnostics-color=always -g *.c -o "C:\Users\Duarte Santos\Desktop\mercados_financeiros\bin\main.exe" & .\bin\main.exe 
 Simao->  gcc -fdiagnostics-color=always -g *.c -o "C:\Users\simao\OneDrive - ESTGV\AP\mercados_financeiros\bin\mercados.exe"; .\bin\mercados.exe

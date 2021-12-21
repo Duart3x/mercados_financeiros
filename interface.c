@@ -57,16 +57,47 @@ void drawExchangeRate(EXCHANGERATE exchangeRate)
     int middle = ceil(EXCHANGES_SIZE / 2.0);
     printf("\n[%02d-%02d-%02d]\n", exchangeRate.conversionDate.day, exchangeRate.conversionDate.month, exchangeRate.conversionDate.year);
     float value1, value2;
-       
+    char *strVal1 = malloc(sizeof(char) * 4);
+    char *strVal2 = malloc(sizeof(char) * 4);
+
+    strVal1 = NULL;
+    strVal2 = NULL;
+
     for (int j = 0; j < ceil(EXCHANGES_SIZE / 2.0); j++)
     {
         value1 = exchangeRate.currencies[j];
         value2 = exchangeRate.currencies[j + middle];
+
+        if (value1 == -1)
+            strVal1 = "N/A";
+        if (value2 == -1)
+            strVal2 = "N/A";
+
         if(j + middle > EXCHANGES_SIZE - 1)
-            printf("\t%s = %.02f\n", EXCHANGES[j], value1);
+        {
+            if(strVal1 != NULL)
+                printf("\t%s = %s\n", EXCHANGES[j], strVal1);
+            else
+                printf("\t%s = %.02lf\n", EXCHANGES[j], value1);
+        }
         else
-            printf("\t%s = %.02f \t %s = %.02f \n", EXCHANGES[j], value1, EXCHANGES[j+middle], value2);
+        {
+            if(strVal1 != NULL && strVal2 != NULL)
+                printf("\t%s = %s \t %s = %s\n", EXCHANGES[j], strVal1, EXCHANGES[j + middle], strVal2);
+            else if(strVal1 != NULL)
+                printf("\t%s = %s \t %s = %.02lf \n", EXCHANGES[j], strVal1, EXCHANGES[j + middle], value2);
+            else if(strVal2 != NULL)
+                printf("\t%s = %.02lf \t %s = %s\n", EXCHANGES[j], value1, EXCHANGES[j + middle], strVal2);
+            else
+                printf("\t%s = %.02lf \t %s = %.02lf\n", EXCHANGES[j], value1, EXCHANGES[j + middle], value2);
+        }
+
+        strVal1 = NULL;
+        strVal2 = NULL;
+            
     }
+    free(strVal1);
+    free(strVal2);
 }
 
 void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLidas, int paginaAtual, int linhasPorPagina)
@@ -93,46 +124,54 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int linhasLida
     do
     {
         drawExchangeRatesPagination(exchangeRates, linhasLidas, paginaAtual, linhasPorPagina);
-        printf("\nPágina %04d de %d\n", paginaAtual, (int)ceil((double)linhasLidas / linhasPorPagina)-1);
-        printf("%d registos por página\n", linhasPorPagina);
+        printf("\nPagina %04d de %d\n", paginaAtual, (int)ceil((double)linhasLidas / linhasPorPagina)-1);
+        printf("%d registos por pagina\n", linhasPorPagina);
 
         printf("\n\n");
-        printf("1 - Próxima página\n");
-        printf("2 - Página anterior\n");
-        printf("3 - Escolher número de página\n");
-        printf("4 - Escolher número de registos por página\n");
-        printf("5 - Voltar ao menu principal\n");
+        printf("1 - Pagina anterior\n");
+        printf("2 - Proxima pagina\n");
+        printf("3 - Escolher numero de pagina\n");
+        printf("4 - Escolher numero de registos por pagina\n");
+        printf("5 - Ordernar por ordem crescente do codigo da moeda\n");
+        printf("6 - Ordernar por ordem decrescente do valor em euros\n");
+        printf("0 - Voltar ao menu principal\n");
         printf("\n");
-        printf("Opção: ");
+        printf("Opcao: ");
         scanf("%d", &opcao);
 
         switch(opcao)
         {
             case 1:
-                paginaAtual++;
+                paginaAtual--;
                 break;
             case 2:
-                paginaAtual--;
+                paginaAtual++;
                 break;
             case 3:
                 printf("\n");
-                printf("Página: ");
+                printf("Pagina: ");
                 scanf("%d", &paginaAtual);
                 break;
             case 4:
                 printf("\n");
-                printf("Número de registos por página: ");
+                printf("Numero de registos por pagina: ");
                 scanf("%d", &linhasPorPagina);
                 break;
             case 5:
+                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, linhasLidas);
+                break;
+            case 6:
+                exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, linhasLidas);
+                break;
+            case 0:
                 break;
             default:
                 printf("\n");
-                printf("Opção inválida!\n");
+                printf("Opcao invalida!\n");
                 break;
         }
 
-    } while (opcao != 5);
+    } while (opcao != 0);
     
 }
 
