@@ -172,11 +172,11 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows)
                 scanf("%d", &linhasPorPagina);
                 break;
             case 5:
-                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows,sortedCurrencies);
+                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows);
                 sortedCurrencies = sortCurrenciesQuickSort(cloneCurrenciesArray(),0, CURRENCIES_SIZE-1);
                 break;
             case 6:
-                exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, numRows);
+                exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, numRows,sortedCurrencies);
                 break;
             case 0:
                 break;

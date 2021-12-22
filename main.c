@@ -42,8 +42,6 @@ int main(){
 
     // newGoodQuestionaire();
     
-    free(sortedCurrencies);
-
     free(exchangeRates);
     return 0;
 }
