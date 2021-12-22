@@ -27,8 +27,8 @@ static const char CURRENCIES[CURRENCIES_SIZE][4] = {"USD", "JPY", "BGN", "CYP", 
 
 EXCHANGERATE* readExchangeRatesFile(FILE* f, int* numRows);
 EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DATE date);
-EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int numRows, char** sortedCurrencies);
-EXCHANGERATE* sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows);
+EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int numRows);
+EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows, char** orderedCurrencies);
 char** sortCurrencies();
 char **sortCurrenciesQuickSort(char **currencies, int left, int right);
 char** cloneCurrenciesArray();

@@ -33,10 +33,12 @@ void drawExchangeRate(EXCHANGERATE exchangeRate, char** sortedCurrencies)
     char *strVal1 = malloc(sizeof(char) * 4);
     char *strVal2 = malloc(sizeof(char) * 4);
 
+    strVal1 = NULL;
+    strVal2 = NULL;
+
     if(sortedCurrencies == NULL)
     {
-        strVal1 = NULL;
-        strVal2 = NULL;
+        
 
         for (int j = 0; j < ceil(CURRENCIES_SIZE / 2.0); j++)
         {
@@ -170,10 +172,11 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows)
                 scanf("%d", &linhasPorPagina);
                 break;
             case 5:
-                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows,sortedCurrencies);
+                exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows);
+                sortedCurrencies = sortCurrenciesQuickSort(cloneCurrenciesArray(),0, CURRENCIES_SIZE-1);
                 break;
             case 6:
-                exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, numRows);
+                exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, numRows,sortedCurrencies);
                 break;
             case 0:
                 break;
