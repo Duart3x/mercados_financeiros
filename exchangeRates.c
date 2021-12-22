@@ -200,3 +200,16 @@ char** cloneCurrenciesArray()
 EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows)
 {
 }
+
+double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
+{
+    
+    EXCHANGERATE rate = getExchangeRateByDate( exchangeRates,numRows,rateDate);
+    double fromcurrencie = rate.currencies[from];
+    double tocurrencie =rate.currencies[to];
+
+    double Eur = fromValue/fromcurrencie;
+    double convertedValue= Eur * tocurrencie;
+
+    return convertedValue;
+}
