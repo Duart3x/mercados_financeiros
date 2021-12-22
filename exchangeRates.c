@@ -109,7 +109,6 @@ EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int n
         }
     }
 
-    free(sortedCurrencies);
     return result;
 }
 

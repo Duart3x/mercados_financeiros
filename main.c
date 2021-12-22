@@ -40,7 +40,7 @@ int main(){
     op = drawMenu(opcoes, 4, "Menu");
     printf("%d fdp", op);*/
 
-    newGoodQuestionaire();
+    // newGoodQuestionaire();
     
     free(sortedCurrencies);
 
