@@ -11,7 +11,7 @@
 
 int main()
 {
-    char *res = setlocale(LC_ALL, ".UTF8");
+    char *res = setlocale(LC_ALL, "portuguese");
     if (res == NULL)
         puts("setlocale failed");
 
