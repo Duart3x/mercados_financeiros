@@ -9,8 +9,6 @@
 #include"goodsTransactions.h"
 #include"interface.h"
 
-// novo comentario
-
 int main(){
     char* res = setlocale(LC_ALL, ".UTF8");
 	if (res == NULL) puts("setlocale failed");
