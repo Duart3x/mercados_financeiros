@@ -78,10 +78,10 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     }
 }
 
-EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int numRows)
+EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int numRows,char** sortedCurrencies)
 {
     EXCHANGERATE *result = malloc(numRows * sizeof(EXCHANGERATE));
-    char** sortedCurrencies = sortCurrenciesQuickSort(cloneCurrenciesArray(), 0, CURRENCIES_SIZE - 1);
+    sortCurrenciesQuickSort(sortedCurrencies, 0, CURRENCIES_SIZE - 1);
     int positions[CURRENCIES_SIZE];
     int i= 0, j= 0;
 
@@ -111,6 +111,61 @@ EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int n
     }
 
     return result;
+}
+
+EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows, char*** sortedCurrencyNamesByDay)
+{
+    EXCHANGERATE *result = cloneExchangeRatesArray(exchangeRates, numRows);
+
+    if (!result)
+    {
+        handleError("Não foi possivel ordernar o array.");
+        return exchangeRates;
+    }
+        
+        
+    int i = 0;
+    int j = 0;
+    double temp = 0;
+    int k = 0;
+
+    for (i = 0; i < numRows; i++)
+    {
+        for (j = 0; j < CURRENCIES_SIZE; j++)
+        {
+            for (k = j+1; k < CURRENCIES_SIZE; k++)
+            {
+                if (result[i].currencies[j] < result[i].currencies[k])
+                {
+                    temp = result[i].currencies[j];
+                    result[i].currencies[j] = result[i].currencies[k];
+                    result[i].currencies[k] = temp;
+                    strcpy(sortedCurrencyNamesByDay[i][j],CURRENCIES[k]);
+                }
+            }
+        }
+
+        
+
+        result[i].conversionDate.year = exchangeRates[i].conversionDate.year;
+        result[i].conversionDate.month = exchangeRates[i].conversionDate.month;
+        result[i].conversionDate.day = exchangeRates[i].conversionDate.day;
+    }
+    
+    return result;
+}
+
+double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
+{
+    
+    EXCHANGERATE rate = getExchangeRateByDate( exchangeRates,numRows,rateDate);
+    double fromcurrencie = rate.currencies[from];
+    double tocurrencie =rate.currencies[to];
+
+    double Eur = fromValue/fromcurrencie;
+    double convertedValue= Eur * tocurrencie;
+
+    return convertedValue;
 }
 
 // Buble Sort
@@ -144,6 +199,7 @@ char **sortCurrenciesQuickSort(char **currencies, int left, int right)
     int i = 0;
     int j = 0;
     char temp[4];
+    char* aux = malloc(4 * sizeof(char));
 
 
     if (left < right)
@@ -161,9 +217,9 @@ char **sortCurrenciesQuickSort(char **currencies, int left, int right)
 
             if (i <= j)
             {
-                char *aux = currencies[i];
-                currencies[i] = currencies[j];
-                currencies[j] = aux;
+                strcpy(aux, currencies[i]);
+                strcpy(currencies[i], currencies[j]);
+                strcpy(currencies[j], aux);
                 i++;
                 j--;
             }
@@ -197,22 +253,27 @@ char** cloneCurrenciesArray()
     return result;
 }
 
-
-EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows, char** orderedCurrencies)
+void cloneCurrenciesArrayParam(char** result)
 {
-    EXCHANGERATE *result = malloc(numRows * sizeof(EXCHANGERATE));
-
-    // clone exchangesRates to result
-
-    if (!result)
-    {
-        handleError("Não foi possivel ordernar o array.");
-        return exchangeRates;
-    }
-        
-        
     int i = 0;
-    int j = 0;
+
+    for (i = 0; i < CURRENCIES_SIZE; i++)
+    {
+        strcpy(result[i], CURRENCIES[i]);
+        if (!result[i])
+        {
+            free(result);
+        }
+    }
+
+}
+
+EXCHANGERATE* cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows)
+{
+    EXCHANGERATE *result = (EXCHANGERATE *)malloc(numRows * sizeof(EXCHANGERATE));
+    if (!result)
+        return NULL;
+    int i = 0;
 
     for (i = 0; i < numRows; i++)
     {
@@ -220,53 +281,11 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int n
         result[i].conversionDate.month = exchangeRates[i].conversionDate.month;
         result[i].conversionDate.day = exchangeRates[i].conversionDate.day;
 
-        for ( j = 0; j < CURRENCIES_SIZE; j++)
+        for (int j = 0; j < CURRENCIES_SIZE; j++)
         {
             result[i].currencies[j] = exchangeRates[i].currencies[j];
         }
     }
 
-
-
-    int temp = 0;
-    i = 0;
-    j = 0;
-
-    orderedCurrencies = malloc(CURRENCIES_SIZE * sizeof(char));
-
-    for (i = 0; i < numRows; i++)
-    {
-        for (j = 0; j < CURRENCIES_SIZE; j++)
-        {
-            for (int k = j+1; k < CURRENCIES_SIZE; k++)
-            {
-                if (result[i].currencies[j] < result[i].currencies[k])
-                {
-                    orderedCurrencies[j] = malloc(4 * sizeof(char));
-                    temp = result[i].currencies[j];
-                    result[i].currencies[j] = result[i].currencies[k];
-                    result[i].currencies[k] = temp;
-                    orderedCurrencies[j] = CURRENCIES[k];
-                }
-            }
-        }
-        result[i].conversionDate.year = exchangeRates[i].conversionDate.year;
-        result[i].conversionDate.month = exchangeRates[i].conversionDate.month;
-        result[i].conversionDate.day = exchangeRates[i].conversionDate.day;
-    }
-    
     return result;
-}
-
-double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
-{
-    
-    EXCHANGERATE rate = getExchangeRateByDate( exchangeRates,numRows,rateDate);
-    double fromcurrencie = rate.currencies[from];
-    double tocurrencie =rate.currencies[to];
-
-    double Eur = fromValue/fromcurrencie;
-    double convertedValue= Eur * tocurrencie;
-
-    return convertedValue;
 }
