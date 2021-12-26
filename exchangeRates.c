@@ -40,7 +40,7 @@ EXCHANGERATE *readExchangeRatesFile(FILE *f, int *numRows)
                 if (strcmp(V[i], "N/A") == 0)
                     exchangeRate[n].currencies[i - 1] = -1;
                 else
-                    exchangeRate[n].currencies[i - 1] = atof(V[i]);
+                    exchangeRate[n].currencies[i - 1] = atof(replaceChar(V[i], '.', ','));
             }
         }
 
@@ -78,10 +78,27 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     }
 }
 
-EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int numRows,char** sortedCurrencies)
+EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int from,int to,char** sortedCurrencies)
 {
-    EXCHANGERATE *result = malloc(numRows * sizeof(EXCHANGERATE));
+    EXCHANGERATE *result = malloc((to - from) * sizeof(EXCHANGERATE));
+    int i = 0;
+
     sortCurrenciesQuickSort(sortedCurrencies, 0, CURRENCIES_SIZE - 1);
+
+    for (i = 0; i < to-from; i++)
+    {
+        result[i] = sortExchangeRateByCurrencyCode(exchangeRates[from + i],sortedCurrencies);
+    }
+
+    return result;
+}
+
+EXCHANGERATE sortExchangeRateByCurrencyCode(EXCHANGERATE exchangeRate,char** sortedCurrencies)
+{
+    EXCHANGERATE result;
+    if(!sortedCurrencies)
+        sortCurrenciesQuickSort(sortedCurrencies, 0, CURRENCIES_SIZE - 1);
+    
     int positions[CURRENCIES_SIZE];
     int i= 0, j= 0;
 
@@ -97,25 +114,21 @@ EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int n
         }
     }
 
-    
-    for (i = 0; i < numRows; i++)
+    for (i = 0; i < CURRENCIES_SIZE; i++)
     {
-        for (j = 0; j < CURRENCIES_SIZE; j++)
-        {
-            result[i].conversionDate.year = exchangeRates[i].conversionDate.year;
-            result[i].conversionDate.month = exchangeRates[i].conversionDate.month;
-            result[i].conversionDate.day = exchangeRates[i].conversionDate.day;
+        result.conversionDate.year = exchangeRate.conversionDate.year;
+        result.conversionDate.month = exchangeRate.conversionDate.month;
+        result.conversionDate.day = exchangeRate.conversionDate.day;
 
-            result[i].currencies[positions[j]] = exchangeRates[i].currencies[j];
-        }
+        result.currencies[positions[i]] = exchangeRate.currencies[i];
     }
 
     return result;
 }
 
-EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int numRows, char*** sortedCurrencyNamesByDay)
+EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int from,int to, char*** sortedCurrencyNamesByDay)
 {
-    EXCHANGERATE *result = cloneExchangeRatesArray(exchangeRates, numRows);
+    EXCHANGERATE *result = exchangeRates;
 
     if (!result)
     {
@@ -127,9 +140,21 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int n
     int i = 0;
     int j = 0;
     double temp = 0;
+    char* tempCurrencyName = malloc(4 * sizeof(char*));
     int k = 0;
 
-    for (i = 0; i < numRows; i++)
+    for (i = 0; i < (to-from); i++)
+    {
+        for (j = 0; j < CURRENCIES_SIZE; j++)
+        {
+            strcpy(sortedCurrencyNamesByDay[i][j],CURRENCIES[j]);
+        }
+    }
+
+    i = 0;
+    j = 0;
+
+    for (i = 0; i < (to-from); i++)
     {
         for (j = 0; j < CURRENCIES_SIZE; j++)
         {
@@ -140,19 +165,46 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int n
                     temp = result[i].currencies[j];
                     result[i].currencies[j] = result[i].currencies[k];
                     result[i].currencies[k] = temp;
-                    strcpy(sortedCurrencyNamesByDay[i][j],CURRENCIES[k]);
+                    strcpy(tempCurrencyName, sortedCurrencyNamesByDay[i][j]);
+                    strcpy(sortedCurrencyNamesByDay[i][j], sortedCurrencyNamesByDay[i][k]);
+                    strcpy(sortedCurrencyNamesByDay[i][k], tempCurrencyName);
                 }
             }
         }
-
-        
 
         result[i].conversionDate.year = exchangeRates[i].conversionDate.year;
         result[i].conversionDate.month = exchangeRates[i].conversionDate.month;
         result[i].conversionDate.day = exchangeRates[i].conversionDate.day;
     }
     
+    
     return result;
+}
+
+EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate, char** sortedCurrencyNamesByDay)
+{
+    EXCHANGERATE result;
+    int i = 0, j = 0;
+    double temp = 0;
+    int k = 0;
+
+    for (i = 0; i < CURRENCIES_SIZE; i++)
+    {
+        for (j = i+1; j < CURRENCIES_SIZE; j++)
+        {
+            if (exchangeRate.currencies[i] < exchangeRate.currencies[j])
+            {
+                temp = exchangeRate.currencies[i];
+                exchangeRate.currencies[i] = exchangeRate.currencies[j];
+                exchangeRate.currencies[j] = temp;
+                strcpy(sortedCurrencyNamesByDay[i],CURRENCIES[j]);
+            }
+        }
+    }
+
+
+    return result;
+
 }
 
 double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
@@ -284,6 +336,28 @@ EXCHANGERATE* cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows)
         for (int j = 0; j < CURRENCIES_SIZE; j++)
         {
             result[i].currencies[j] = exchangeRates[i].currencies[j];
+        }
+    }
+
+    return result;
+}
+
+EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows, int start, int end)
+{
+    EXCHANGERATE *result = (EXCHANGERATE *)malloc((end-start) * sizeof(EXCHANGERATE));
+    if (!result)
+        return NULL;
+    int i = 0;
+
+    for (i = 0; i < end-start; i++)
+    {
+        result[i].conversionDate.year = exchangeRates[start + i].conversionDate.year;
+        result[i].conversionDate.month = exchangeRates[start + i].conversionDate.month;
+        result[i].conversionDate.day = exchangeRates[start + i].conversionDate.day;
+
+        for (int j = 0; j < CURRENCIES_SIZE; j++)
+        {
+            result[i].currencies[j] = exchangeRates[start + i].currencies[j];
         }
     }
 

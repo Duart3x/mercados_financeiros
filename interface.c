@@ -40,6 +40,7 @@ void drawExchangeRate(EXCHANGERATE exchangeRate, char **currenciesText)
         wasNull = true;
         currenciesText = cloneCurrenciesArray();
     }
+    
         
 
     for (int j = 0; j < ceil(CURRENCIES_SIZE / 2.0); j++)
@@ -87,7 +88,7 @@ void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int p
     int i;
     printf("\n");
 
-    for (i = paginaAtual * linhasPorPagina; i < (paginaAtual * linhasPorPagina) + linhasPorPagina; i++)
+    for (i = 0; i < linhasPorPagina; i++)
     {
         if (i < numRows)
         {
@@ -103,7 +104,7 @@ void drawExchangeRatesPaginationSortedByValue(EXCHANGERATE *exchangeRates, int n
     int i;
     printf("\n");
 
-    for (i = paginaAtual * linhasPorPagina; i < (paginaAtual * linhasPorPagina) + linhasPorPagina; i++)
+    for (i = 0; i < linhasPorPagina; i++)
     {
         if (i < numRows)
         {
@@ -121,10 +122,10 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRatesOriginal, int nu
     int opcao = 0;
     int sortedBy = 0; // 0 = NOT SORTED, 1 = SORTED BY CURRENCY, 2 = SORTED BY VALUE
     char **sortedCurrencies = cloneCurrenciesArray();
-    char*** sortedCurrencyNamesByDay = malloc(sizeof(char**) * numRows);
+    char*** sortedCurrencyNamesByDay = malloc(sizeof(char***) * numRows);
     for (int i = 0; i < numRows; i++)
     {
-        sortedCurrencyNamesByDay[i] = malloc(sizeof(char*) * CURRENCIES_SIZE);
+        sortedCurrencyNamesByDay[i] = malloc(sizeof(char**) * CURRENCIES_SIZE);
 
         for (int j = 0; j < CURRENCIES_SIZE; j++)
         {
@@ -139,6 +140,18 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRatesOriginal, int nu
 
     do
     {
+        exchangeRates = clonePartOfExchangeRatesArray(exchangeRatesOriginal, numRows,paginaAtual * linhasPorPagina , (paginaAtual * linhasPorPagina) + linhasPorPagina);
+
+        switch (sortedBy)
+        {
+        case 1:
+            cloneCurrenciesArrayParam(sortedCurrencies);
+            exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, 0 , linhasPorPagina, sortedCurrencies);
+            break;
+        case 2:
+            exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, paginaAtual * linhasPorPagina,(paginaAtual * linhasPorPagina) + linhasPorPagina, sortedCurrencyNamesByDay);
+            break;
+        }
         if(sortedBy == 2)
             drawExchangeRatesPaginationSortedByValue(exchangeRates, numRows, paginaAtual, linhasPorPagina, sortedCurrencyNamesByDay);
         else
@@ -177,15 +190,10 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRatesOriginal, int nu
             printf("Numero de registos por pagina: ");
             scanf("%d", &linhasPorPagina);
             break;
-        case 5:
-            cloneCurrenciesArrayParam(sortedCurrencies);
-            exchangeRates = cloneExchangeRatesArray(exchangeRatesOriginal, numRows);
-            exchangeRates = sortExchangeRatesByCurrencyCode(exchangeRates, numRows, sortedCurrencies);
+        case 5:            
             sortedBy = 1;
             break;
         case 6:
-            exchangeRates = cloneExchangeRatesArray(exchangeRatesOriginal, numRows);
-            exchangeRates = sortExchangeRatesByValueInEuros(exchangeRates, numRows, sortedCurrencyNamesByDay);
             sortedBy = 2;
             break;
         case 7:
