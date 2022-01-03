@@ -284,11 +284,72 @@ void newGoodQuestionaire() {
     if(buffer[0] == 'S' || buffer[0] == 's')
     {
         //Se for S, adicionar o good ao ficheiro
-        //addGoodToFile(good);
+        memset(buffer, 0, BUFFER_SIZE);
+        addGoodToFile(good);
     }
     else
     {
-        //Se for N, voltar ao menu
+        //Se for N, voltar ao menu inicial
+        memset(buffer, 0, BUFFER_SIZE);
         return;
     }
+}
+
+bool checkIfGoodExists(GOOD good, FILE* file)
+{
+    GOOD auxGood;
+
+    while(fread(&auxGood, sizeof(GOOD), 1, file))
+    {
+        if(strcmp(auxGood.name, good.name) == 0 && auxGood.marketType == good.marketType && auxGood.obsDate.day == good.obsDate.day && auxGood.obsDate.month == good.obsDate.month && auxGood.obsDate.year == good.obsDate.year)
+        {
+            fclose(file);
+            return true;
+        }
+    }
+
+    fclose(file);
+    return false;
+}
+
+void addGoodToFile(GOOD good)
+{
+    FILE* file = fopen("/files/goodTransaction.bin", "ab");
+
+    if(file == NULL)
+    {
+        setTextRed();
+        printf("Erro a guardar os dados do bem tente novamente.\n");
+        resetText();
+        printf("\nClique em qualquer tecla para voltar ao menu.");
+        getch();
+        return;
+    }
+
+    if(!checkIfGoodExists(good, file))
+    {
+        fwrite(&good, sizeof(GOOD), 1, file);
+        printf("Dados do bem guardados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
+        resetText();
+        getch();
+    }
+    else
+    {
+        //atualizar o bem no ficheiro
+        //! Não funciona ainda
+        fseek(file, -sizeof(GOOD), SEEK_CUR);
+        fwrite(&good, sizeof(GOOD), 1, file);
+        printf("Dados do bem atualizados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
+        resetText();
+        getch();
+    }
+}
+
+void goodTransactionsMenu() {
+    system("cls");
+
+    char *opcoes[] = {"Registar Novo", "Listar Bens Transacionados", "Voltar..."};
+    int op = drawMenu(opcoes, 3, "Bens Transacionados");
+
+    newGoodQuestionaire();
 }

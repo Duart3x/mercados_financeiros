@@ -28,5 +28,8 @@ typedef struct Good{
 
 
 void newGoodQuestionaire();
+void addGoodToFile(GOOD good);
+bool checkIfGoodExists(GOOD good, FILE* file);
+void goodTransactionsMenu();
 
 #endif
