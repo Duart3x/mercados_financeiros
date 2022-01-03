@@ -9,7 +9,7 @@
 #define EXCHANGERATES_H
 
 
-#define CURRENCIES_SIZE 41
+#define CURRENCIES_SIZE 42
 
 typedef struct exchangeRate
 {
@@ -18,11 +18,11 @@ typedef struct exchangeRate
 } EXCHANGERATE;
 
 typedef enum currency{
-    USD,JPY,BGN,CYP,CZK,DKK,EEK,GBP,HUF,LTL,LVL,MTL,PLN,ROL,RON,SEK,SIT,SKK,CHF,ISK,NOK,HRK,RUB,TRL,TRY,AUD,BRL,CAD,CNY,HKD,IDR,ILS,INR,KRW,MXN,MYR,NZD,PHP,SGD,THB,ZAR
+    EUR,USD,JPY,BGN,CYP,CZK,DKK,EEK,GBP,HUF,LTL,LVL,MTL,PLN,ROL,RON,SEK,SIT,SKK,CHF,ISK,NOK,HRK,RUB,TRL,TRY,AUD,BRL,CAD,CNY,HKD,IDR,ILS,INR,KRW,MXN,MYR,NZD,PHP,SGD,THB,ZAR
 } CURRENCY;
 
 
-static const char CURRENCIES[CURRENCIES_SIZE][4] = {"USD", "JPY", "BGN", "CYP", "CZK", "DKK", "EEK", "GBP", "HUF", "LTL", "LVL", "MTL", "PLN", "ROL", "RON", "SEK", "SIT", "SKK", "CHF", "ISK", "NOK", "HRK", "RUB", "TRL", "TRY", "AUD", "BRL", "CAD", "CNY", "HKD", "IDR", "ILS", "INR", "KRW", "MXN", "MYR", "NZD", "PHP", "SGD", "THB", "ZAR"};
+static const char CURRENCIES[CURRENCIES_SIZE][4] = {"EUR","USD", "JPY", "BGN", "CYP", "CZK", "DKK", "EEK", "GBP", "HUF", "LTL", "LVL", "MTL", "PLN", "ROL", "RON", "SEK", "SIT", "SKK", "CHF", "ISK", "NOK", "HRK", "RUB", "TRL", "TRY", "AUD", "BRL", "CAD", "CNY", "HKD", "IDR", "ILS", "INR", "KRW", "MXN", "MYR", "NZD", "PHP", "SGD", "THB", "ZAR"};
 
 
 EXCHANGERATE* readExchangeRatesFile(FILE* f, int* numRows);
@@ -36,5 +36,6 @@ char** cloneCurrenciesArray();
 void cloneCurrenciesArrayParam(char** result);
 EXCHANGERATE* cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows);
 EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows, int start, int end);
+double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to);
 
 #endif

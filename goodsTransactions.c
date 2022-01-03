@@ -215,6 +215,7 @@ void newGoodQuestionaire() {
 
         printf("Maior valor observado: ");
         scanf("%lf", &value);
+        fflush(stdin);
 
         if(value < 0) {
             if(!handleError("Maior valor observado nao pode ser negativo!")) return;
@@ -253,6 +254,7 @@ void newGoodQuestionaire() {
 
         printf("Indique o volume total transacionado: ");
         scanf("%d", &vol);
+        fflush(stdin);
 
         if(vol < 0) {
             if(!handleError("Volume total transacionado nao pode ser negativo!")) return;
@@ -279,7 +281,8 @@ void newGoodQuestionaire() {
 
     printf("Deseja confirmar os dados? (S/N): ");
     fgets(buffer, sizeof(buffer), stdin);
-
+    fflush(stdin);
+    
     //Fazer as validações do buffer e verificar se é S ou N
     if(buffer[0] == 'S' || buffer[0] == 's')
     {

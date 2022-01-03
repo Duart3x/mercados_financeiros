@@ -37,6 +37,8 @@ int main()
 
     menuWithExchangeRatesPagination(exchangeRates, numRows);
 
+    // double resultado = convertCurrenciesOnSpecificDay(exchangeRates, numRows, (DATE){.day = 1, .month = 12, .year = 2022}, USD, 20, AUD);
+
     /*char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
     op = drawMenu(opcoes, 4, "Menu");
     printf("%d fdp", op);*/
