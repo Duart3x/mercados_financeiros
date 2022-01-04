@@ -35,7 +35,9 @@ int main()
 
     //drawExchangeRate(findExchange);
 
-    menuWithExchangeRatesPagination(exchangeRates, numRows);
+    //menuWithExchangeRatesPagination(exchangeRates, numRows);
+
+    printColoredText("O Duarte é chato a Maria é mais", GREEN);
 
     // double resultado = convertCurrenciesOnSpecificDay(exchangeRates, numRows, (DATE){.day = 1, .month = 12, .year = 2022}, USD, 20, AUD);
 
