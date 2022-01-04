@@ -300,12 +300,7 @@ void resetText()
     printf("\033[0m");
 }
 
-
-
-/**
- * Criar ENUM de cores
- * Criar array com código de cada cor onde cada posição do array corresponde a uma cor do ENUM
- * Criar função com dois parametros de entrada (char* mensagem, COR cor)
- * A função tem de imprimir a mensagem na cor do parametro cor
- * 
-*/
+void printColoredText(char* msg, COLORS color)
+{
+    printf("\033%s %s \033%s", COLOR_CODES[color], msg, COLOR_CODES[RESET]);
+}
