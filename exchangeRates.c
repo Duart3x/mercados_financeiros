@@ -20,7 +20,7 @@ EXCHANGERATE *readExchangeRatesFile(FILE *f, int *numRows)
 
     while (!feof(f))
     {
-        char **V = Read_Split_Line_File(f, 42, &nCamposLidos, ",");
+        char **V = Read_Split_Line_File(f, CURRENCIES_SIZE+1, &nCamposLidos, ",");
 
         for (int i = 0; i < nCamposLidos; i++)
         {
@@ -60,19 +60,28 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     EXCHANGERATE exchangeRate;
     int middle = numRows / 2;
 
+
     if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
         return exchangeRates[middle];
     else if (compareDates(exchangeRates[middle].conversionDate, date) == -1)
     {
         if (numRows == 1)
-            return exchangeRates[middle];
+        {
+            if(compareDates(exchangeRates[middle].conversionDate, date) == 0)
+                return exchangeRates[middle];
+            else
+                return (EXCHANGERATE){};
+        }
         else
             return getExchangeRateByDate(exchangeRates, middle, date);
     }
     else
     {
         if (numRows == 1)
-            return exchangeRates[middle];
+            if(compareDates(exchangeRates[middle].conversionDate, date) == 0)
+                return exchangeRates[middle];
+            else
+                return (EXCHANGERATE){};
         else
             return getExchangeRateByDate(exchangeRates + middle, numRows - middle, date);
     }
@@ -208,9 +217,14 @@ EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate,
 }
 
 double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
-{
-    
+{    
     EXCHANGERATE rate = getExchangeRateByDate( exchangeRates,numRows,rateDate);
+    if(rate.conversionDate.year == 0)
+    {
+        handleError("Não foi possivel encontrar a cotação do dia.");
+        return -1;
+    }
+        
     double fromcurrencie = rate.currencies[from];
     double tocurrencie =rate.currencies[to];
 

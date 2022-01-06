@@ -37,11 +37,48 @@ int main()
 
     //menuWithExchangeRatesPagination(exchangeRates, numRows);
 
-    /*char *opcoes[] = {"Sair", "Listar", "Buscar", "Ordenar"};
-    op = drawMenu(opcoes, 4, "Menu");
-    printf("%d fdp", op);*/
+    printColoredText("O Duarte é chato a Maria é mais", GREEN);
 
-    //goodTransactionsMenu();
+    // double resultado = convertCurrenciesOnSpecificDay(exchangeRates, numRows, (DATE){.day = 1, .month = 12, .year = 2022}, USD, 20, AUD);
+
+    char *listarmoedas[] = {"Listar Moedas que Suportam Conversões de Valores",
+     "Converter um Montante entre duas Moedas Distintas",
+     "Registar Valor histórico diário de um bem transacionado",
+     "Listar identificadores de bens transacionáveis",
+     "Valor Mínimo, Médio, Desvio Padrão e Máximo de fecho de um bem transacionável",
+     "Maior variação positiva entre o preço de abertura e de fecho de um bem transacionável num intervalo de datas",
+     "Bem transacionável que obteve o melhor desempenho num intervalo de datas",
+     "5 bens transacionáveis com o maior volume de transações num intervalo de datas",
+     "Exportar para um ficheiro texto as taxas de conversão aplicáveis a uma moeda num intervalo de datas"};
+    op = drawMenu(listarmoedas, 9, "Menu");
+    printf("%d fdp", op);
+    switch (op)
+    {
+    case 1:
+        /* code */
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    case 6:
+        break;
+    case 7:
+        break;
+    case 8:
+        break;
+    case 9:
+        break;
+        
+    
+    default:
+        break;
+    }
+
     newGoodQuestionaire();
 
     free(exchangeRates);

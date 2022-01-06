@@ -286,7 +286,7 @@ void newGoodQuestionaire() {
     printf("Volume total transacionado: %d\n\n", good.volume);
 
     printf("Deseja confirmar os dados? (S/N): ");
-    fgets(buffer, BUFFER_SIZE, stdin);
+    fgets(buffer, sizeof(buffer), stdin);
     fflush(stdin);
     
     //Fazer as validações do buffer e verificar se é S ou N
