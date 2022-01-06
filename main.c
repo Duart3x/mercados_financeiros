@@ -18,17 +18,39 @@ int main()
     printf("ã ô í è ª º");
 
     EXCHANGERATE *exchangeRates;
+    GOOD *goodsHistory;
+
     EXCHANGERATE findExchange;
     char **sortedCurrencies;
 
     int numRows;
+    int numGoodsRows;
+
     int op;
 
     FILE *fp = openFile("files/exchangeRates.txt", "r");
-    if (fp == NULL)
+    FILE *fGoodsHistory = openFile("files/goodsHistory.txt", "r");
+
+    if (fp == NULL || fGoodsHistory == NULL)
         return 1;
 
     exchangeRates = readExchangeRatesFile(fp, &numRows);
+    goodsHistory = readGoodsTransactionsHistoryFile(fGoodsHistory, &numGoodsRows);
+
+    for (int i = 0; i < 5000; i++)
+    {
+        printf("\n");
+        printf("[%d-%d-%d] | [%s]\n", goodsHistory[i].obsDate.day, goodsHistory[i].obsDate.month, goodsHistory[i].obsDate.year,CURRENCIES[goodsHistory[i].currency]);
+        printf("Bem: %s\n", goodsHistory[i].name);
+        printf("Valor de abertura: %.3f\n", goodsHistory[i].openValue);
+        printf("Valor de fechamento: %.3f\n", goodsHistory[i].closeValue);
+        printf("Valor mais alto: %.3f\n", goodsHistory[i].higherValue);
+        printf("Valor mais baixo: %.3f\n", goodsHistory[i].lowerValue);
+        printf("Volume: %d\n", goodsHistory[i].volume);
+        printf("Tipo de mercado: %s\n", marketTypeStrings[goodsHistory[i].marketType]);
+        printf("-------------------------------------------------------------------------------------\n");
+    }    
+
     // drawExchangeRates(exchangeRates, numRows);
 
     // findExchange = getExchangeRateByDate(exchangeRates, numRows, (DATE){.day = 10, .month = 7, .year = 2003});
@@ -37,11 +59,9 @@ int main()
 
     //menuWithExchangeRatesPagination(exchangeRates, numRows);
 
-    printColoredText("O Duarte é chato a Maria é mais", GREEN);
-
     // double resultado = convertCurrenciesOnSpecificDay(exchangeRates, numRows, (DATE){.day = 1, .month = 12, .year = 2022}, USD, 20, AUD);
 
-    char *listarmoedas[] = {"Listar Moedas que Suportam Conversões de Valores",
+   /* char *listarmoedas[] = {"Listar Moedas que Suportam Conversões de Valores",
      "Converter um Montante entre duas Moedas Distintas",
      "Registar Valor histórico diário de um bem transacionado",
      "Listar identificadores de bens transacionáveis",
@@ -55,7 +75,6 @@ int main()
     switch (op)
     {
     case 1:
-        /* code */
         break;
     case 2:
         break;
@@ -79,8 +98,10 @@ int main()
         break;
     }
 
-    newGoodQuestionaire();
+    newGoodQuestionaire();*/
 
     free(exchangeRates);
+    free(goodsHistory);
+
     return 0;
 }

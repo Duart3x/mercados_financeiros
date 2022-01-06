@@ -393,6 +393,54 @@ GOOD *readGoodTransactionsFile() {
     return goods;
 }
 
+GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
+{
+    GOOD *goodsHistory;
+    int nCamposLidos = 0;
+    int linhasFicheiro = 0;
+    int n = 0;
+
+    linhasFicheiro = getNumberOfLinesInFile(f);
+
+    goodsHistory = (GOOD *)malloc(linhasFicheiro * sizeof(GOOD));
+
+    while (!feof(f))
+    {
+        char **V = Read_Split_Line_File(f, 9, &nCamposLidos, ";");
+
+        if(nCamposLidos == 0)
+            continue;
+
+        char *date = strtok(V[0], "/");
+        goodsHistory[n].obsDate.day = atoi(date);
+
+        date = strtok(NULL, "/");
+        goodsHistory[n].obsDate.month = atoi(date);
+
+        date = strtok(NULL, "/");
+        goodsHistory[n].obsDate.year = atoi(date);
+        
+        strcpy(goodsHistory[n].name,V[1]);
+        goodsHistory[n].openValue = atof(V[2]);
+        goodsHistory[n].closeValue = atof(V[3]);
+        goodsHistory[n].higherValue = atof(V[4]);
+        goodsHistory[n].lowerValue = atof(V[5]);
+        goodsHistory[n].volume = atoi(V[6]);
+        goodsHistory[n].marketType = atoi(V[7]);
+        goodsHistory[n].currency = atoi(V[8]);
+        
+
+        for (int i = 0; i < nCamposLidos; i++)
+            free(V[i]);
+        free(V);
+        n++;
+    }
+    fclose(f);
+    *numRows = n;
+
+    return goodsHistory;
+}
+
 void goodTransactionsMenu() {
     system("cls");
 
@@ -406,7 +454,7 @@ void goodTransactionsMenu() {
             break;
 
         case 2:
-            listGoodTransactions();
+            // listGoodTransactions();
             break;
         
         default:

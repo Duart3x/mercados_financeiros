@@ -32,5 +32,7 @@ void addGoodToFile(GOOD good);
 bool checkIfGoodExistsAndUpdate(GOOD good);
 void goodTransactionsMenu();
 GOOD *readGoodTransactionsFile();
+GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows);
+
 
 #endif
