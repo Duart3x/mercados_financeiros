@@ -355,11 +355,13 @@ void addGoodToFile(GOOD good)
         
         fwrite(&good, sizeof(GOOD), 1, file);
         fclose(file);
-        printf("Dados do bem guardados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
+        printColoredText("Dados do bem guardados com sucesso.\n", GREEN);
+        printf("Clica em qualquer tecla para voltar ao menu.");
         getch();
     }
     else {
-        printf("Dados do bem atualizados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
+        printColoredText("Dados do bem atualizados com sucesso.\n", GREEN);
+        printf("Clica em qualquer tecla para voltar ao menu.");
         getch();
     }
 }
@@ -397,5 +399,17 @@ void goodTransactionsMenu() {
     char *opcoes[] = {"Registar Novo", "Listar Bens Transacionados", "Voltar..."};
     int op = drawMenu(opcoes, 3, "Bens Transacionados");
 
-    newGoodQuestionaire();
+    switch (op)
+    {
+        case 1:
+            newGoodQuestionaire();
+            break;
+
+        case 2:
+            listGoodTransactions();
+            break;
+        
+        default:
+            break;
+    }
 }
