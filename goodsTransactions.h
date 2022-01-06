@@ -15,9 +15,9 @@ static const char marketTypeStrings[MARKET_TYPES_NUMBER][15] = {
 };
 
 typedef struct Good{
+    char name[20];
     DATE obsDate;
     MARKETTYPE marketType;
-    char* name;
     double openValue;
     double closeValue;
     double higherValue;
@@ -29,7 +29,7 @@ typedef struct Good{
 
 void newGoodQuestionaire();
 void addGoodToFile(GOOD good);
-bool checkIfGoodExists(GOOD good, FILE* file);
+bool checkIfGoodExists(GOOD good);
 void goodTransactionsMenu();
 
 #endif

@@ -236,6 +236,7 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
         printf("  ******************************\n");
         printf("Use as setas para selecionar uma opção. ENTER para confimar. ESC para sair.\n");
         key = getch();
+        fflush(stdin);
 
         /*printf("\n   ******** Menu Principal ********\n");
         printf("   *                              *\n");

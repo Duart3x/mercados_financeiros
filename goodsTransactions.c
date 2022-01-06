@@ -6,7 +6,7 @@
 #include"goodsTransactions.h"
 #include"exchangeRates.h"
 
-#define BUFFER_SIZE 72
+#define BUFFER_SIZE 40
 
 void newGoodQuestionaire() {
     GOOD good;
@@ -23,6 +23,7 @@ void newGoodQuestionaire() {
 
         printf("\nIdentificacao da data de observacao (dd/MM/aaaa): ");
         fgets(buffer, sizeof(buffer), stdin);
+        fflush(stdin);
 
         if(strlen(buffer) - 1 == 0 || strlen(buffer) - 1 > 10 || strlen(buffer) - 1 < 10) {
             if(!handleError("Data Inválida")) return;
@@ -109,23 +110,26 @@ void newGoodQuestionaire() {
 
         printf("Identificacao do bem: ");
         fgets(buffer, sizeof(buffer), stdin);
+        fflush(stdin);
+        
 
-        good.name = (char *) malloc(strlen(buffer) + 1);
-        strcpy(good.name, buffer);
-
-        if(strlen(good.name) - 1 == 0) {
+        if(strlen(buffer) - 1 == 0) {
             if(!handleError("Identificador do bem nao pode ser vazio.")) return;
 
             isValid = false;
-        } else if(contaisNumber(good.name) == true) {
+        } else if(contaisNumber(buffer) == true) {
             if(!handleError("Identificador só pode conter letras.")) return;
+
+            isValid = false;
+        } else if(strlen(buffer) - 1 > 20) {
+            if(!handleError("Identificador do bem nao pode ter mais de 20 caracteres.")) return;
 
             isValid = false;
         }
 
-        if(isValid) good.name = strToUpper(good.name);
+        strcpy(good.name, buffer);
 
-        free(good.name);
+        if(isValid) strcpy(good.name, strToUpper(good.name));
     } while (!isValid);
 
     memset(buffer, 0, BUFFER_SIZE);
@@ -139,7 +143,7 @@ void newGoodQuestionaire() {
 
         for (i = 0; i < MARKET_TYPES_NUMBER; i++)
         {
-            opcoes[i] = marketTypeStrings[i];
+            opcoes[i] = (char*)marketTypeStrings[i];
         }
         
         int op = drawMenu(opcoes, MARKET_TYPES_NUMBER, "Selecione o tipo de mercado");
@@ -158,6 +162,7 @@ void newGoodQuestionaire() {
 
         printf("Valor de abertura: ");
         scanf("%lf", &value);
+        fflush(stdin);
 
         if(value < 0) {
             if(!handleError("Valor de abertura nao pode ser negativo!")) return;
@@ -177,6 +182,7 @@ void newGoodQuestionaire() {
 
         printf("Valor de Fecho: ");
         scanf("%lf", &value);
+        fflush(stdin);
 
         if(value < 0) {
             if(!handleError("Valor de fecho nao pode ser negativo!")) return;
@@ -196,6 +202,7 @@ void newGoodQuestionaire() {
 
         printf("Menor valor observado: ");
         scanf("%lf", &value);
+        fflush(stdin);
 
         if(value < 0) {
             if(!handleError("Menor valor observado nao pode ser negativo!")) return;
@@ -215,6 +222,7 @@ void newGoodQuestionaire() {
 
         printf("Maior valor observado: ");
         scanf("%lf", &value);
+        fflush(stdin);
 
         if(value < 0) {
             if(!handleError("Maior valor observado nao pode ser negativo!")) return;
@@ -234,7 +242,7 @@ void newGoodQuestionaire() {
 
         for (i = 0; i < CURRENCIES_SIZE; i++)
         {
-            opcoes[i] = CURRENCIES[i];
+            opcoes[i] = (char*)CURRENCIES[i];
         }
         
         int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda");
@@ -253,6 +261,7 @@ void newGoodQuestionaire() {
 
         printf("Indique o volume total transacionado: ");
         scanf("%d", &vol);
+        fflush(stdin);
 
         if(vol < 0) {
             if(!handleError("Volume total transacionado nao pode ser negativo!")) return;
@@ -265,7 +274,6 @@ void newGoodQuestionaire() {
 
     system("cls");
 
-    //print de todos os campos do good
     printf("\n*** Dados do bem ***\n");
     printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
     printf("Nome do bem: %s\n", good.name);
@@ -278,8 +286,9 @@ void newGoodQuestionaire() {
     printf("Volume total transacionado: %d\n\n", good.volume);
 
     printf("Deseja confirmar os dados? (S/N): ");
-    fgets(buffer, sizeof(buffer), stdin);
-
+    fgets(buffer, BUFFER_SIZE, stdin);
+    fflush(stdin);
+    
     //Fazer as validações do buffer e verificar se é S ou N
     if(buffer[0] == 'S' || buffer[0] == 's')
     {
@@ -295,26 +304,70 @@ void newGoodQuestionaire() {
     }
 }
 
-bool checkIfGoodExists(GOOD good, FILE* file)
+bool checkIfGoodExistsAndUpdate(GOOD good)
 {
-    GOOD auxGood;
+    printf("\n*** Verificar se o bem existe ***\n");
+    FILE *auxFile = fopen("./files/goodTransaction.bin", "rb");
+    GOOD *auxGood = readGoodTransactionsFile();
+    int auxGoodSize = getNumberOfLinesInFile(auxFile);
+    fclose(auxFile);
 
-    while(fread(&auxGood, sizeof(GOOD), 1, file))
+    int i = 0;
+    for (i = 0; i <= auxGoodSize; i++)
     {
-        if(strcmp(auxGood.name, good.name) == 0 && auxGood.marketType == good.marketType && auxGood.obsDate.day == good.obsDate.day && auxGood.obsDate.month == good.obsDate.month && auxGood.obsDate.year == good.obsDate.year)
+        if(strcmp(auxGood[i].name, good.name) == 0 && auxGood[i].marketType == good.marketType && auxGood[i].obsDate.day == good.obsDate.day && auxGood[i].obsDate.month == good.obsDate.month && auxGood[i].obsDate.year == good.obsDate.year)
         {
-            fclose(file);
+            printf("\n*** O bem ja existe ***\n");
+            FILE *auxFile = fopen("./files/goodTransaction.bin", "wb");
+
+            auxGood[i].currency = good.currency;
+            auxGood[i].marketType = good.marketType;
+            auxGood[i].openValue = good.openValue;
+            auxGood[i].closeValue = good.closeValue;
+            auxGood[i].lowerValue = good.lowerValue;
+            auxGood[i].higherValue = good.higherValue;
+            auxGood[i].volume = good.volume;
+
+            fwrite(auxGood, sizeof(GOOD), auxGoodSize, auxFile); 
+            fclose(auxFile);
             return true;
         }
     }
-
-    fclose(file);
+    
     return false;
 }
 
 void addGoodToFile(GOOD good)
 {
-    FILE* file = fopen("/files/goodTransaction.bin", "ab");
+    if(checkIfGoodExistsAndUpdate(good) == false)
+    {
+        FILE *file = fopen("./files/goodTransaction.bin", "ab");
+
+        if(file == NULL)
+        {
+            setTextRed();
+            printf("Erro a guardar os dados do bem tente novamente.\n");
+            resetText();
+            printf("\nClique em qualquer tecla para voltar ao menu.");
+            getch();
+            return;
+        }
+        
+        fwrite(&good, sizeof(GOOD), 1, file);
+        fclose(file);
+        printf("Dados do bem guardados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
+        getch();
+    }
+    else {
+        printf("Dados do bem atualizados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
+        getch();
+    }
+}
+
+GOOD *readGoodTransactionsFile() {
+    FILE *file = fopen("./files/goodTransaction.bin", "rb");
+    GOOD *goods = (GOOD*)malloc(sizeof(GOOD));
+    int i = 0;
 
     if(file == NULL)
     {
@@ -323,26 +376,19 @@ void addGoodToFile(GOOD good)
         resetText();
         printf("\nClique em qualquer tecla para voltar ao menu.");
         getch();
-        return;
+        return NULL;
     }
 
-    if(!checkIfGoodExists(good, file))
+    rewind(file);
+
+    while(fread(&goods[i], sizeof(GOOD), 1, file))
     {
-        fwrite(&good, sizeof(GOOD), 1, file);
-        printf("Dados do bem guardados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
-        resetText();
-        getch();
+        i++;
+        goods = (GOOD*)realloc(goods, (i+1) * sizeof(GOOD));
     }
-    else
-    {
-        //atualizar o bem no ficheiro
-        //! Não funciona ainda
-        fseek(file, -sizeof(GOOD), SEEK_CUR);
-        fwrite(&good, sizeof(GOOD), 1, file);
-        printf("Dados do bem atualizados com sucesso.\nnClica em qualquer tecla para voltar ao menu.");
-        resetText();
-        getch();
-    }
+
+    fclose(file);
+    return goods;
 }
 
 void goodTransactionsMenu() {
