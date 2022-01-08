@@ -143,7 +143,7 @@ void newGoodQuestionaire() {
 
         for (i = 0; i < MARKET_TYPES_NUMBER; i++)
         {
-            opcoes[i] = (char*)marketTypeStrings[i];
+            opcoes[i] = (char*)MARKET_TYPE_STRINGS[i];
         }
         
         int op = drawMenu(opcoes, MARKET_TYPES_NUMBER, "Selecione o tipo de mercado");
@@ -277,7 +277,7 @@ void newGoodQuestionaire() {
     printf("\n*** Dados do bem ***\n");
     printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
     printf("Nome do bem: %s\n", good.name);
-    printf("Tipo de mercado: %s\n", marketTypeStrings[good.marketType]);
+    printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
     printf("Valor de abertura: %.3f\n", good.openValue);
     printf("Valor de fecho: %.3f\n", good.closeValue);
     printf("Menor valor observado: %.3f\n", good.lowerValue);
@@ -308,27 +308,27 @@ bool checkIfGoodExistsAndUpdate(GOOD good)
 {
     printf("\n*** Verificar se o bem existe ***\n");
     FILE *auxFile = fopen("./files/goodTransaction.bin", "rb");
-    GOOD *auxGood = readGoodTransactionsFile();
+    GOOD *auxGoods = readGoodsTransactionsFile();
     int auxGoodSize = getNumberOfLinesInFile(auxFile);
     fclose(auxFile);
 
     int i = 0;
     for (i = 0; i <= auxGoodSize; i++)
     {
-        if(strcmp(auxGood[i].name, good.name) == 0 && auxGood[i].marketType == good.marketType && auxGood[i].obsDate.day == good.obsDate.day && auxGood[i].obsDate.month == good.obsDate.month && auxGood[i].obsDate.year == good.obsDate.year)
+        if(strcmp(auxGoods[i].name, good.name) == 0 && auxGoods[i].marketType == good.marketType && auxGoods[i].obsDate.day == good.obsDate.day && auxGoods[i].obsDate.month == good.obsDate.month && auxGoods[i].obsDate.year == good.obsDate.year)
         {
             printf("\n*** O bem ja existe ***\n");
             FILE *auxFile = fopen("./files/goodTransaction.bin", "wb");
 
-            auxGood[i].currency = good.currency;
-            auxGood[i].marketType = good.marketType;
-            auxGood[i].openValue = good.openValue;
-            auxGood[i].closeValue = good.closeValue;
-            auxGood[i].lowerValue = good.lowerValue;
-            auxGood[i].higherValue = good.higherValue;
-            auxGood[i].volume = good.volume;
+            auxGoods[i].currency = good.currency;
+            auxGoods[i].marketType = good.marketType;
+            auxGoods[i].openValue = good.openValue;
+            auxGoods[i].closeValue = good.closeValue;
+            auxGoods[i].lowerValue = good.lowerValue;
+            auxGoods[i].higherValue = good.higherValue;
+            auxGoods[i].volume = good.volume;
 
-            fwrite(auxGood, sizeof(GOOD), auxGoodSize, auxFile); 
+            fwrite(auxGoods, sizeof(GOOD), auxGoodSize, auxFile); 
             fclose(auxFile);
             return true;
         }
@@ -366,7 +366,7 @@ void addGoodToFile(GOOD good)
     }
 }
 
-GOOD *readGoodTransactionsFile() {
+GOOD *readGoodsTransactionsFile() {
     FILE *file = fopen("./files/goodTransaction.bin", "rb");
     GOOD *goods = (GOOD*)malloc(sizeof(GOOD));
     int i = 0;

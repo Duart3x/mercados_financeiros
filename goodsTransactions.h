@@ -7,11 +7,11 @@
 
 #define MARKET_TYPES_NUMBER 5
 typedef enum marketType{
-    cripto,stocks,bonds,commodities,other
+    CRIPTO,STOCKS,BONDS,COMMODITIES,OTHER
 } MARKETTYPE;
 
-static const char marketTypeStrings[MARKET_TYPES_NUMBER][15] = {
-    "cripto","stocks","bonds","commodities","other"
+static const char MARKET_TYPE_STRINGS[MARKET_TYPES_NUMBER][15] = {
+    "Cripto","Stocks","Bonds","Commodities","Other"
 };
 
 typedef struct Good{
@@ -31,7 +31,7 @@ void newGoodQuestionaire();
 void addGoodToFile(GOOD good);
 bool checkIfGoodExistsAndUpdate(GOOD good);
 void goodTransactionsMenu();
-GOOD *readGoodTransactionsFile();
+GOOD *readGoodsTransactionsFile();
 GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows);
 
 

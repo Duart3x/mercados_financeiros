@@ -47,7 +47,7 @@ int main()
         printf("Valor mais alto: %.3f\n", goodsHistory[i].higherValue);
         printf("Valor mais baixo: %.3f\n", goodsHistory[i].lowerValue);
         printf("Volume: %d\n", goodsHistory[i].volume);
-        printf("Tipo de mercado: %s\n", marketTypeStrings[goodsHistory[i].marketType]);
+        printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[goodsHistory[i].marketType]);
         printf("-------------------------------------------------------------------------------------\n");
     }    
 
