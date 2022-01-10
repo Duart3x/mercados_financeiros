@@ -329,7 +329,7 @@ bool checkIfGoodExistsAndUpdate(GOOD *goodTransactions, int goodTransactionsRows
 
 void saveGoodsToFile(GOOD *goodTransactions, int *goodTransactionsRows)
 {
-    FILE *file = fopen("./files/goodTransaction.bin", "wb");
+    FILE *file = fopen("./files/goodTransaction.dat", "wb");
 
     fwrite(goodTransactions, sizeof(GOOD), *goodTransactionsRows, file);
     fclose(file);
@@ -373,7 +373,7 @@ void addGoodToFile(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows)
 }
 
 GOOD *readGoodsTransactionsFile(int *numRows) {
-    FILE *file = fopen("./files/goodTransaction.bin", "rb");
+    FILE *file = fopen("./files/goodTransaction.dat", "rb");
     GOOD *goods = (GOOD*)malloc(1*sizeof(GOOD));
     int i = 0;
 
@@ -410,6 +410,7 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
     linhasFicheiro = getNumberOfLinesInFile(f);
 
     goodsHistory = (GOOD *)malloc(linhasFicheiro * sizeof(GOOD));
+
 
     while (!feof(f))
     {
