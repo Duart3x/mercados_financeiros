@@ -13,6 +13,8 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
     bool isValid = true;
     int i = 0;
 
+    system("cls");
+
     printf("*** Registo de novo bem ***\n");
 
     char buffer[BUFFER_SIZE];
@@ -26,7 +28,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
         fflush(stdin);
 
         if(strlen(buffer) - 1 == 0 || strlen(buffer) - 1 > 10 || strlen(buffer) - 1 < 10) {
-            if(!handleError("Data Inválida")) return;
+            if(!handleError("Data Invalida")) return;
 
             isValid = false;
         }
@@ -39,7 +41,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
                     if(strlen(aux) == 2) {
                         good.obsDate.day = atoi(aux);
                     } else {
-                        if(!handleError("Data Inválida")) return;
+                        if(!handleError("Data Invalida")) return;
 
                         isValid = false;
                         break;
@@ -49,7 +51,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
                     if(strlen(aux) == 2) {
                         good.obsDate.month = atoi(aux);
                     } else {
-                        if(!handleError("Data Inválida")) return;
+                        if(!handleError("Data Invalida")) return;
 
                         isValid = false;
                         break;
@@ -59,7 +61,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
                     if(strlen(aux) - 1 == 4) {
                         good.obsDate.year = atoi(aux);
                     } else {
-                        if(!handleError("Data Inválida")) return;
+                        if(!handleError("Data Invalida")) return;
 
                         isValid = false;
                         break;
@@ -79,25 +81,25 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
         if(isValid) {
             if(good.obsDate.day < 1 || good.obsDate.day > 31)
             {
-                if(!handleError("Data Inválida")) return;
+                if(!handleError("Data Invalida")) return;
 
                 isValid = false;
             }
             else if(good.obsDate.month < 1 || good.obsDate.month > 12)
             {
-                if(!handleError("Data Inválida")) return;
+                if(!handleError("Data Invalida")) return;
 
                 isValid = false;
             }
             else if(good.obsDate.year < 999 || good.obsDate.year > 9999)
             {
-                if(!handleError("Data Inválida")) return;
+                if(!handleError("Data Invalida")) return;
 
                 isValid = false;
             }
         }
-
-        printf("%d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+        if(isValid)
+            printf("%d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
     } while (!isValid);
 
     memset(buffer, 0, BUFFER_SIZE);
@@ -289,7 +291,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
     fgets(buffer, sizeof(buffer), stdin);
     fflush(stdin);
     
-    //Fazer as validações do buffer e verificar se é S ou N
+    //Fazer as validacces do buffer e verificar se é S ou N
     if(buffer[0] == 'S' || buffer[0] == 's')
     {
         //Se for S, adicionar o good ao ficheiro

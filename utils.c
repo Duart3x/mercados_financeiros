@@ -41,7 +41,7 @@ int getNumberOfLinesInFile(FILE *f)
     rewind(f);*/
 
     long pos;
-    pos = ftell(f); // guarda a posição actual do ponteiro do ficheiro 
+    pos = ftell(f); // guarda a posicao actual do ponteiro do ficheiro 
     fseek(f,0L, SEEK_END);
     size = ftell(f);
     fseek(f, pos, SEEK_SET);
