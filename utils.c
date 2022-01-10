@@ -32,14 +32,21 @@ char **Read_Split_Line_File(FILE *f, int n_campos_max, int *n_campos_lidos, char
 
 int getNumberOfLinesInFile(FILE *f)
 {
-    int n_linhas = 0;
-    char *LT = (char *)malloc(sizeof(char)*MAX_LINHA_FICHEIRO);
+    int size = 0;
+   /* char *LT = (char *)malloc(sizeof(char)*MAX_LINHA_FICHEIRO);
     while (fgets(LT , MAX_LINHA_FICHEIRO , f) != NULL)
     {
-        n_linhas++;
+        size++;
     }
-    rewind(f);
-    return n_linhas;
+    rewind(f);*/
+
+    long pos;
+    pos = ftell(f); // guarda a posição actual do ponteiro do ficheiro 
+    fseek(f,0L, SEEK_END);
+    size = ftell(f);
+    fseek(f, pos, SEEK_SET);
+
+    return size;
 }
 
 
