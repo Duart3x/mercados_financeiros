@@ -303,5 +303,5 @@ void resetText()
 
 void printColoredText(char* msg, COLORS color)
 {
-    printf("\033\r%s %s \033%s", COLOR_CODES[color], msg, COLOR_CODES[RESET]);
+    printf("\033%s %s \033%s", COLOR_CODES[color], msg, COLOR_CODES[RESET]);
 }

@@ -27,10 +27,10 @@ typedef struct Good{
 } GOOD;
 
 
-void newGoodQuestionaire();
-void addGoodToFile(GOOD good);
-bool checkIfGoodExistsAndUpdate(GOOD good);
-void goodTransactionsMenu();
+void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows);
+void addGoodToFile(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows);
+bool checkIfGoodExistsAndUpdate(GOOD *goodTransactions, int goodTransactionsRows, GOOD good);
+void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows);
 GOOD *readGoodsTransactionsFile();
 GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows);
 
