@@ -8,7 +8,7 @@
 
 #define BUFFER_SIZE 40
 
-void newGoodQuestionaire() {
+void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
     GOOD good;
     bool isValid = true;
     int i = 0;
@@ -18,7 +18,7 @@ void newGoodQuestionaire() {
     char buffer[BUFFER_SIZE];
     do
     {
-        system("cls");
+        //system("cls");
         isValid = true;
 
         printf("\nIdentificacao da data de observacao (dd/MM/aaaa): ");
@@ -294,7 +294,7 @@ void newGoodQuestionaire() {
     {
         //Se for S, adicionar o good ao ficheiro
         memset(buffer, 0, BUFFER_SIZE);
-        addGoodToFile(good);
+        addGoodToFile(good, goodTransactions, goodTransactionsRows);
     }
     else
     {
@@ -304,32 +304,20 @@ void newGoodQuestionaire() {
     }
 }
 
-bool checkIfGoodExistsAndUpdate(GOOD good)
+bool checkIfGoodExistsAndUpdate(GOOD *goodTransactions, int goodTransactionsRows, GOOD good)
 {
-    printf("\n*** Verificar se o bem existe ***\n");
-    FILE *auxFile = fopen("./files/goodTransaction.bin", "rb");
-    GOOD *auxGoods = readGoodsTransactionsFile();
-    int auxGoodSize = getNumberOfLinesInFile(auxFile);
-    fclose(auxFile);
-
     int i = 0;
-    for (i = 0; i <= auxGoodSize; i++)
+    for (i = 0; i <= goodTransactionsRows; i++)
     {
-        if(strcmp(auxGoods[i].name, good.name) == 0 && auxGoods[i].marketType == good.marketType && auxGoods[i].obsDate.day == good.obsDate.day && auxGoods[i].obsDate.month == good.obsDate.month && auxGoods[i].obsDate.year == good.obsDate.year)
+        if(strcmp(goodTransactions[i].name, good.name) == 0 && goodTransactions[i].marketType == good.marketType && goodTransactions[i].obsDate.day == good.obsDate.day && goodTransactions[i].obsDate.month == good.obsDate.month && goodTransactions[i].obsDate.year == good.obsDate.year)
         {
-            printf("\n*** O bem ja existe ***\n");
-            FILE *auxFile = fopen("./files/goodTransaction.bin", "wb");
-
-            auxGoods[i].currency = good.currency;
-            auxGoods[i].marketType = good.marketType;
-            auxGoods[i].openValue = good.openValue;
-            auxGoods[i].closeValue = good.closeValue;
-            auxGoods[i].lowerValue = good.lowerValue;
-            auxGoods[i].higherValue = good.higherValue;
-            auxGoods[i].volume = good.volume;
-
-            fwrite(auxGoods, sizeof(GOOD), auxGoodSize, auxFile); 
-            fclose(auxFile);
+            goodTransactions[i].currency = good.currency;
+            goodTransactions[i].marketType = good.marketType;
+            goodTransactions[i].openValue = good.openValue;
+            goodTransactions[i].closeValue = good.closeValue;
+            goodTransactions[i].lowerValue = good.lowerValue;
+            goodTransactions[i].higherValue = good.higherValue;
+            goodTransactions[i].volume = good.volume;
             return true;
         }
     }
@@ -337,24 +325,26 @@ bool checkIfGoodExistsAndUpdate(GOOD good)
     return false;
 }
 
-void addGoodToFile(GOOD good)
+void addGoodsToFile(GOOD *goodTransactions, int *goodTransactionsRows)
 {
-    if(checkIfGoodExistsAndUpdate(good) == false)
-    {
-        FILE *file = fopen("./files/goodTransaction.bin", "ab");
+    FILE *file = fopen("./files/goodTransaction.bin", "wb");
 
-        if(file == NULL)
-        {
-            setTextRed();
-            printf("Erro a guardar os dados do bem tente novamente.\n");
-            resetText();
-            printf("\nClique em qualquer tecla para voltar ao menu.");
-            getch();
-            return;
-        }
-        
-        fwrite(&good, sizeof(GOOD), 1, file);
-        fclose(file);
+    fwrite(goodTransactions, sizeof(GOOD), *goodTransactionsRows, file);
+    fclose(file);
+}
+
+void addGoodToFile(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows)
+{
+    if(checkIfGoodExistsAndUpdate(goodTransactions, *goodTransactionsRows, good) == false)
+    {
+        *goodTransactionsRows = *goodTransactionsRows + 1;
+
+        goodTransactions = (GOOD*)realloc(goodTransactions, (*goodTransactionsRows) * sizeof(GOOD));
+
+        goodTransactions[*goodTransactionsRows] = good;
+
+        printf("%d", goodTransactions[*goodTransactionsRows].volume);
+
         printColoredText("Dados do bem guardados com sucesso.\n", GREEN);
         printf("Clica em qualquer tecla para voltar ao menu.");
         getch();
@@ -366,7 +356,7 @@ void addGoodToFile(GOOD good)
     }
 }
 
-GOOD *readGoodsTransactionsFile() {
+GOOD *readGoodsTransactionsFile(int *numRows) {
     FILE *file = fopen("./files/goodTransaction.bin", "rb");
     GOOD *goods = (GOOD*)malloc(sizeof(GOOD));
     int i = 0;
@@ -390,6 +380,7 @@ GOOD *readGoodsTransactionsFile() {
     }
 
     fclose(file);
+    *numRows = i;
     return goods;
 }
 
@@ -441,7 +432,7 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
     return goodsHistory;
 }
 
-void goodTransactionsMenu() {
+void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows) {
     system("cls");
 
     char *opcoes[] = {"Registar Novo", "Listar Bens Transacionados", "Voltar..."};
@@ -450,7 +441,7 @@ void goodTransactionsMenu() {
     switch (op)
     {
         case 1:
-            newGoodQuestionaire();
+            newGoodQuestionaire(goodTransactions, goodTransactionsRows);
             break;
 
         case 2:

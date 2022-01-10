@@ -19,12 +19,14 @@ int main()
 
     EXCHANGERATE *exchangeRates;
     GOOD *goodsHistory;
+    GOOD *goodTransactions;
 
     EXCHANGERATE findExchange;
     char **sortedCurrencies;
 
     int numRows;
     int numGoodsRows;
+    int numGoodTransactionsRows;
 
     int op;
 
@@ -36,8 +38,9 @@ int main()
 
     exchangeRates = readExchangeRatesFile(fp, &numRows);
     goodsHistory = readGoodsTransactionsHistoryFile(fGoodsHistory, &numGoodsRows);
+    goodTransactions = readGoodsTransactionsFile(&numGoodTransactionsRows);
 
-    for (int i = 0; i < 5000; i++)
+    /*for (int i = 0; i < 5000; i++)
     {
         printf("\n");
         printf("[%d-%d-%d] | [%s]\n", goodsHistory[i].obsDate.day, goodsHistory[i].obsDate.month, goodsHistory[i].obsDate.year,CURRENCIES[goodsHistory[i].currency]);
@@ -49,7 +52,7 @@ int main()
         printf("Volume: %d\n", goodsHistory[i].volume);
         printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[goodsHistory[i].marketType]);
         printf("-------------------------------------------------------------------------------------\n");
-    }    
+    }    */
 
     // drawExchangeRates(exchangeRates, numRows);
 
@@ -96,12 +99,16 @@ int main()
     
     default:
         break;
-    }
+    }*/
 
-    newGoodQuestionaire();*/
+    GOOD good = (GOOD){.name = "Bem", .openValue = 1.0, .closeValue = 2.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 5, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2020}};
+
+    addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
+    //newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
 
     free(exchangeRates);
     free(goodsHistory);
+    free(goodTransactions);
 
     return 0;
 }
