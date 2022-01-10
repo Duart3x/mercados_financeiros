@@ -103,7 +103,8 @@ int main()
 
     GOOD good = (GOOD){.name = "Bem", .openValue = 1.0, .closeValue = 2.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 5, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2020}};
 
-    addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
+    //addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
+    listGoodsIndentifiers(goodsHistory, numGoodsRows);
     //newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
 
     free(exchangeRates);

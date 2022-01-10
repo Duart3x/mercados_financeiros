@@ -33,6 +33,7 @@ bool checkIfGoodExistsAndUpdate(GOOD *goodTransactions, int goodTransactionsRows
 void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows);
 GOOD *readGoodsTransactionsFile();
 GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows);
+void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows);
 
 
 #endif

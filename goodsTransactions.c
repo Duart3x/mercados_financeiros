@@ -432,6 +432,49 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
     return goodsHistory;
 }
 
+void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
+{
+    int i = 0, j = 0, count = 0;
+    bool exists = false;
+    char **names;
+
+    names = (char**)malloc(1 * sizeof(char*));
+    names[0] = (char*)malloc(sizeof(goodTransactions[0].name) * sizeof(char));
+    strcpy(names[0], goodTransactions[0].name);
+
+    for (i = 0; i <= goodTransactionsRows; i++)
+    {
+        for (i = 0; i < count; i++)
+        {
+            if(strcmp(names[i], goodTransactions[i].name) == 0) {
+                exists = true;
+                break;
+            }
+                
+        }
+
+        if(exists == false)
+        {
+            count++;
+            names = (char**)realloc(names, count * sizeof(char*));
+            names[count] = (char*)malloc(sizeof(goodTransactions[i].name) * sizeof(char));
+            strcpy(names[count], goodTransactions[i].name);
+        }
+
+        exists = false;
+    }
+
+    i = 0;
+
+    for (i = 0; i < count; i++)
+    {
+        printf("%s\n", names[i]);
+    }
+    
+
+    free(names);  
+}
+
 void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows) {
     system("cls");
 
