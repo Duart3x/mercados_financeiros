@@ -101,10 +101,12 @@ int main()
         break;
     }*/
 
-    GOOD good = (GOOD){.name = "Bem", .openValue = 1.0, .closeValue = 2.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 5, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2020}};
+    GOOD good = (GOOD){.name = "Bem2", .openValue = 1.0, .closeValue = 2.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 5, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2020}};
 
     //addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
-    listGoodsIndentifiers(goodsHistory, numGoodsRows);
+    //saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);
+    
+    listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
     //newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
 
     free(exchangeRates);

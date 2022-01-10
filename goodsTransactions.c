@@ -325,7 +325,7 @@ bool checkIfGoodExistsAndUpdate(GOOD *goodTransactions, int goodTransactionsRows
     return false;
 }
 
-void addGoodsToFile(GOOD *goodTransactions, int *goodTransactionsRows)
+void saveGoodsToFile(GOOD *goodTransactions, int *goodTransactionsRows)
 {
     FILE *file = fopen("./files/goodTransaction.bin", "wb");
 
@@ -339,11 +339,24 @@ void addGoodToFile(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows)
     {
         *goodTransactionsRows = *goodTransactionsRows + 1;
 
-        goodTransactions = (GOOD*)realloc(goodTransactions, (*goodTransactionsRows) * sizeof(GOOD));
+        goodTransactions = realloc(goodTransactions, (*goodTransactionsRows) * sizeof(GOOD));
 
-        goodTransactions[*goodTransactionsRows] = good;
 
-        printf("%d", goodTransactions[*goodTransactionsRows].volume);
+        goodTransactions[*goodTransactionsRows-1] = good;
+
+        /*goodTransactions[*goodTransactionsRows-1].currency = good.currency;
+        goodTransactions[*goodTransactionsRows-1].marketType = good.marketType;
+        goodTransactions[*goodTransactionsRows-1].openValue = good.openValue;
+        goodTransactions[*goodTransactionsRows-1].closeValue = good.closeValue;
+        goodTransactions[*goodTransactionsRows-1].lowerValue = good.lowerValue;
+        goodTransactions[*goodTransactionsRows-1].higherValue = good.higherValue;
+        goodTransactions[*goodTransactionsRows-1].volume = good.volume;
+        
+        goodTransactions[*goodTransactionsRows].obsDate.day = good.obsDate.day;
+        goodTransactions[*goodTransactionsRows].obsDate.month = good.obsDate.month;
+        goodTransactions[*goodTransactionsRows].obsDate.year = good.obsDate.year;
+        strcpy(goodTransactions[*goodTransactionsRows-1].name, good.name);
+        */
 
         printColoredText("Dados do bem guardados com sucesso.\n", GREEN);
         printf("Clica em qualquer tecla para voltar ao menu.");
@@ -354,17 +367,18 @@ void addGoodToFile(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows)
         printf("Clica em qualquer tecla para voltar ao menu.");
         getch();
     }
+
 }
 
 GOOD *readGoodsTransactionsFile(int *numRows) {
     FILE *file = fopen("./files/goodTransaction.bin", "rb");
-    GOOD *goods = (GOOD*)malloc(sizeof(GOOD));
+    GOOD *goods = (GOOD*)malloc(1*sizeof(GOOD));
     int i = 0;
 
     if(file == NULL)
     {
         setTextRed();
-        printf("Erro a guardar os dados do bem tente novamente.\n");
+        printf("Erro ao abrir o ficheiro.\n");
         resetText();
         printf("\nClique em qualquer tecla para voltar ao menu.");
         getch();
@@ -434,7 +448,7 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
 
 void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
 {
-    int i = 0, j = 0, count = 0;
+    int i = 0, j = 0, count = 1;
     bool exists = false;
     char **names;
 
@@ -442,23 +456,24 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
     names[0] = (char*)malloc(sizeof(goodTransactions[0].name) * sizeof(char));
     strcpy(names[0], goodTransactions[0].name);
 
-    for (i = 0; i <= goodTransactionsRows; i++)
+    for (i = 0; i < goodTransactionsRows; i++)
     {
-        for (i = 0; i < count; i++)
+        for (j = 0; j < count; j++)
         {
-            if(strcmp(names[i], goodTransactions[i].name) == 0) {
+            if(strcmp(names[j], goodTransactions[i].name) == 0) {
                 exists = true;
                 break;
             }
                 
         }
+        j=0;
 
         if(exists == false)
         {
             count++;
             names = (char**)realloc(names, count * sizeof(char*));
-            names[count] = (char*)malloc(sizeof(goodTransactions[i].name) * sizeof(char));
-            strcpy(names[count], goodTransactions[i].name);
+            names[count-1] = (char*)malloc(20 * sizeof(char));
+            strcpy(names[count-1], goodTransactions[i].name);
         }
 
         exists = false;
