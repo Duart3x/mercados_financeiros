@@ -35,8 +35,10 @@ void drawExchangeRatesPaginationSortedByValue(EXCHANGERATE *exchangeRates, int n
 void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows);
 int drawMenu(char *opcoes[], int numOpcoes, char *title);
 bool handleError(char *msg);
+int askFileToUse(int numGoodTransactionsRows,int numGoodsRows);
 void setTextRed();
 void resetText();
 void printColoredText(char* msg, COLORS color);
+
 
 #endif

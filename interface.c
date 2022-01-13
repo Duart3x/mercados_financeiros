@@ -160,7 +160,7 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRatesOriginal, int nu
         printf("%d registos por pagina\n", linhasPorPagina);
 
         printf("\n\n");
-        printf("1 - Página anterior\n");
+        printf("1 - Pagina anterior\n");
         printf("2 - Proxima pagina\n");
         printf("3 - Escolher numero de pagina\n");
         printf("4 - Escolher numero de registos por pagina\n");
@@ -220,22 +220,55 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
 {
     int key = 0;
     int option = 1;
-    int i;
+    int biggerOption = 0;
+    int i = 0;
+
+    biggerOption = strlen(title);
+
+    for (i = 0; i < numOpcoes; i++)
+    {
+        if(strlen(opcoes[i]) > biggerOption)
+            biggerOption = strlen(opcoes[i]);
+    }
+
+    if(biggerOption == strlen(title))
+        biggerOption += 10;
 
     do
     {
         system("cls");
 
-        printf("\n  ********\t%s\t********\n", title);
-        printf("  *                            *\n");
+        //printf("\n  ********     %s     ********\n\n", title);
+        printf("\n  ");
+        i= 0 ;
+        for (i = 0; i < ceil(abs(((biggerOption + 14) - ( strlen(title) + 10 ) )) / 2.0); i++)
+        {
+            printf("*");
+        }
+        printf("     %s     ", title);
+        i=  0;
+        for (i = 0; i < abs(((biggerOption + 14) - ( strlen(title) + 10 ) )) / 2; i++)
+        {
+            printf("*");
+        }
+        printf("\n\n");
+
+        i = 0;
         for (i = 0; i < numOpcoes; i++)
         {
             printf("    %s %s\n", (option == i + 1) ? "-> [x]" : "   [ ]", opcoes[i]);
         }
-        printf("  *                            *\n");
-        printf("  ******************************\n");
-        printf("Use as setas para selecionar uma opção. ENTER para confimar. ESC para sair.\n");
+        printf("\n  ");
+        i = 0;
+        for (i = 0; i < 14+biggerOption; i++)
+        {
+            printf("*");
+        }
+         
+        
+        printf("\n  Use as setas para selecionar uma opcao. ENTER para confimar. ESC para sair.\n");
         key = getch();
+        fflush(stdin);
 
         /*printf("\n   ******** Menu Principal ********\n");
         printf("   *                              *\n");
@@ -268,8 +301,34 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
     return option;
 }
 
+int askFileToUse(int numGoodTransactionsRows,int numGoodsRows)
+{
+
+    
+    char opcao1[40] = "Ficheiro Externo (";
+    char* numGoodsRowsStr = malloc(sizeof(char) * 10);; 
+    itoa(numGoodsRows,numGoodsRowsStr,10);
+    strcat(opcao1, numGoodsRowsStr);
+    strcat(opcao1, " linhas)");
+
+    char opcao2[40] = "Ficheiro Interno (";
+    char* numGoodTransactionsRowsStr = malloc(sizeof(char) * 10);
+    itoa(numGoodTransactionsRows,numGoodTransactionsRowsStr,10);
+    strcat(opcao2, numGoodTransactionsRowsStr);
+    strcat(opcao2, " linhas)");
+
+    char** opcoes = malloc(sizeof(char*) * 2);
+    opcoes[0] = malloc(sizeof(char) * 40);
+    opcoes[1] = malloc(sizeof(char) * 40);
+    strcpy(opcoes[0], opcao1);
+    strcpy(opcoes[1], opcao2);
+   
+
+    return drawMenu(opcoes, 2, "Qual ficheiro deseja abrir?");
+}
+
 /**
- * @brief Mostra um erro a vermelho na consola e espera que o utilizador clique ENTER para continuar ou ESC para cancelar a ação que estaria a fazer.
+ * @brief Mostra um erro a vermelho na consola e espera que o utilizador clique ENTER para continuar ou ESC para cancelar a acao que estaria a fazer.
  * @param msg
  * 
  * @return false se o utilizador clicou ESC, true se clicou ENTER ou qq outra tecla

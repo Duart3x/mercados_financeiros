@@ -141,7 +141,7 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int f
 
     if (!result)
     {
-        handleError("Não foi possivel ordernar o array.");
+        handleError("Nao foi possivel ordernar o array.");
         return exchangeRates;
     }
         
@@ -221,7 +221,7 @@ double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,D
     EXCHANGERATE rate = getExchangeRateByDate( exchangeRates,numRows,rateDate);
     if(rate.conversionDate.year == 0)
     {
-        handleError("Não foi possivel encontrar a cotação do dia.");
+        handleError("Nao foi possivel encontrar a cotacao do dia.");
         return -1;
     }
         
