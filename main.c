@@ -4,10 +4,14 @@
 #include <math.h>
 #include <ctype.h>
 #include <locale.h>
+#include <stdlib.h>
+#include <conio.h>
+
 #include "utils.h"
 #include "exchangeRates.h"
 #include "goodsTransactions.h"
 #include "interface.h"
+
 
 int main()
 {
@@ -110,15 +114,16 @@ int main()
 
     /*GOOD good = (GOOD){.name = "ETH", .openValue = 3.0, .closeValue = 4.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 552, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2022}};
 
-    addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
-    saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);*/
+    //addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
+    //saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);
     
-   // listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
+    //listGoodsIndentifiers(goodsHistory, numGoodsRows);
     // newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
 
     free(exchangeRates);
     free(goodsHistory);
     free(goodTransactions);
+    getch();
 
     return 0;
 }

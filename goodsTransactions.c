@@ -436,7 +436,7 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
         goodsHistory[n].volume = atoi(V[6]);
         goodsHistory[n].marketType = atoi(V[7]);
         goodsHistory[n].currency = atoi(V[8]);
-        
+
 
         for (int i = 0; i < nCamposLidos; i++)
             free(V[i]);
@@ -484,11 +484,12 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
 
     i = 0;
 
+    char** namesSorted = sortCurrenciesQuickSort(names,0,count-1);
+
     for (i = 0; i < count; i++)
     {
-        printf("%s\n", names[i]);
+        printf("%s\n", namesSorted[i]);
     }
-    
 
     free(names);  
 }

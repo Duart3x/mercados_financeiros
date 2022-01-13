@@ -60,7 +60,6 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     EXCHANGERATE exchangeRate;
     int middle = numRows / 2;
 
-
     if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
         return exchangeRates[middle];
     else if (compareDates(exchangeRates[middle].conversionDate, date) == -1)
@@ -264,8 +263,8 @@ char **sortCurrenciesQuickSort(char **currencies, int left, int right)
 {
     int i = 0;
     int j = 0;
-    char temp[4];
-    char* aux = malloc(4 * sizeof(char));
+    char temp[80];
+    char* aux = malloc(80 * sizeof(char));
 
 
     if (left < right)
@@ -385,33 +384,40 @@ void chooseCurrenciesToConvert(){
     int i=0;
      
     system("cls");
-    char** opcoes = malloc(CURRENCIES_SIZE*sizeof(char*));
+    char** opcoes = malloc(CURRENCIES_SIZE * sizeof(char *));
+
 
     for (i = 0; i < CURRENCIES_SIZE; i++)
     {
-        opcoes[i]=malloc(4*sizeof(char));
-        strcpy(opcoes[i],(char*)CURRENCIES[i]);
+        opcoes[i] = malloc(4 * sizeof(char));
+        strcpy(opcoes[i], CURRENCIES[i]);
     }
     
-    int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
+    //int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
+    int op = drawCurrenciesMenu();
 
     if(op == -1) return;
 
     currencyFrom=op-1;
 
-    int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
+    //int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
+    int op2 = drawCurrenciesMenu();
 
     if(op2 == -1) return;
     currencyTo=op2-1;
+
     system("cls");
     while (isNumber(value))
     {
-        printf("Moeda origem: %s");
-        printf("Moeda pretendida: ");
-
+        printf("Moeda origem: %s",CURRENCIES[currencyFrom]);
+        printf("Moeda pretendida: %s ",CURRENCIES[currencyTo]);
         printf("Valor que prentende converter: ");
         scanf("%lf",value);
-    
+        if (!isNumber(value))
+        {
+            
+        }
+        
 
     }
     fromValue=atof(value);
