@@ -60,7 +60,6 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     EXCHANGERATE exchangeRate;
     int middle = numRows / 2;
 
-
     if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
         return exchangeRates[middle];
     else if (compareDates(exchangeRates[middle].conversionDate, date) == -1)
@@ -264,8 +263,8 @@ char **sortCurrenciesQuickSort(char **currencies, int left, int right)
 {
     int i = 0;
     int j = 0;
-    char temp[4];
-    char* aux = malloc(4 * sizeof(char));
+    char temp[80];
+    char* aux = malloc(80 * sizeof(char));
 
 
     if (left < right)
