@@ -37,5 +37,6 @@ void cloneCurrenciesArrayParam(char** result);
 EXCHANGERATE* cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows);
 EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows, int start, int end);
 double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to);
-void chooseCurrenciesToConvert();
+void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows);
+bool isNumber(char* value);
 #endif

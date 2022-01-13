@@ -4,7 +4,7 @@
 #include <math.h>
 #include <ctype.h>
 #include "utils.h"
-#include"interface.h"
+#include "interface.h"
 #include "exchangeRates.h"
 
 EXCHANGERATE *readExchangeRatesFile(FILE *f, int *numRows)
@@ -20,7 +20,7 @@ EXCHANGERATE *readExchangeRatesFile(FILE *f, int *numRows)
 
     while (!feof(f))
     {
-        char **V = Read_Split_Line_File(f, CURRENCIES_SIZE+1, &nCamposLidos, ",");
+        char **V = Read_Split_Line_File(f, CURRENCIES_SIZE + 1, &nCamposLidos, ",");
 
         for (int i = 0; i < nCamposLidos; i++)
         {
@@ -66,7 +66,7 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     {
         if (numRows == 1)
         {
-            if(compareDates(exchangeRates[middle].conversionDate, date) == 0)
+            if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
                 return exchangeRates[middle];
             else
                 return (EXCHANGERATE){};
@@ -77,7 +77,7 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     else
     {
         if (numRows == 1)
-            if(compareDates(exchangeRates[middle].conversionDate, date) == 0)
+            if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
                 return exchangeRates[middle];
             else
                 return (EXCHANGERATE){};
@@ -86,29 +86,29 @@ EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DAT
     }
 }
 
-EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int from,int to,char** sortedCurrencies)
+EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int from, int to, char **sortedCurrencies)
 {
     EXCHANGERATE *result = malloc((to - from) * sizeof(EXCHANGERATE));
     int i = 0;
 
     sortCurrenciesQuickSort(sortedCurrencies, 0, CURRENCIES_SIZE - 1);
 
-    for (i = 0; i < to-from; i++)
+    for (i = 0; i < to - from; i++)
     {
-        result[i] = sortExchangeRateByCurrencyCode(exchangeRates[from + i],sortedCurrencies);
+        result[i] = sortExchangeRateByCurrencyCode(exchangeRates[from + i], sortedCurrencies);
     }
 
     return result;
 }
 
-EXCHANGERATE sortExchangeRateByCurrencyCode(EXCHANGERATE exchangeRate,char** sortedCurrencies)
+EXCHANGERATE sortExchangeRateByCurrencyCode(EXCHANGERATE exchangeRate, char **sortedCurrencies)
 {
     EXCHANGERATE result;
-    if(!sortedCurrencies)
+    if (!sortedCurrencies)
         sortCurrenciesQuickSort(sortedCurrencies, 0, CURRENCIES_SIZE - 1);
-    
+
     int positions[CURRENCIES_SIZE];
-    int i= 0, j= 0;
+    int i = 0, j = 0;
 
     for (i = 0; i < CURRENCIES_SIZE; i++)
     {
@@ -134,7 +134,7 @@ EXCHANGERATE sortExchangeRateByCurrencyCode(EXCHANGERATE exchangeRate,char** sor
     return result;
 }
 
-EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int from,int to, char*** sortedCurrencyNamesByDay)
+EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int from, int to, char ***sortedCurrencyNamesByDay)
 {
     EXCHANGERATE *result = exchangeRates;
 
@@ -143,30 +143,29 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int f
         handleError("Nao foi possivel ordernar o array.");
         return exchangeRates;
     }
-        
-        
+
     int i = 0;
     int j = 0;
     double temp = 0;
-    char* tempCurrencyName = malloc(4 * sizeof(char*));
+    char *tempCurrencyName = malloc(4 * sizeof(char *));
     int k = 0;
 
-    for (i = 0; i < (to-from); i++)
+    for (i = 0; i < (to - from); i++)
     {
         for (j = 0; j < CURRENCIES_SIZE; j++)
         {
-            strcpy(sortedCurrencyNamesByDay[i][j],CURRENCIES[j]);
+            strcpy(sortedCurrencyNamesByDay[i][j], CURRENCIES[j]);
         }
     }
 
     i = 0;
     j = 0;
 
-    for (i = 0; i < (to-from); i++)
+    for (i = 0; i < (to - from); i++)
     {
         for (j = 0; j < CURRENCIES_SIZE; j++)
         {
-            for (k = j+1; k < CURRENCIES_SIZE; k++)
+            for (k = j + 1; k < CURRENCIES_SIZE; k++)
             {
                 if (result[i].currencies[j] < result[i].currencies[k])
                 {
@@ -184,12 +183,11 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int f
         result[i].conversionDate.month = exchangeRates[i].conversionDate.month;
         result[i].conversionDate.day = exchangeRates[i].conversionDate.day;
     }
-    
-    
+
     return result;
 }
 
-EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate, char** sortedCurrencyNamesByDay)
+EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate, char **sortedCurrencyNamesByDay)
 {
     EXCHANGERATE result;
     int i = 0, j = 0;
@@ -198,37 +196,48 @@ EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate,
 
     for (i = 0; i < CURRENCIES_SIZE; i++)
     {
-        for (j = i+1; j < CURRENCIES_SIZE; j++)
+        for (j = i + 1; j < CURRENCIES_SIZE; j++)
         {
             if (exchangeRate.currencies[i] < exchangeRate.currencies[j])
             {
                 temp = exchangeRate.currencies[i];
                 exchangeRate.currencies[i] = exchangeRate.currencies[j];
                 exchangeRate.currencies[j] = temp;
-                strcpy(sortedCurrencyNamesByDay[i],CURRENCIES[j]);
+                strcpy(sortedCurrencyNamesByDay[i], CURRENCIES[j]);
             }
         }
     }
 
-
     return result;
-
 }
+/**
+ * @brief 
+ * 
+ * @param exchangeRates 
+ * @param numRows 
+ * @param rateDate 
+ * @param from 
+ * @param fromValue 
+ * @param to 
+ * @return -1 se nao existir taxa de conversao de moeda origem | -2 se nao existir taxa de conversao de moeda pretendida | -3 se nao existir conversões na data especificada 
+ */
+double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows, DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
+{
+    EXCHANGERATE rate = getExchangeRateByDate(exchangeRates, numRows, rateDate);
+    if (rate.conversionDate.year == 0) return -3;
+    
+    
+    
 
-double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
-{    
-    EXCHANGERATE rate = getExchangeRateByDate( exchangeRates,numRows,rateDate);
-    if(rate.conversionDate.year == 0)
-    {
-        handleError("Nao foi possivel encontrar a cotacao do dia.");
-        return -1;
-    }
-        
     double fromcurrencie = rate.currencies[from];
-    double tocurrencie =rate.currencies[to];
+    double tocurrencie = rate.currencies[to];
 
-    double Eur = fromValue/fromcurrencie;
-    double convertedValue= Eur * tocurrencie;
+    if (fromcurrencie==-1 ) return -1;
+    else if( tocurrencie==-1) return -2;
+    
+
+    double Eur = fromValue / fromcurrencie;
+    double convertedValue = Eur * tocurrencie;
 
     return convertedValue;
 }
@@ -264,8 +273,7 @@ char **sortCurrenciesQuickSort(char **currencies, int left, int right)
     int i = 0;
     int j = 0;
     char temp[80];
-    char* aux = malloc(80 * sizeof(char));
-
+    char *aux = malloc(80 * sizeof(char));
 
     if (left < right)
     {
@@ -297,7 +305,7 @@ char **sortCurrenciesQuickSort(char **currencies, int left, int right)
     return currencies;
 }
 
-char** cloneCurrenciesArray()
+char **cloneCurrenciesArray()
 {
     char **result = (char **)malloc(CURRENCIES_SIZE * sizeof(char *));
     if (!result)
@@ -318,7 +326,7 @@ char** cloneCurrenciesArray()
     return result;
 }
 
-void cloneCurrenciesArrayParam(char** result)
+void cloneCurrenciesArrayParam(char **result)
 {
     int i = 0;
 
@@ -330,10 +338,9 @@ void cloneCurrenciesArrayParam(char** result)
             free(result);
         }
     }
-
 }
 
-EXCHANGERATE* cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows)
+EXCHANGERATE *cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows)
 {
     EXCHANGERATE *result = (EXCHANGERATE *)malloc(numRows * sizeof(EXCHANGERATE));
     if (!result)
@@ -355,14 +362,14 @@ EXCHANGERATE* cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows)
     return result;
 }
 
-EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows, int start, int end)
+EXCHANGERATE *clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows, int start, int end)
 {
-    EXCHANGERATE *result = (EXCHANGERATE *)malloc((end-start) * sizeof(EXCHANGERATE));
+    EXCHANGERATE *result = (EXCHANGERATE *)malloc((end - start) * sizeof(EXCHANGERATE));
     if (!result)
         return NULL;
     int i = 0;
 
-    for (i = 0; i < end-start; i++)
+    for (i = 0; i < end - start; i++)
     {
         result[i].conversionDate.year = exchangeRates[start + i].conversionDate.year;
         result[i].conversionDate.month = exchangeRates[start + i].conversionDate.month;
@@ -377,32 +384,236 @@ EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int num
     return result;
 }
 
-void chooseCurrenciesToConvert(){
-    int currencyfrom=0, currencyto=0 ;
-    int i=0;
-     
-    system("cls");
-    char** opcoes = malloc(CURRENCIES_SIZE * sizeof(char *));
+void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
+{
+    int currencyFrom = 0, currencyTo = 0;
+    char value[20];
+    char strData[15];
+    double fromValue, convertedValue;
+    bool quitMenu = false, isValid = false,repeat=false;
+    DATE data;
+    int strLenData;
+    int i = 0;
 
-
-    for (i = 0; i < CURRENCIES_SIZE; i++)
-    {
-        opcoes[i] = malloc(4 * sizeof(char));
-        strcpy(opcoes[i], CURRENCIES[i]);
-    }
     
+do
+{
+    system("cls");
     //int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
     int op = drawCurrenciesMenu();
 
-    if(op == -1) return;
+    if (op == -1)
+        return;
 
-    currencyfrom=op-1;
+    currencyFrom = op - 1;
 
     //int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
-    int op2 = drawCurrenciesMenu();
 
-    if(op2 == -1) return;
-    currencyto=op2-1;
+    int op2 = 0;
+    do
+    {
+        op2 = drawCurrenciesMenu();
+        if (op2 == op)
+        {
+            quitMenu = !handleError("Nao pode selecionar a mesma moeda");
+        }
 
-        
+    } while (op2 == op && !quitMenu);
+
+    if (op2 == -1)
+        return;
+    currencyTo = op2 - 1;
+
+    while (!quitMenu)
+    {
+        system("cls");
+        printf("Moeda origem: %s\n", CURRENCIES[currencyFrom]);
+        printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
+        printf("Valor que prentende converter: ");
+        scanf("%s", value);
+        fflush(stdin);
+        if (!isNumber(value))
+        {
+            quitMenu = !handleError("Valor introduzido invalido");
+        }
+        else
+        {
+
+            fromValue = atof(replaceChar(value, '.', ','));
+            break;
+        }
+    }
+
+    i = 0;
+    while (!isValid && !quitMenu)
+    {
+        isValid = true;
+        system("cls");
+        printf("Valor a converter: %.02lf %s \n", fromValue, CURRENCIES[currencyFrom]);
+        printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
+
+        printf("Identificacao da data de observacao (dd/MM/aaaa): ");
+        scanf("%s", strData);
+        fflush(stdin);
+        strLenData = strlen(strData);
+        if (strLenData == 0 || strLenData > 10)
+        {
+            quitMenu = !handleError("Data Invalida");
+
+            isValid = false;
+        }
+        else
+        {
+
+            char *aux;
+            aux = strtok(strData, "/");
+
+            while (aux != NULL)
+            {
+                if (i == 0)
+                {
+                    if (strlen(aux) <= 2)
+                    {
+                        data.day = atoi(aux);
+                    }
+                    else
+                    {
+                        quitMenu = !handleError("Data Invalida");
+
+                        isValid = false;
+                        break;
+                    }
+                }
+                else if (i == 1)
+                {
+                    if (strlen(aux) <= 2)
+                    {
+                        data.month = atoi(aux);
+                    }
+                    else
+                    {
+                        quitMenu = !handleError("Data Invalida");
+
+                        isValid = false;
+                        break;
+                    }
+                }
+                else if (i == 2)
+                {
+                    if (strlen(aux) == 4)
+                    {
+                        data.year = atoi(aux);
+                    }
+                    else
+                    {
+                        quitMenu = !handleError("Data Invalida");
+
+                        isValid = false;
+                        break;
+                    }
+                }
+
+                aux = strtok(NULL, "/");
+                i++;
+            }
+
+            free(aux);
+        }
+
+        if (isValid)
+        {
+            if (data.day < 1 || data.day > 31)
+            {
+                quitMenu = !handleError("Data Invalida");
+
+                isValid = false;
+            }
+            else if (data.month < 1 || data.month > 12)
+            {
+                quitMenu = !handleError("Data Invalida");
+
+                isValid = false;
+            }
+            else if (data.year < 999 || data.year > 9999)
+            {
+                quitMenu = !handleError("Data Invalida");
+
+                isValid = false;
+            }
+        }
+    }
+    if (quitMenu)
+        return;
+
+    convertedValue = convertCurrenciesOnSpecificDay(exchangeRates, numRows, data, currencyFrom, fromValue, currencyTo);
+    if (convertedValue==-1)
+    {
+       quitMenu= !handleError("Nao existe taxa de conversao da moeda de origem");
+    }
+    else if (convertedValue==-2)
+    {
+       quitMenu= !handleError("Nao existe taxa de conversao da moeda pretendida");
+    }
+    else if (convertedValue==-3)
+    {
+       quitMenu= !handleError("Nao existe taxa de conversao na data especificada");
+    }
+    if (quitMenu)
+        return;
+    
+    system("cls");
+    printf("Conversao:\n %.02lf %s -> %.02lf %s\n", fromValue, CURRENCIES[currencyFrom], convertedValue, CURRENCIES[currencyTo]);
+    printf("\nTaxas de Conversao:\n");
+    printf("1 %s = %.02f %s\n",CURRENCIES[currencyFrom],(convertedValue/fromValue),CURRENCIES[currencyTo]);
+    printf("1 %s = %.02f %s\n",CURRENCIES[currencyTo],(fromValue/convertedValue),CURRENCIES[currencyFrom]);
+    
+    int sn=0;
+    char* opcao[]= {"Sim","Nao"};
+
+    sn=drawMenu(opcao,2,"Deseja continuar a converter valores?");
+    /*printf("-------------------------\n");
+    printf("|           |           |\n");
+    printf("|  %s      |  %s      |\n", CURRENCIES[currencyFrom], CURRENCIES[currencyTo]);
+    printf("|   	    |	     	|\n");
+    printf("|-----------|-----------|\n");
+    printf("|           |           |\n");
+    printf("|  %.2lf    |  %.2lf  	|\n", fromValue, convertedValue);
+    printf("|   	    |    	    |\n");
+    printf("-------------------------\n");*/
+    if (sn==1)
+    {
+        repeat=true;
+    }
+    else{
+        repeat=false;
+    }
+    
+    } while (repeat);
+}
+
+bool isNumber(char *value)
+{
+
+    int point = 0;
+    bool number = true;
+    for (int i = 0; i < strlen(value); i++)
+    {
+
+        if (value[i] == '.' || value[i] == ',')
+        {
+            if (point > 0)
+            {
+                number = false;
+                break;
+            }
+
+            point++;
+        }
+        else if (!isdigit(value[i]))
+        {
+            number = false;
+            break;
+        }
+    }
+    return number;
 }

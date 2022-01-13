@@ -80,16 +80,17 @@ int main()
      "5 bens transacionaveis com o maior volume de transacces num intervalo de datas",
      "Exportar para um ficheiro texto as taxas de conversao aplicaveis a uma moeda num intervalo de datas"};
     op = drawMenu(listarmoedas, 9, "Menu");
-    printf("%d fdp", op);
     switch (op)
     {
     case 1:
+        menuWithExchangeRatesPagination(exchangeRates, numRows);
         break;
     case 2:
-        chooseCurrenciesToConvert();
-
+        chooseCurrenciesToConvert(exchangeRates,numRows);
+        
         break;
     case 3:
+    
         break;
     case 4:
         break;
@@ -112,10 +113,10 @@ int main()
     //newGoodQuestionaire();
     
 
-    GOOD good = (GOOD){.name = "ETH", .openValue = 3.0, .closeValue = 4.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 552, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2022}};
+    /*GOOD good = (GOOD){.name = "ETH", .openValue = 3.0, .closeValue = 4.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 552, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2022}};
 
     //addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
-    //saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);
+    //saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);*/
     
     //listGoodsIndentifiers(goodsHistory, numGoodsRows);
     // newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
