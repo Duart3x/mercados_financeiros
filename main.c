@@ -124,6 +124,7 @@ int main()
     free(exchangeRates);
     free(goodsHistory);
     free(goodTransactions);
+    printf("\n\n\n PRESSIONE UMA TECLA PARA FECHAR A CONSOLA!");
     getch();
 
     return 0;

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
+#include <conio.h>
 #include "utils.h"
 #include "interface.h"
 #include "exchangeRates.h"
@@ -224,17 +225,16 @@ EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate,
 double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows, DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
 {
     EXCHANGERATE rate = getExchangeRateByDate(exchangeRates, numRows, rateDate);
-    if (rate.conversionDate.year == 0) return -3;
-    
-    
-    
+    if (rate.conversionDate.year == 0)
+        return -3;
 
     double fromcurrencie = rate.currencies[from];
     double tocurrencie = rate.currencies[to];
 
-    if (fromcurrencie==-1 ) return -1;
-    else if( tocurrencie==-1) return -2;
-    
+    if (fromcurrencie == -1)
+        return -1;
+    else if (tocurrencie == -1)
+        return -2;
 
     double Eur = fromValue / fromcurrencie;
     double convertedValue = Eur * tocurrencie;
@@ -390,204 +390,205 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
     char value[20];
     char strData[15];
     double fromValue, convertedValue;
-    bool quitMenu = false, isValid = false,repeat=false;
+    bool quitMenu = false, isValid = false, repeat = false;
     DATE data;
     int strLenData;
     int i = 0;
 
-    
-do
-{
-    system("cls");
-    //int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
-    int op = drawCurrenciesMenu();
+    int *selectedCurrencies = (int *)malloc(2 * sizeof(int));
 
-    if (op == -1)
-        return;
-
-    currencyFrom = op - 1;
-
-    //int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
-
-    int op2 = 0;
     do
     {
-        op2 = drawCurrenciesMenu();
-        if (op2 == op)
+        quitMenu = false;
+        isValid = false;
+        repeat = false;
+        system("cls");
+        //int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
+        int op = drawCurrenciesMenu("Selecione a moeda de origem", selectedCurrencies, 0);
+
+        if (op == -1)
+            return;
+
+        currencyFrom = op - 1;
+        selectedCurrencies[0] = op;
+
+        //int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
+
+        int op2 = 0;
+        do
         {
-            quitMenu = !handleError("Nao pode selecionar a mesma moeda");
+            op2 = drawCurrenciesMenu("Selecione a moeda pretendida", selectedCurrencies, 1);
+            if (op2 == op)
+            {
+                quitMenu = !handleError("Nao pode selecionar a mesma moeda");
+            }
+
+        } while (op2 == op && !quitMenu);
+
+        if (op2 == -1)
+            return;
+        currencyTo = op2 - 1;
+
+        while (!quitMenu)
+        {
+            system("cls");
+            printf("Moeda origem: %s\n", CURRENCIES[currencyFrom]);
+            printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
+            printf("Valor que prentende converter: ");
+            fflush(stdin);
+            scanf("%s", value);
+            fflush(stdin);
+            if (!isNumber(value))
+            {
+                quitMenu = !handleError("Valor introduzido invalido");
+            }
+            else
+            {
+
+                fromValue = atof(replaceChar(value, '.', ','));
+                break;
+            }
         }
 
-    } while (op2 == op && !quitMenu);
-
-    if (op2 == -1)
-        return;
-    currencyTo = op2 - 1;
-
-    while (!quitMenu)
-    {
-        system("cls");
-        printf("Moeda origem: %s\n", CURRENCIES[currencyFrom]);
-        printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
-        printf("Valor que prentende converter: ");
-        scanf("%s", value);
-        fflush(stdin);
-        if (!isNumber(value))
+        i = 0;
+        while (!isValid && !quitMenu)
         {
-            quitMenu = !handleError("Valor introduzido invalido");
+            isValid = true;
+            system("cls");
+            printf("Valor a converter: %.02lf %s \n", fromValue, CURRENCIES[currencyFrom]);
+            printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
+            printf("Identificacao da data de observacao (dd/MM/aaaa): ");
+            fflush(stdin);
+            scanf("%s", strData);
+            fflush(stdin);
+            strLenData = strlen(strData);
+            if (strLenData == 0 || strLenData > 10)
+            {
+                quitMenu = !handleError("Data Invalida");
+
+                isValid = false;
+            }
+            else
+            {
+
+                char *aux;
+                aux = strtok(strData, "/");
+                i = 0;
+                while (aux != NULL)
+                {
+                    if (i == 0)
+                    {
+                        if (strlen(aux) <= 2)
+                        {
+                            data.day = atoi(aux);
+                        }
+                        else
+                        {
+                            quitMenu = !handleError("Data Invalida");
+
+                            isValid = false;
+                            break;
+                        }
+                    }
+                    else if (i == 1)
+                    {
+                        if (strlen(aux) <= 2)
+                        {
+                            data.month = atoi(aux);
+                        }
+                        else
+                        {
+                            quitMenu = !handleError("Data Invalida");
+
+                            isValid = false;
+                            break;
+                        }
+                    }
+                    else if (i == 2)
+                    {
+                        if (strlen(aux) == 4)
+                        {
+                            data.year = atoi(aux);
+                        }
+                        else
+                        {
+                            quitMenu = !handleError("Data Invalida");
+
+                            isValid = false;
+                            break;
+                        }
+                    }
+
+                    aux = strtok(NULL, "/");
+                    i++;
+                }
+
+                free(aux);
+            }
+
+            if (isValid)
+            {
+                if (data.day < 1 || data.day > 31)
+                {
+                    quitMenu = !handleError("Data Invalida");
+
+                    isValid = false;
+                }
+                else if (data.month < 1 || data.month > 12)
+                {
+                    quitMenu = !handleError("Data Invalida");
+
+                    isValid = false;
+                }
+                else if (data.year < 999 || data.year > 9999)
+                {
+                    quitMenu = !handleError("Data Invalida");
+
+                    isValid = false;
+                }
+            }
+        }
+        if (quitMenu)
+            return;
+
+        convertedValue = convertCurrenciesOnSpecificDay(exchangeRates, numRows, data, currencyFrom, fromValue, currencyTo);
+        if (convertedValue == -1)
+        {
+            quitMenu = !handleError("Nao existe taxa de conversao para a moeda de origem");
+        }
+        else if (convertedValue == -2)
+        {
+            quitMenu = !handleError("Nao existe taxa de conversao para a moeda pretendida");
+        }
+        else if (convertedValue == -3)
+        {
+            quitMenu = !handleError("Nao existe taxa de conversao na data especificada");
         }
         else
         {
-
-            fromValue = atof(replaceChar(value, '.', ','));
-            break;
+            system("cls");
+            printf("\n \033[4mConversao\033[0m\n %.02lf %s -> %.02lf %s\n", fromValue, CURRENCIES[currencyFrom], convertedValue, CURRENCIES[currencyTo]);
+            printf("\n \033[4mTaxas de Conversao\033[0m\n");
+            printf(" 1 %s = %.04f %s\n", CURRENCIES[currencyFrom], (convertedValue / fromValue), CURRENCIES[currencyTo]);
+            printf(" 1 %s = %.04f %s\n", CURRENCIES[currencyTo], (fromValue / convertedValue), CURRENCIES[currencyFrom]);
+            printf("\n \033[7mPressione qualquer tecla para continuar...\033[0m");
+            getch();
         }
-    }
 
-    i = 0;
-    while (!isValid && !quitMenu)
-    {
-        isValid = true;
-        system("cls");
-        printf("Valor a converter: %.02lf %s \n", fromValue, CURRENCIES[currencyFrom]);
-        printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
+        int sn = 0;
+        char *opcao[] = {"Sim", "Nao"};
 
-        printf("Identificacao da data de observacao (dd/MM/aaaa): ");
-        scanf("%s", strData);
-        fflush(stdin);
-        strLenData = strlen(strData);
-        if (strLenData == 0 || strLenData > 10)
+        sn = drawMenu(opcao, 2, "Deseja fazer uma nova conversão?");
+
+        if (sn == 1)
         {
-            quitMenu = !handleError("Data Invalida");
-
-            isValid = false;
+            repeat = true;
         }
         else
         {
-
-            char *aux;
-            aux = strtok(strData, "/");
-
-            while (aux != NULL)
-            {
-                if (i == 0)
-                {
-                    if (strlen(aux) <= 2)
-                    {
-                        data.day = atoi(aux);
-                    }
-                    else
-                    {
-                        quitMenu = !handleError("Data Invalida");
-
-                        isValid = false;
-                        break;
-                    }
-                }
-                else if (i == 1)
-                {
-                    if (strlen(aux) <= 2)
-                    {
-                        data.month = atoi(aux);
-                    }
-                    else
-                    {
-                        quitMenu = !handleError("Data Invalida");
-
-                        isValid = false;
-                        break;
-                    }
-                }
-                else if (i == 2)
-                {
-                    if (strlen(aux) == 4)
-                    {
-                        data.year = atoi(aux);
-                    }
-                    else
-                    {
-                        quitMenu = !handleError("Data Invalida");
-
-                        isValid = false;
-                        break;
-                    }
-                }
-
-                aux = strtok(NULL, "/");
-                i++;
-            }
-
-            free(aux);
+            repeat = false;
         }
 
-        if (isValid)
-        {
-            if (data.day < 1 || data.day > 31)
-            {
-                quitMenu = !handleError("Data Invalida");
-
-                isValid = false;
-            }
-            else if (data.month < 1 || data.month > 12)
-            {
-                quitMenu = !handleError("Data Invalida");
-
-                isValid = false;
-            }
-            else if (data.year < 999 || data.year > 9999)
-            {
-                quitMenu = !handleError("Data Invalida");
-
-                isValid = false;
-            }
-        }
-    }
-    if (quitMenu)
-        return;
-
-    convertedValue = convertCurrenciesOnSpecificDay(exchangeRates, numRows, data, currencyFrom, fromValue, currencyTo);
-    if (convertedValue==-1)
-    {
-       quitMenu= !handleError("Nao existe taxa de conversao da moeda de origem");
-    }
-    else if (convertedValue==-2)
-    {
-       quitMenu= !handleError("Nao existe taxa de conversao da moeda pretendida");
-    }
-    else if (convertedValue==-3)
-    {
-       quitMenu= !handleError("Nao existe taxa de conversao na data especificada");
-    }
-    if (quitMenu)
-        return;
-    
-    system("cls");
-    printf("Conversao:\n %.02lf %s -> %.02lf %s\n", fromValue, CURRENCIES[currencyFrom], convertedValue, CURRENCIES[currencyTo]);
-    printf("\nTaxas de Conversao:\n");
-    printf("1 %s = %.02f %s\n",CURRENCIES[currencyFrom],(convertedValue/fromValue),CURRENCIES[currencyTo]);
-    printf("1 %s = %.02f %s\n",CURRENCIES[currencyTo],(fromValue/convertedValue),CURRENCIES[currencyFrom]);
-    
-    int sn=0;
-    char* opcao[]= {"Sim","Nao"};
-
-    sn=drawMenu(opcao,2,"Deseja continuar a converter valores?");
-    /*printf("-------------------------\n");
-    printf("|           |           |\n");
-    printf("|  %s      |  %s      |\n", CURRENCIES[currencyFrom], CURRENCIES[currencyTo]);
-    printf("|   	    |	     	|\n");
-    printf("|-----------|-----------|\n");
-    printf("|           |           |\n");
-    printf("|  %.2lf    |  %.2lf  	|\n", fromValue, convertedValue);
-    printf("|   	    |    	    |\n");
-    printf("-------------------------\n");*/
-    if (sn==1)
-    {
-        repeat=true;
-    }
-    else{
-        repeat=false;
-    }
-    
     } while (repeat);
 }
 

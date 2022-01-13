@@ -299,27 +299,42 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
     return option;
 }
 
+bool checkIfArrayContainsElement(int* array,int length, int element)
+{
+    int i = 0;
+    for (i = 0; i < length; i++)
+    {
+        if (array[i] == element)
+            return true;
+    }
+    return false;
+}
 
-int drawCurrenciesMenu()
+
+int drawCurrenciesMenu(char* title, int* selectedCurrencies,int length)
 {
     int key = 0;
     int option = 1;
     int i = 0;
     int middle = ceil(CURRENCIES_SIZE / 3.0);
 
+
     do
     {
         system("cls");
 
-        printf("\n  ********     %s     ********\n\n", "Menu de Moedas");
+        printf("\n  ********     \033[4m%s\033[0m     ********\n\n", title);
          
         i = 0;
         for (i = 0; i < ceil(CURRENCIES_SIZE / 3.0); i++)
         {
             printf("    %s %s      %s %s      %s %s\n", 
-            (option == i + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i],
-            (option == i+middle + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i+middle],
-            (option == i+middle+middle + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i+middle+middle]);
+            (option == i + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : 
+            (checkIfArrayContainsElement(selectedCurrencies,length,i+1)==true) ? "   \033[31;1m[O]\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i],
+            (option == i+middle + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : 
+            (checkIfArrayContainsElement(selectedCurrencies,length,i+middle + 1)==true) ? "   \033[31;1m[O]\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i+middle],
+            (option == i+middle+middle + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : 
+            (checkIfArrayContainsElement(selectedCurrencies,length,i+middle+middle + 1)==true) ? "   \033[31;1m[O]\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i+middle+middle]);
         }
         
         printf("\n  Use as setas para selecionar uma opcao. ENTER para confimar. ESC para sair.\n");

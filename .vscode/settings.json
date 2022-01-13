@@ -8,6 +8,7 @@
         "conio.h": "c",
         "functional": "c",
         "algorithm": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "string_view": "c"
     }
 }

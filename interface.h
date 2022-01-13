@@ -44,7 +44,7 @@ void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int p
 void drawExchangeRatesPaginationSortedByValue(EXCHANGERATE *exchangeRates, int numRows, int paginaAtual, int linhasPorPagina, char ***sortedCurrencyNamesByDay);
 void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows);
 int drawMenu(char *opcoes[], int numOpcoes, char *title);
-int drawCurrenciesMenu();
+int drawCurrenciesMenu(char* title, int* selectedCurrencies,int length);
 bool handleError(char *msg);
 int askFileToUse(int numGoodTransactionsRows,int numGoodsRows);
 void setTextRed();
