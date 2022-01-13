@@ -66,7 +66,7 @@ int main()
 
     // double resultado = convertCurrenciesOnSpecificDay(exchangeRates, numRows, (DATE){.day = 1, .month = 12, .year = 2022}, USD, 20, AUD);
 
-   /*char *listarmoedas[] = {"Listar Moedas que Suportam Conversces de Valores",
+   char *listarmoedas[] = {"Listar Moedas que Suportam Conversces de Valores",
      "Converter um Montante entre duas Moedas Distintas",
      "Registar Valor histórico diario de um bem transacionado",
      "Listar identificadores de bens transacionaveis",
@@ -103,15 +103,15 @@ int main()
     
     default:
         break;
-    }*/
+    }
 
     //newGoodQuestionaire();
     
 
-    GOOD good = (GOOD){.name = "ETH", .openValue = 3.0, .closeValue = 4.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 552, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2022}};
+    /*GOOD good = (GOOD){.name = "ETH", .openValue = 3.0, .closeValue = 4.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 552, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2022}};
 
     addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
-    saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);
+    saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);*/
     
    // listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
     // newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);

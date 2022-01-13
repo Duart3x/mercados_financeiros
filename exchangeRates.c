@@ -379,27 +379,73 @@ EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int num
 }
 
 void chooseCurrenciesToConvert(){
-    int currencyfrom=0, currencyto=0 ;
+    int currencyFrom=0, currencyTo=0 ;
+    char* value;
+    double fromValue;
     int i=0;
      
-        system("cls");
-        char* opcoes[CURRENCIES_SIZE];
+    system("cls");
+    char** opcoes = malloc(CURRENCIES_SIZE*sizeof(char*));
 
-        for (i = 0; i < CURRENCIES_SIZE; i++)
-        {
-            opcoes[i] = CURRENCIES[i];
-        }
-        
-        int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
+    for (i = 0; i < CURRENCIES_SIZE; i++)
+    {
+        opcoes[i]=malloc(4*sizeof(char));
+        strcpy(opcoes[i],(char*)CURRENCIES[i]);
+    }
+    
+    int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
 
-        if(op == -1) return;
+    if(op == -1) return;
 
-        currencyfrom=op-1;
+    currencyFrom=op-1;
 
-        int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
+    int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
 
-        if(op2 == -1) return;
-        currencyto=op2-1;
+    if(op2 == -1) return;
+    currencyTo=op2-1;
+    system("cls");
+    while (isNumber(value))
+    {
+        printf("Moeda origem: %s");
+        printf("Moeda pretendida: ");
 
-        
+        printf("Valor que prentende converter: ");
+        scanf("%lf",value);
+    
+
+    }
+    fromValue=atof(value);
+
+    
+    
+      
+
+
+
+
+}
+
+bool isNumber(char* value){
+
+   int point=0;
+   bool number=true;
+   for (int i = 0; i < strlen(value); i++)
+   {
+       if (!isdigit(value[i]) )
+       {
+           number=false;
+           break;
+       }
+       else if(value[i]=='.' || value[i]==','){
+           if (point>0)
+           {
+               number=false;
+               break;
+           }
+           
+           point++;
+       }
+       
+   }
+   return number;
 }
