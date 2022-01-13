@@ -254,7 +254,7 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
         i = 0;
         for (i = 0; i < numOpcoes; i++)
         {
-            printf("    %s %s\n", (option == i + 1) ? "-> [\033[32mx\033[0m]" : "   [ ]", opcoes[i]);
+            printf("    %s %s\n", (option == i + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : "   \033[30;1m[ ]\033[0m", opcoes[i]);
         }
         printf("\n  ");
         i = 0;
