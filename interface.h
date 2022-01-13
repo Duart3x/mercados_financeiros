@@ -3,6 +3,16 @@
 
 #ifndef INTERFACE_H
 #define INTERFACE_H
+
+#define KEY_UP 72
+#define KEY_DOWN 80
+#define KEY_LEFT 75
+#define KEY_RIGHT 77
+#define KEY_ESC 27
+#define KEY_ENTER 13
+#define KEY_SPACE 32
+#define KEY_BACKSPACE 8
+
 #define COLORS_SIZE 17
 typedef enum colors
 {
@@ -34,6 +44,7 @@ void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int p
 void drawExchangeRatesPaginationSortedByValue(EXCHANGERATE *exchangeRates, int numRows, int paginaAtual, int linhasPorPagina, char ***sortedCurrencyNamesByDay);
 void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows);
 int drawMenu(char *opcoes[], int numOpcoes, char *title);
+int drawCurrenciesMenu();
 bool handleError(char *msg);
 int askFileToUse(int numGoodTransactionsRows,int numGoodsRows);
 void setTextRed();

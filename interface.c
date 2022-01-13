@@ -9,10 +9,8 @@
 #include "exchangeRates.h"
 #include "interface.h"
 
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_ESC 27
-#define KEY_ENTER 13
+
+
 
 void drawExchangeRates(EXCHANGERATE *exchangeRates, int numRows)
 {
@@ -256,7 +254,7 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
         i = 0;
         for (i = 0; i < numOpcoes; i++)
         {
-            printf("    %s %s\n", (option == i + 1) ? "-> [x]" : "   [ ]", opcoes[i]);
+            printf("    %s %s\n", (option == i + 1) ? "-> [\033[32mx\033[0m]" : "   [ ]", opcoes[i]);
         }
         printf("\n  ");
         i = 0;
@@ -264,7 +262,7 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
         {
             printf("*");
         }
-         
+        
         
         printf("\n  Use as setas para selecionar uma opcao. ENTER para confimar. ESC para sair.\n");
         key = getch();
@@ -294,6 +292,80 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
                 option++;
             else
                 option = numOpcoes;
+        }
+
+    } while (key != KEY_ENTER);
+
+    return option;
+}
+
+
+int drawCurrenciesMenu()
+{
+    int key = 0;
+    int option = 1;
+    int i = 0;
+    int middle = ceil(CURRENCIES_SIZE / 3.0);
+
+    do
+    {
+        system("cls");
+
+        printf("\n  ********     %s     ********\n\n", "Menu de Moedas");
+         
+        i = 0;
+        for (i = 0; i < ceil(CURRENCIES_SIZE / 3.0); i++)
+        {
+            printf("    %s %s      %s %s      %s %s\n", 
+            (option == i + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i],
+            (option == i+middle + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i+middle],
+            (option == i+middle+middle + 1) ? "   \033[37;1m[\033[31;1mx\033[0m]\033[37;1m\033[0m" : "   \033[30;1m[ ]\033[0m", CURRENCIES[i+middle+middle]);
+        }
+        
+        printf("\n  Use as setas para selecionar uma opcao. ENTER para confimar. ESC para sair.\n");
+        key = getch();
+        fflush(stdin);
+
+        /*printf("\n   ******** Menu Principal ********\n");
+        printf("   *                              *\n");
+        printf("   * %s Opcao 1                   *\n", (option == 1) ? "->": "  ");
+        printf("   * %s Opcao 2                   *\n", (option == 2) ? "->": "  ");
+        printf("   *                              *\n");
+        printf("   ********************************\n");*/
+
+        if (key == KEY_ESC)
+            return -1;
+
+        if (key == KEY_UP)
+        {
+            if (option > 1)
+                option--;
+            else
+                option = 1;
+        }
+
+        if (key == KEY_DOWN)
+        {
+            if (option < CURRENCIES_SIZE)
+                option++;
+            else
+                option = CURRENCIES_SIZE;
+        }
+
+        if(key == KEY_LEFT)
+        {
+            if(option > middle)
+                option -= middle;
+            else
+                option = 1;
+        }
+
+        if(key == KEY_RIGHT)
+        {
+            if(option < middle *2)
+                option += middle;
+            else
+                option = CURRENCIES_SIZE;
         }
 
     } while (key != KEY_ENTER);

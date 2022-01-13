@@ -381,24 +381,28 @@ void chooseCurrenciesToConvert(){
     int currencyfrom=0, currencyto=0 ;
     int i=0;
      
-        system("cls");
-        char* opcoes[CURRENCIES_SIZE];
+    system("cls");
+    char** opcoes = malloc(CURRENCIES_SIZE * sizeof(char *));
 
-        for (i = 0; i < CURRENCIES_SIZE; i++)
-        {
-            opcoes[i] = CURRENCIES[i];
-        }
-        
-        int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
 
-        if(op == -1) return;
+    for (i = 0; i < CURRENCIES_SIZE; i++)
+    {
+        opcoes[i] = malloc(4 * sizeof(char));
+        strcpy(opcoes[i], CURRENCIES[i]);
+    }
+    
+    //int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
+    int op = drawCurrenciesMenu();
 
-        currencyfrom=op-1;
+    if(op == -1) return;
 
-        int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
+    currencyfrom=op-1;
 
-        if(op2 == -1) return;
-        currencyto=op2-1;
+    //int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
+    int op2 = drawCurrenciesMenu();
+
+    if(op2 == -1) return;
+    currencyto=op2-1;
 
         
 }

@@ -70,7 +70,7 @@ int main()
 
     // double resultado = convertCurrenciesOnSpecificDay(exchangeRates, numRows, (DATE){.day = 1, .month = 12, .year = 2022}, USD, 20, AUD);
 
-   /*char *listarmoedas[] = {"Listar Moedas que Suportam Conversces de Valores",
+   char *listarmoedas[] = {"Listar Moedas que Suportam Conversces de Valores",
      "Converter um Montante entre duas Moedas Distintas",
      "Registar Valor histórico diario de um bem transacionado",
      "Listar identificadores de bens transacionaveis",
@@ -107,7 +107,7 @@ int main()
     
     default:
         break;
-    }*/
+    }
 
     //newGoodQuestionaire();
     
@@ -117,7 +117,7 @@ int main()
     //addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
     //saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);
     
-    listGoodsIndentifiers(goodsHistory, numGoodsRows);
+    //listGoodsIndentifiers(goodsHistory, numGoodsRows);
     // newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
 
     free(exchangeRates);
