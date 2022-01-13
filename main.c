@@ -86,6 +86,8 @@ int main()
     case 1:
         break;
     case 2:
+        chooseCurrenciesToConvert();
+
         break;
     case 3:
         break;
@@ -107,6 +109,7 @@ int main()
         break;
     }*/
 
+    //newGoodQuestionaire();
     
 
     GOOD good = (GOOD){.name = "ETH", .openValue = 3.0, .closeValue = 4.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 552, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2022}};
