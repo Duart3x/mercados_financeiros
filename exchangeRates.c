@@ -377,3 +377,29 @@ EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int num
 
     return result;
 }
+
+void chooseCurrenciesToConvert(){
+    int currencyfrom=0, currencyto=0 ;
+    int i=0;
+     
+        system("cls");
+        char* opcoes[CURRENCIES_SIZE];
+
+        for (i = 0; i < CURRENCIES_SIZE; i++)
+        {
+            opcoes[i] = CURRENCIES[i];
+        }
+        
+        int op = drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda que pretende converter");
+
+        if(op == -1) return;
+
+        currencyfrom=op-1;
+
+        int op2=drawMenu(opcoes, CURRENCIES_SIZE, "Selecione a unidade de moeda para qual vai converter");
+
+        if(op2 == -1) return;
+        currencyto=op2-1;
+
+        
+}

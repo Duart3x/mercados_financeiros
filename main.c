@@ -58,6 +58,8 @@ int main()
         /* code */
         break;
     case 2:
+        chooseCurrenciesToConvert();
+
         break;
     case 3:
         break;
@@ -79,7 +81,7 @@ int main()
         break;
     }
 
-    newGoodQuestionaire();
+    //newGoodQuestionaire();
 
     free(exchangeRates);
     return 0;
