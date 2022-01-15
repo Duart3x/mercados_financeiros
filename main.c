@@ -71,6 +71,7 @@ int main()
                 break;
             case 3:
                 newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
+                askToContinue = false;
                 break;
             case 4:
                 askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? listGoodsIndentifiers(goodsHistory, numGoodsRows) : listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
