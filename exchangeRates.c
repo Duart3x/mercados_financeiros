@@ -468,6 +468,10 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
 
                 isValid = false;
             }
+            else if(strcspn(strData, "/") == strLenData)
+            {
+                isValid = !handleError("Data Invalida");
+            }
             else
             {
 
@@ -522,8 +526,7 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
                     aux = strtok(NULL, "/");
                     i++;
                 }
-
-                free(aux);
+            
             }
 
             if (isValid)
