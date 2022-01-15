@@ -123,3 +123,75 @@ char* strToUpper(char *str)
     }
     return str;
 }
+DATE isDateValid(char data[]){
+
+      int strLenData = strlen(data);
+      int i=0;
+      bool isvalid=true;
+      DATE newdata;
+            if (strLenData == 0 || strLenData > 10)
+            {
+               isvalid=false;
+            }
+            else if(strcspn(data, "/") == strLenData)
+            {
+                isvalid=false;
+
+            }
+            else
+            {
+
+                char *aux;
+                aux = strtok(data, "/");
+                i = 0;
+                while (aux != NULL)
+                {
+                    if (i == 0)
+                    {
+                        
+                        newdata.day = atoi(aux);
+                        
+                    }
+                    else if (i == 1)
+                    {
+                        
+                            newdata.month = atoi(aux);
+                        
+                    }
+                    else if (i == 2)
+                    {
+                        
+                            newdata.year = atoi(aux);
+                        
+                    }
+
+                    aux = strtok(NULL, "/");
+                    i++;
+                }
+            
+            }
+    if (newdata.day < 1 || newdata.day > 31)
+    {     
+        isvalid=false;
+    }
+    else if (newdata.month < 1 || newdata.month > 12)
+    {
+        isvalid=false;
+    }
+    else if (newdata.year < 999 || newdata.year > 9999)
+    {
+        isvalid=false;
+    }
+    
+    if (!isvalid)
+    {
+        newdata.day=0;
+        newdata.month=0;
+        newdata.year=0;
+    }
+    
+        return newdata;
+    
+    
+
+}

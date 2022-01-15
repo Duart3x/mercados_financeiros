@@ -35,5 +35,6 @@ void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows);
 GOOD *readGoodsTransactionsFile(int *numRows);
 GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows);
 void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows);
+void FiveGoodsWithMoretransaccions(GOOD *goodTransactions, int *goodTransactionsRows);
 
 #endif

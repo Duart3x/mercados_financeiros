@@ -77,7 +77,8 @@ int main()
                 break;
             case 5:
                  
-                
+                FiveGoodsWithMoretransaccions(goodTransactions, numGoodTransactionsRows);
+
 
                 break;
             case 6:

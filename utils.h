@@ -22,6 +22,6 @@ int compareDates(DATE d1, DATE d2);
 char* replaceChar(char* str, char find, char replace);
 bool contaisNumber(char *str);
 char* strToUpper(char *str);
-
+DATE isDateValid(char data[]);
 
 #endif

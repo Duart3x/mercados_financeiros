@@ -579,10 +579,43 @@ void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows) {
     }
 }
 
+
 void FiveGoodsWithMoretransaccions(GOOD *goodTransactions, int *goodTransactionsRows){
 
+    GOOD interval;
+    bool quitQuestions=false,isvalid=false;
+    int count=0;
+    int i =0;
     DATE inicio,fim;
-    char* strLen;
-     
+    char strDatainicio[15];
+    char strDatafim[15];
+
+    
+    do
+    {
+        system("cls");
+        printf("Identificacao da data de inicio (dd/MM/aaaa): ");
+        fflush(stdin);
+        scanf("%s",strDatainicio);
+        fflush(stdin);
+        printf("Identificacao da data de fim (dd/MM/aaaa): ");
+        scanf("%s",strDatafim);
+        fflush(stdin);
+        inicio=isDateValid(strDatainicio);
+        fim=isDateValid(strDatafim);
+        if (inicio.year==0 && fim.year==0)
+        {
+            quitQuestions=!handleError("Data Invalida");
+        }
+    } while (quitQuestions==true);
+
+    /*do
+    {   
+           count++; 
+           i++;
+    } while (compareDates(inicio,goodTransactions[i].obsDate)!=0);
+    printf("%d",count);*/
+
+    
 
 }
