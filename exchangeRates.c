@@ -581,7 +581,7 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
         int sn = 0;
         char *opcao[] = {"Sim", "Nao"};
 
-        sn = drawMenu(opcao, 2, "Deseja fazer uma nova conversão?");
+        sn = drawMenu(opcao, 2, "Deseja fazer uma nova conversao?");
 
         if (sn == 1)
         {

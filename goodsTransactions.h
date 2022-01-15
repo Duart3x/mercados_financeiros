@@ -28,7 +28,7 @@ typedef struct Good{
 
 
 void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows);
-void addGoodToFile(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows);
+void addGoodToArray(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows);
 void saveGoodsToFile(GOOD *goodTransactions, int *goodTransactionsRows);
 bool checkIfGoodExistsAndUpdate(GOOD *goodTransactions, int goodTransactionsRows, GOOD good);
 void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows);
