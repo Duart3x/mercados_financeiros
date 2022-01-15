@@ -10,8 +10,8 @@ typedef enum marketType{
     CRIPTO,STOCKS,BONDS,COMMODITIES,OTHER
 } MARKETTYPE;
 
-static const char MARKET_TYPE_STRINGS[MARKET_TYPES_NUMBER][15] = {
-    "Cripto","Stocks","Bonds","Commodities","Other"
+static const char MARKET_TYPE_STRINGS[MARKET_TYPES_NUMBER][20] = {
+    "Cripto","Acoes","Titulos","Mercadorias","Outros"
 };
 
 typedef struct Good{

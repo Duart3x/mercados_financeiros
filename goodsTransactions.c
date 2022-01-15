@@ -449,21 +449,31 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
     return goodsHistory;
 }
 
+typedef struct goodIdentifier 
+{
+    char name[50];
+    MARKETTYPE marketType;
+} GOODIDENTIFIER;
+
+
 void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
 {
     int i = 0, j = 0, count = 1;
     bool exists = false;
-    char **names;
 
-    names = (char**)malloc(1 * sizeof(char*));
-    names[0] = (char*)malloc(sizeof(goodTransactions[0].name) * sizeof(char));
-    strcpy(names[0], goodTransactions[0].name);
+    GOODIDENTIFIER* goodIdentifiers = (GOODIDENTIFIER*)malloc(1 * sizeof(GOODIDENTIFIER));
+
+    strcpy(goodIdentifiers[0].name, goodTransactions[0].name);
+    goodIdentifiers[0].marketType = goodTransactions[0].marketType;
+    
+
 
     for (i = 0; i < goodTransactionsRows; i++)
     {
+        j=0;
         for (j = 0; j < count; j++)
         {
-            if(strcmp(names[j], goodTransactions[i].name) == 0) {
+            if(strcmp(goodIdentifiers[j].name, goodTransactions[i].name) == 0) {
                 exists = true;
                 break;
             }
@@ -474,9 +484,13 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
         if(exists == false)
         {
             count++;
-            names = (char**)realloc(names, count * sizeof(char*));
-            names[count-1] = (char*)malloc(20 * sizeof(char));
-            strcpy(names[count-1], goodTransactions[i].name);
+            
+            goodIdentifiers = (GOODIDENTIFIER*)realloc(goodIdentifiers, (count) * sizeof(GOODIDENTIFIER));
+            
+            //insert new good identifier in array sorted by name
+            strcpy(goodIdentifiers[count-1].name, goodTransactions[i].name);
+            goodIdentifiers[count-1].marketType = goodTransactions[i].marketType;
+
         }
 
         exists = false;
@@ -484,14 +498,32 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
 
     i = 0;
 
-    char** namesSorted = sortCurrenciesQuickSort(names,0,count-1);
+    //sort array by name
 
     for (i = 0; i < count; i++)
     {
-        printf("%s\n", namesSorted[i]);
+        for (j = 0; j < count-1; j++)
+        {
+            if(strcmp(goodIdentifiers[j].name, goodIdentifiers[j+1].name) > 0)
+            {
+                GOODIDENTIFIER aux;
+                aux = goodIdentifiers[j];
+                goodIdentifiers[j] = goodIdentifiers[j+1];
+                goodIdentifiers[j+1] = aux;
+            }
+        }
     }
 
-    free(names);  
+    system("cls");
+
+    printf("\n  \033[4mBens disponiveis (Ordenados por ordem crescente do nome)\033[0m\n");
+
+    for (i = 0; i < count; i++)
+    {
+        printf("  %s: %s\n", goodIdentifiers[i].name, MARKET_TYPE_STRINGS[goodIdentifiers[i].marketType]);
+    }
+
+    free(goodIdentifiers);  
 }
 
 void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows) {

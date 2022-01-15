@@ -23,15 +23,19 @@ void drawExchangeRates(EXCHANGERATE *exchangeRates, int numRows)
 
 void drawExchangeRate(EXCHANGERATE exchangeRate, char **currenciesText)
 {
-    int middle = ceil(CURRENCIES_SIZE / 2.0);
+    int middle = ceil(CURRENCIES_SIZE / 3.0);
     printf("\n[%02d-%02d-%02d]\n", exchangeRate.conversionDate.day, exchangeRate.conversionDate.month, exchangeRate.conversionDate.year);
 
-    float value1, value2;
+    float value1, value2,value3;
     char *strVal1 = malloc(sizeof(char) * 4);
     char *strVal2 = malloc(sizeof(char) * 4);
+    char *strVal3 = malloc(sizeof(char) * 4);
+
 
     strVal1 = NULL;
     strVal2 = NULL;
+    strVal3 = NULL;
+
     bool wasNull = false;
     if(currenciesText == NULL)
     {
@@ -41,37 +45,52 @@ void drawExchangeRate(EXCHANGERATE exchangeRate, char **currenciesText)
     
         
 
-    for (int j = 0; j < ceil(CURRENCIES_SIZE / 2.0); j++)
+    for (int j = 0; j < ceil(CURRENCIES_SIZE / 3.0); j++)
     {
         value1 = exchangeRate.currencies[j];
         value2 = exchangeRate.currencies[j + middle];
+        value3 = exchangeRate.currencies[j + middle*2];
+
 
         if (value1 == -1)
             strVal1 = "N/A";
         if (value2 == -1)
             strVal2 = "N/A";
+        if (value3 == -1)
+            strVal3 = "N/A";
 
         if (j + middle > CURRENCIES_SIZE - 1)
         {
+            
             if (strVal1 != NULL)
                 printf("\t%s = %s\n", currenciesText[j], strVal1);
             else
                 printf("\t%s = %.02lf\n", currenciesText[j], value1);
+
         }
         else
         {
-            if (strVal1 != NULL && strVal2 != NULL)
-                printf("\t%s = %s \t %s = %s\n", currenciesText[j], strVal1, currenciesText[j + middle], strVal2);
-            else if (strVal1 != NULL)
-                printf("\t%s = %s \t %s = %.02lf \n", currenciesText[j], strVal1, currenciesText[j + middle], value2);
-            else if (strVal2 != NULL)
-                printf("\t%s = %.02lf \t %s = %s\n", currenciesText[j], value1, currenciesText[j + middle], strVal2);
+            if (strVal1 != NULL && strVal2 != NULL && strVal3 != NULL)
+                printf("\t%s = %s\t%s = %s\t%s = %s\n", currenciesText[j], strVal1, currenciesText[j + middle], strVal2, currenciesText[j + middle*2], strVal3);
+            else if(strVal1 != NULL && strVal2 != NULL && strVal3 == NULL)
+                printf("\t%s = %s\t%s = %s\t%s = %.02lf\n", currenciesText[j], strVal1, currenciesText[j + middle], strVal2, currenciesText[j + middle*2], value3);
+            else if(strVal1 != NULL && strVal2 == NULL && strVal3 != NULL)
+                printf("\t%s = %s\t%s = %.02lf\t%s = %s\n", currenciesText[j], strVal1, currenciesText[j + middle], value2, currenciesText[j + middle*2], strVal3);
+            else if(strVal1 == NULL && strVal2 != NULL && strVal3 != NULL)
+                printf("\t%s = %.02lf\t%s = %s\t%s = %s\n", currenciesText[j], value1, currenciesText[j + middle], strVal2, currenciesText[j + middle*2], strVal3);
+            else if(strVal1 != NULL && strVal2 == NULL && strVal3 == NULL)
+                printf("\t%s = %s\t%s = %.02lf\t%s = %.02lf\n", currenciesText[j], strVal1, currenciesText[j + middle], value2, currenciesText[j + middle*2], value3);
+            else if(strVal1 == NULL && strVal2 != NULL && strVal3 == NULL)
+                printf("\t%s = %.02lf\t%s = %s\t%s = %.02lf\n", currenciesText[j], value1, currenciesText[j + middle], strVal2, currenciesText[j + middle*2], value3);
+            else if(strVal1 == NULL && strVal2 == NULL && strVal3 != NULL)
+                printf("\t%s = %.02lf\t%s = %.02lf\t%s = %s\n", currenciesText[j], value1, currenciesText[j + middle], value2, currenciesText[j + middle*2], strVal3);
             else
-                printf("\t%s = %.02lf \t %s = %.02lf\n", currenciesText[j], value1, currenciesText[j + middle], value2);
+                printf("\t%s = %.02lf\t%s = %.02lf\t%s = %.02lf\n", currenciesText[j], value1, currenciesText[j + middle], value2, currenciesText[j + middle*2], value3);
         }
 
         strVal1 = NULL;
         strVal2 = NULL;
+        strVal3 = NULL;
     }
 
     if(wasNull == true)
@@ -79,6 +98,7 @@ void drawExchangeRate(EXCHANGERATE exchangeRate, char **currenciesText)
 
     free(strVal1);
     free(strVal2);
+    free(strVal3);
 }
 
 void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int paginaAtual, int linhasPorPagina, char **sortedCurrencies)
@@ -138,6 +158,7 @@ void menuWithExchangeRatesPagination(EXCHANGERATE *exchangeRatesOriginal, int nu
 
     do
     {
+        system("cls");
         exchangeRates = clonePartOfExchangeRatesArray(exchangeRatesOriginal, numRows,paginaAtual * linhasPorPagina , (paginaAtual * linhasPorPagina) + linhasPorPagina);
 
         switch (sortedBy)
@@ -388,6 +409,11 @@ int drawCurrenciesMenu(char* title, int* selectedCurrencies,int length)
     return option;
 }
 
+
+/**
+ * 
+ * @returns 1 se o utilizador quiser o ficheiro externo, 2 se o utilizador quiser o ficheiro interno
+*/
 int askFileToUse(int numGoodTransactionsRows,int numGoodsRows)
 {
 
