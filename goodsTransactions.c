@@ -620,3 +620,11 @@ void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows) {
             break;
     }
 }
+
+void FiveGoodsWithMoretransaccions(GOOD *goodTransactions, int *goodTransactionsRows){
+
+    DATE inicio,fim;
+    char* strLen;
+     
+
+}
