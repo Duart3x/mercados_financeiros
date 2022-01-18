@@ -23,5 +23,7 @@ char* replaceChar(char* str, char find, char replace);
 bool contaisNumber(char *str);
 char* strToUpper(char *str);
 DATE isDateValid(char data[]);
+bool isNumber(char* value);
+bool checkIfArrayContainsElement(int* array,int length, int element);
 
 #endif

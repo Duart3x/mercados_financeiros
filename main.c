@@ -12,6 +12,7 @@
 #include "goodsTransactions.h"
 #include "interface.h"
 
+
 int main()
 {
     char *res = setlocale(LC_ALL, "Portuguese");
@@ -43,7 +44,8 @@ int main()
     goodsHistory = readGoodsTransactionsHistoryFile(fGoodsHistory, &numGoodsRows);
     goodTransactions = readGoodsTransactionsFile(&numGoodTransactionsRows);
 
-    char *listarmoedas[] = {"Listar Moedas que Suportam Conversces de Valores",
+    char *listarmoedas[] = {"Listar moedas",
+                            "Listar taxas de conversao aplicadas a uma moeda, numa determinada data",
                             "Converter um Montante entre duas Moedas Distintas",
                             "Registar Valor histórico diario de um bem transacionado",
                             "Listar identificadores de bens transacionaveis",
@@ -58,7 +60,7 @@ int main()
     do
     {
         askToContinue = true;
-        op = drawMenu(listarmoedas, 10, "Menu");
+        op = drawMenu(listarmoedas, 11, "Menu");
         switch (op)
         {
             case 1:
@@ -66,23 +68,26 @@ int main()
                 askToContinue = false;
                 break;
             case 2:
+                printExchangeRateByDateAndCurrency(exchangeRates,numRows);
+                askToContinue = false;
+                break;
+
+            case 3:
                 chooseCurrenciesToConvert(exchangeRates, numRows);
                 askToContinue = false;
                 break;
-            case 3:
-                newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
+            case 4:
+                goodTransactions = newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
                 askToContinue = false;
                 break;
-            case 4:
+            case 5:
                 askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? listGoodsIndentifiers(goodsHistory, numGoodsRows) : listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
                 break;
-            case 5:
-                 
-                FiveGoodsWithMoretransaccions(goodTransactions, numGoodTransactionsRows);
-
-
-                break;
             case 6:
+                 
+                fiveGoodsWithMoreTransactions(goodTransactions, &numGoodTransactionsRows);
+
+
                 break;
             case 7:
                 break;
@@ -90,8 +95,10 @@ int main()
                 break;
             case 9:
                 break;
-
             case 10:
+                break;
+
+            case 11:
             case -1:
                 exitMenu = true;
                 break;
@@ -128,7 +135,7 @@ int main()
     free(goodTransactions);
 
     system("cls");
-    printf("\n  Obrigado por utilizar o programa!\n");
+    printf("\n  Obrigado por utilizar o programa!\n\n  \033[4mTrabalho realizado por\033[0m:\n  - Duarte Santos\t22593\n  - Simao Teixeira\t22590\n  - Jose Almeida\t22982\n  - Maria Simoes\tObjeto nao identificado\n");
 
     printf("\n  \033[7mPressione uma tecla para fechar a consola...\033[0m");
     getch();

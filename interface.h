@@ -50,6 +50,6 @@ int askFileToUse(int numGoodTransactionsRows,int numGoodsRows);
 void setTextRed();
 void resetText();
 void printColoredText(char* msg, COLORS color);
-
+void printExchangeRateByDateAndCurrency(EXCHANGERATE* exchangeRates,int numRows);
 
 #endif

@@ -594,30 +594,3 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
 
     } while (repeat);
 }
-
-bool isNumber(char *value)
-{
-
-    int point = 0;
-    bool number = true;
-    for (int i = 0; i < strlen(value); i++)
-    {
-
-        if (value[i] == '.' || value[i] == ',')
-        {
-            if (point > 0)
-            {
-                number = false;
-                break;
-            }
-
-            point++;
-        }
-        else if (!isdigit(value[i]))
-        {
-            number = false;
-            break;
-        }
-    }
-    return number;
-}
