@@ -77,10 +77,8 @@ int main()
                 askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? listGoodsIndentifiers(goodsHistory, numGoodsRows) : listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
                 break;
             case 5:
-                 
-                FiveGoodsWithMoretransaccions(goodTransactions, numGoodTransactionsRows);
-
-
+                closeValueStatistics(goodsHistory, numGoodsRows);
+                //FiveGoodsWithMoretransaccions(goodTransactions, numGoodTransactionsRows);
                 break;
             case 6:
                 break;

@@ -2,6 +2,7 @@
 #include<conio.h>
 #include<ctype.h>
 #include<string.h>
+#include<math.h>
 #include"interface.h"
 #include"goodsTransactions.h"
 #include"exchangeRates.h"
@@ -522,32 +523,33 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
 
     return goodsHistory;
 }
-
 typedef struct goodIdentifier 
 {
     char name[50];
     MARKETTYPE marketType;
 } GOODIDENTIFIER;
 
+typedef struct goodIdentifiersArray {
+    GOODIDENTIFIER* identifiers;
+    int count;
+} GOODIDENTIFIERSARRAY;
 
-void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
-{
+GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransactionsRows) {
     int i = 0, j = 0, count = 1;
     bool exists = false;
 
-    GOODIDENTIFIER* goodIdentifiers = (GOODIDENTIFIER*)malloc(1 * sizeof(GOODIDENTIFIER));
+    GOODIDENTIFIERSARRAY goodIdentifiers;
+    goodIdentifiers.identifiers = (GOODIDENTIFIER*)malloc(1 * sizeof(GOODIDENTIFIER));
 
-    strcpy(goodIdentifiers[0].name, goodTransactions[0].name);
-    goodIdentifiers[0].marketType = goodTransactions[0].marketType;
-    
-
+    strcpy(goodIdentifiers.identifiers[0].name, goodTransactions[0].name);
+    goodIdentifiers.identifiers[0].marketType = goodTransactions[0].marketType;
 
     for (i = 0; i < goodTransactionsRows; i++)
     {
         j=0;
         for (j = 0; j < count; j++)
         {
-            if(strcmp(goodIdentifiers[j].name, goodTransactions[i].name) == 0) {
+            if(strcmp(goodIdentifiers.identifiers[j].name, goodTransactions[i].name) == 0) {
                 exists = true;
                 break;
             }
@@ -559,11 +561,11 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
         {
             count++;
             
-            goodIdentifiers = (GOODIDENTIFIER*)realloc(goodIdentifiers, (count) * sizeof(GOODIDENTIFIER));
+            goodIdentifiers.identifiers = (GOODIDENTIFIER*)realloc(goodIdentifiers.identifiers, (count) * sizeof(GOODIDENTIFIER));
             
             //insert new good identifier in array sorted by name
-            strcpy(goodIdentifiers[count-1].name, goodTransactions[i].name);
-            goodIdentifiers[count-1].marketType = goodTransactions[i].marketType;
+            strcpy(goodIdentifiers.identifiers[count-1].name, goodTransactions[i].name);
+            goodIdentifiers.identifiers[count-1].marketType = goodTransactions[i].marketType;
 
         }
 
@@ -578,26 +580,37 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
     {
         for (j = 0; j < count-1; j++)
         {
-            if(strcmp(goodIdentifiers[j].name, goodIdentifiers[j+1].name) > 0)
+            if(strcmp(goodIdentifiers.identifiers[j].name, goodIdentifiers.identifiers[j+1].name) > 0)
             {
                 GOODIDENTIFIER aux;
-                aux = goodIdentifiers[j];
-                goodIdentifiers[j] = goodIdentifiers[j+1];
-                goodIdentifiers[j+1] = aux;
+                aux = goodIdentifiers.identifiers[j];
+                goodIdentifiers.identifiers[j] = goodIdentifiers.identifiers[j+1];
+                goodIdentifiers.identifiers[j+1] = aux;
             }
         }
     }
+
+    goodIdentifiers.count = count;
+
+    return goodIdentifiers;
+}
+
+
+void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
+{
+    int i = 0;
+    GOODIDENTIFIERSARRAY goodIdentifiers = getGoodsIdentifiers(goodTransactions, goodTransactionsRows);
 
     system("cls");
 
     printf("\n  \033[4mBens disponiveis (Ordenados por ordem crescente do nome)\033[0m\n");
 
-    for (i = 0; i < count; i++)
+    for (i = 0; i < goodIdentifiers.count; i++)
     {
-        printf("  %s: %s\n", goodIdentifiers[i].name, MARKET_TYPE_STRINGS[goodIdentifiers[i].marketType]);
+        printf("  %s: %s\n", goodIdentifiers.identifiers[i].name, MARKET_TYPE_STRINGS[goodIdentifiers.identifiers[i].marketType]);
     }
 
-    free(goodIdentifiers);  
+    free(goodIdentifiers.identifiers);  
 }
 
 void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows) {
@@ -660,4 +673,121 @@ void FiveGoodsWithMoretransaccions(GOOD *goodTransactions, int *goodTransactions
 
     
 
+}
+
+void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows) {
+    DATE initialDate, endDate;
+
+    bool isValid = true, quitMenu = false;
+    char strInitialDate[10];
+    char strEndDate[10];
+    GOOD *goodInStudie;
+
+    int identifierOption = 0, i = 0, goodInStudieCount = 0;
+    GOODIDENTIFIERSARRAY goodIdentifiers = getGoodsIdentifiers(goodTransactions, goodTransactionsRows);
+
+    do
+    {
+        system("cls");
+        isValid = true;
+        printf("\033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("Data inicial (dd/MM/aaaa): ");
+        scanf("%s",strInitialDate);
+        fflush(stdin);
+        initialDate=isDateValid(strInitialDate);
+
+        if (initialDate.year==0)
+        {
+            quitMenu = handleError("Data inicial invalida");
+            isValid = false;
+        }
+    } while (!isValid && !quitMenu);
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        system("cls");
+        isValid = true;
+        printf("\033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("De %d/%d/%d a : ", initialDate.day, initialDate.month, initialDate.year);
+        scanf("%s",strEndDate);
+        fflush(stdin);
+        endDate=isDateValid(strEndDate);
+
+        if (endDate.year==0)
+        {
+            quitMenu = handleError("Data final invalida");
+            isValid = false;
+        }
+    }
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        system("cls");
+        isValid = true;
+        int i = 0;
+        
+        char** opcoes = (char**)malloc(goodIdentifiers.count * sizeof(char*));
+
+        for (i = 0; i < goodIdentifiers.count; i++)
+        {
+            opcoes[i] = (char*)goodIdentifiers.identifiers[i].name;
+        }
+        
+        int op = drawMenu(opcoes, goodIdentifiers.count, "Selecione a moeda que pretende consultar");
+
+        if(op == -1) quitMenu = true;
+        else identifierOption = op;
+    }
+
+    if(!quitMenu) {
+        //? Procura na lista de bens transacionados pelo bem selecionado no intervalo de datas selecionado
+        for (i = 0; i < goodTransactionsRows; i++)
+        {
+            if(strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initialDate) >= 0 && compareDates(goodTransactions[i].obsDate, endDate) <= 0)
+            {
+                if(goodInStudieCount == 0) goodInStudie = (GOOD*)malloc(sizeof(GOOD));
+                else goodInStudie = (GOOD*)realloc(goodInStudie, (goodInStudieCount + 1) * sizeof(GOOD)); //! Testar isto! Pode não funcionar!!!
+
+                goodInStudie[goodInStudieCount] = goodTransactions[i];
+                goodInStudieCount++;
+            }
+        }
+
+        i = 0;
+        
+        if(goodInStudieCount > 0)
+        {
+            //? Procura o valor minimo, maximo e media de fecho
+            float min = goodInStudie[0].closeValue, max = goodInStudie[0].closeValue, media = 0, desvio = 0;
+            for (i = 0; i < goodInStudieCount; i++)
+            {
+                if(goodInStudie[i].closeValue < min) min = goodInStudie[i].closeValue;
+                if(goodInStudie[i].closeValue > max) max = goodInStudie[i].closeValue;
+
+                media += goodInStudie[i].closeValue;
+            }
+            media /= goodInStudieCount;
+
+            i = 0;
+            
+            //? Calcula o desvio padrao de fecho
+            for (i = 0; i < goodInStudieCount; i++)
+            {
+                desvio += pow(goodInStudie[i].closeValue - media, 2);
+            }
+            desvio = sqrt(desvio / goodInStudieCount);
+
+            system("cls");
+            printf("\n\n\033[4mResultados\033[0m\n");
+            printf("\033[32m%d/%d/%d - %d/%d/%d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
+            printf("Valor minimo: %.2f\n", min);
+            printf("Valor maximo: %.2f\n", max);
+            printf("Valor medio: %.2f\n", media);
+            printf("Desvio padrao: %.2f\n", desvio);
+        }
+        else handleError("O bem não foi transacionado neste intervalo de datas");
+
+        free(goodInStudie);
+        free(goodIdentifiers.identifiers);
+    }
 }
