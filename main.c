@@ -85,10 +85,9 @@ int main()
                 break;
             case 6:
                 closeValueStatistics(goodsHistory, numGoodsRows);
-                //fiveGoodsWithMoreTransactions(goodTransactions, &numGoodTransactionsRows);
-
                 break;
             case 7:
+                //fiveGoodsWithMoreTransactions(goodTransactions, &numGoodTransactionsRows);
                 break;
             case 8:
                 break;
@@ -107,7 +106,7 @@ int main()
         if(!exitMenu && askToContinue)
         {
             printf("\n\n");
-            printf("Pressione qualquer tecla para continuar...");
+            printf("\033[7mPressione qualquer tecla para continuar...\033[0m");
             getch();
             system("cls");
         }
