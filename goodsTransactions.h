@@ -27,15 +27,14 @@ typedef struct Good{
 } GOOD;
 
 
-void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows);
-void addGoodToArray(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows);
+GOOD* newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows);
+GOOD * addGoodToArray(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows);
 void saveGoodsToFile(GOOD *goodTransactions, int *goodTransactionsRows);
 bool checkIfGoodExistsAndUpdate(GOOD *goodTransactions, int goodTransactionsRows, GOOD good);
-void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows);
 GOOD *readGoodsTransactionsFile(int *numRows);
 GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows);
 void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows);
-void FiveGoodsWithMoretransaccions(GOOD *goodTransactions, int *goodTransactionsRows);
 void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows);
+void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactionsRows);
 
 #endif

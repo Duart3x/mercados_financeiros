@@ -9,7 +9,7 @@
 
 #define BUFFER_SIZE 40
 
-void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
+GOOD* newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
     GOOD good;
     bool isValid = false;
     int i = 0;
@@ -123,15 +123,16 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
             
 
             if(strlen(buffer) == 0) {
-                if(!handleError("Identificador do bem nao pode ser vazio.")) return;
+                quitMenu = !handleError("Identificador do bem nao pode ser vazio.");
+                isValid=false;
 
                 isValid = false;
             } else if(contaisNumber(buffer) == true) {
-                if(!handleError("Identificador só pode conter letras.")) return;
+                quitMenu = !handleError("Identificador só pode conter letras.");
 
                 isValid = false;
             } else if(strlen(buffer) > 20) {
-                if(!handleError("Identificador do bem nao pode ter mais de 20 caracteres.")) return;
+                quitMenu = !handleError("Identificador do bem nao pode ter mais de 20 caracteres.");
 
                 isValid = false;
             }
@@ -154,7 +155,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
             
             int op = drawMenu(opcoes, MARKET_TYPES_NUMBER, "Selecione o tipo de mercado");
 
-            if(op == -1) return;
+            if(op == -1) return goodTransactions;
             
             good.marketType = op - 1;     
         } 
@@ -311,7 +312,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
             
             int op = drawCurrenciesMenu("Selecione a unidade da moeda", NULL, 0);
 
-            if(op == -1) return;
+            if(op == -1) return goodTransactions;
             
             good.currency = op -1;     
         }
@@ -355,7 +356,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
         }
 
         if (quitMenu)
-            return;
+            return goodTransactions;
 
         system("cls");
 
@@ -376,7 +377,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
         
         //Fazer as validacces do buffer e verificar se é S ou N
         if(buffer[0] != 'N' || buffer[0] != 'n')
-            addGoodToArray(good, goodTransactions, goodTransactionsRows);
+            goodTransactions = addGoodToArray(good, goodTransactions, goodTransactionsRows);
         
         int sn = 0;
         char *opcao[] = {"Sim", "Nao"};
@@ -394,6 +395,7 @@ void newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows) {
 
     } while (repeat);
 
+    return goodTransactions;
 
 }
 
@@ -426,13 +428,16 @@ void saveGoodsToFile(GOOD *goodTransactions, int *goodTransactionsRows)
     fclose(file);
 }
 
-void addGoodToArray(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows)
+GOOD* addGoodToArray(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows)
 {
+    GOOD* newList = (GOOD*)malloc(sizeof(GOOD) * (*goodTransactionsRows + 1));
     if(checkIfGoodExistsAndUpdate(goodTransactions, *goodTransactionsRows, good) == false)
     {
         *goodTransactionsRows = *goodTransactionsRows + 1;
 
-        goodTransactions = (GOOD*) realloc(goodTransactions, (*goodTransactionsRows)  * sizeof(GOOD));
+        newList = (GOOD*) realloc(goodTransactions, (*goodTransactionsRows)  * sizeof(GOOD));
+
+        goodTransactions = newList;
 
         goodTransactions[*goodTransactionsRows-1] = good;
 
@@ -442,6 +447,7 @@ void addGoodToArray(GOOD good, GOOD *goodTransactions, int *goodTransactionsRows
         printColoredText("\rDados do bem atualizados com sucesso.\n", GREEN);
     }
 
+    return goodTransactions;
 }
 
 GOOD *readGoodsTransactionsFile(int *numRows) {
@@ -613,29 +619,7 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
     free(goodIdentifiers.identifiers);  
 }
 
-void goodTransactionsMenu(GOOD *goodTransactions, int *goodTransactionsRows) {
-    system("cls");
-
-    char *opcoes[] = {"Registar Novo", "Listar Bens Transacionados", "Voltar..."};
-    int op = drawMenu(opcoes, 3, "Bens Transacionados");
-
-    switch (op)
-    {
-        case 1:
-            newGoodQuestionaire(goodTransactions, goodTransactionsRows);
-            break;
-
-        case 2:
-            // listGoodTransactions();
-            break;
-        
-        default:
-            break;
-    }
-}
-
-
-void FiveGoodsWithMoretransaccions(GOOD *goodTransactions, int *goodTransactionsRows){
+void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactionsRows){
 
     GOOD interval;
     bool quitQuestions=false,isvalid=false;
