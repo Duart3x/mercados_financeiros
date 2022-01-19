@@ -96,6 +96,8 @@ int main()
             case 9:
                 break;
             case 10:
+                exportExchangeRatesToFile(exchangeRates, numRows);
+                askToContinue = false;
                 break;
 
             case 11:

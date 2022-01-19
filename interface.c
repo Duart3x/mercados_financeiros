@@ -489,7 +489,7 @@ void printExchangeRateByDateAndCurrency(EXCHANGERATE *exchangeRates, int numRows
             }
             else
             {
-                rate = getExchangeRateByDate(exchangeRates, numRows, date);
+                rate = getExchangeRateByDate(exchangeRates, 0,numRows-1, date);
 
                 if (rate.conversionDate.year == 0)
                 {

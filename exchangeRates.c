@@ -21,7 +21,7 @@ EXCHANGERATE *readExchangeRatesFile(FILE *f, int *numRows)
 
     while (!feof(f))
     {
-        char **V = Read_Split_Line_File(f, CURRENCIES_SIZE + 1, &nCamposLidos, ",");
+        char **V = Read_Split_Line_File(f, CURRENCIES_SIZE + 1, &nCamposLidos, ";");
 
         for (int i = 0; i < nCamposLidos; i++)
         {
@@ -56,35 +56,56 @@ EXCHANGERATE *readExchangeRatesFile(FILE *f, int *numRows)
     return exchangeRate;
 }
 
-EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DATE date)
+EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int left, int right, DATE date)
 {
     EXCHANGERATE exchangeRate;
-    int middle = numRows / 2;
 
-    if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
-        return exchangeRates[middle];
-    else if (compareDates(exchangeRates[middle].conversionDate, date) == -1)
+    if (right >= left)
     {
-        if (numRows == 1)
+        int middle = left + (right - left) / 2;
+
+        if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
         {
-            if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
-                return exchangeRates[middle];
-            else
-                return (EXCHANGERATE){};
+            return exchangeRates[middle];
+        }
+        else if (compareDates(exchangeRates[middle].conversionDate, date) == -1)
+        {
+            return getExchangeRateByDate(exchangeRates, left, middle - 1, date);
         }
         else
-            return getExchangeRateByDate(exchangeRates, middle, date);
+        {
+            return getExchangeRateByDate(exchangeRates, middle + 1, right, date);
+        }
     }
-    else
+
+    return (EXCHANGERATE){};
+}
+
+EXCHANGERATE getExchangeRateIndexByDate(EXCHANGERATE *exchangeRates, int left, int right, DATE date, int *index)
+{
+    EXCHANGERATE exchangeRate;
+
+    if (right >= left)
     {
-        if (numRows == 1)
-            if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
-                return exchangeRates[middle];
-            else
-                return (EXCHANGERATE){};
+        int middle = left + (right - left) / 2;
+
+        if (compareDates(exchangeRates[middle].conversionDate, date) == 0)
+        {
+            *index = middle;
+            return exchangeRates[middle];
+        }
+        else if (compareDates(exchangeRates[middle].conversionDate, date) == -1)
+        {
+            return getExchangeRateIndexByDate(exchangeRates, left, middle - 1, date, index);
+        }
         else
-            return getExchangeRateByDate(exchangeRates + middle, numRows - middle, date);
+        {
+            return getExchangeRateIndexByDate(exchangeRates, middle + 1, right, date, index);
+        }
     }
+
+    *index = -1;
+    return (EXCHANGERATE){};
 }
 
 EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int from, int to, char **sortedCurrencies)
@@ -224,7 +245,7 @@ EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate,
  */
 double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows, DATE rateDate, CURRENCY from, double fromValue, CURRENCY to)
 {
-    EXCHANGERATE rate = getExchangeRateByDate(exchangeRates, numRows, rateDate);
+    EXCHANGERATE rate = getExchangeRateByDate(exchangeRates, 0, numRows - 1, rateDate);
     if (rate.conversionDate.year == 0)
         return -3;
 
@@ -468,7 +489,7 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
 
                 isValid = false;
             }
-            else if(strcspn(strData, "/") == strLenData)
+            else if (strcspn(strData, "/") == strLenData)
             {
                 isValid = !handleError("Data Invalida");
             }
@@ -526,7 +547,6 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
                     aux = strtok(NULL, "/");
                     i++;
                 }
-            
             }
 
             if (isValid)
@@ -590,6 +610,151 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
         else
         {
             repeat = false;
+        }
+
+    } while (repeat);
+}
+
+void exportExchangeRatesToFile(EXCHANGERATE *exchangeRates, int numRows)
+{
+    char strDateFrom[15];
+    char strDateTo[15];
+    DATE dateFrom;
+    DATE dateTo;
+
+    int indexFrom = 0;
+    int indexTo = 0;
+
+    EXCHANGERATE fromRate, toRate;
+
+    FILE *file;
+    int i;
+
+    bool quitMenu = false, isValid = false, repeat = false;
+
+    do
+    {
+        repeat = false;
+        quitMenu = false;
+        isValid = false;
+
+        while (!isValid && !quitMenu)
+        {
+            system("cls");
+            printf("\n  \033[4mExportar Dados\033[0m\n");
+            printf("  Data Inicio (dd/mm/yyyy): ");
+            scanf("%s", strDateFrom);
+            fflush(stdin);
+
+            dateFrom = isDateValid(strDateFrom);
+
+            if (dateFrom.year == 0)
+            {
+                quitMenu = !handleError("  Data invalida.");
+
+                isValid = false;
+            }
+            else
+            {
+                fromRate = getExchangeRateIndexByDate(exchangeRates, 0, numRows - 1, dateFrom, &indexFrom);
+
+                if (fromRate.conversionDate.year == 0)
+                {
+                    quitMenu = !handleError("  Nao existem dados para a data introduzida.");
+
+                    isValid = false;
+                }
+                else
+                    isValid = true;
+            }
+        }
+
+        if (quitMenu)
+            return;
+
+        isValid = false;
+
+        while (!isValid && !quitMenu)
+        {
+            system("cls");
+            printf("\n  \033[4mExportar Dados\033[0m\n");
+            printf("  Data Inicio (dd/mm/yyyy): %02d/%02d/%04d\n", dateFrom.day, dateFrom.month, dateFrom.year);
+            printf("  Data Fim (dd/mm/yyyy): ");
+            scanf("%s", strDateTo);
+            fflush(stdin);
+
+            dateTo = isDateValid(strDateTo);
+
+            if (dateTo.year == 0)
+            {
+                quitMenu = !handleError("  Data invalida.");
+
+                isValid = false;
+            }
+            else
+            {
+                toRate = getExchangeRateIndexByDate(exchangeRates, 0, numRows - 1, dateTo, &indexTo);
+
+                if (toRate.conversionDate.year == 0)
+                {
+                    quitMenu = !handleError("  Nao existem dados para a data introduzida.");
+
+                    isValid = false;
+                }
+                else
+                    isValid = true;
+            }
+        }
+
+        if (quitMenu)
+            return;
+
+        int length = abs(indexFrom - indexTo) + 1;
+
+        char *fileName = malloc(sizeof(char) * 28);
+
+        sprintf(fileName, "generatedFiles/[%02d-%02d-%04d_%02d-%02d-%04d].txt", dateFrom.day, dateFrom.month, dateFrom.year, dateTo.day, dateTo.month, dateTo.year);
+
+        file = fopen(fileName, "w");
+
+        if (file == NULL)
+        {
+            quitMenu = !handleError("  Erro ao abrir ficheiro.");
+        }
+        else
+        {
+            if(indexFrom < indexTo)
+            {
+                for (i = indexFrom; i <= indexTo; i++)
+                {
+                    fprintf(file, "%04d-%02d-%02d", exchangeRates[i].conversionDate.year, exchangeRates[i].conversionDate.month, exchangeRates[i].conversionDate.day);
+
+                    for (int j = 0; j < CURRENCIES_SIZE; j++)
+                    {
+                        fprintf(file, ";%.05f", exchangeRates[i].currencies[j]);
+                    }
+                    fprintf(file, "\n");
+                }
+            }
+            else
+            {
+                for (i = indexFrom; i >= indexTo; i--)
+                {
+                    fprintf(file, "%04d-%02d-%02d", exchangeRates[i].conversionDate.year, exchangeRates[i].conversionDate.month, exchangeRates[i].conversionDate.day);
+
+                    for (int j = 0; j < CURRENCIES_SIZE; j++)
+                    {
+                        fprintf(file, ";%.05f", exchangeRates[i].currencies[j]);
+                    }
+                    fprintf(file, "\n");
+                }
+            }
+
+            fclose(file);
+
+            printf("\n  Dados exportados com sucesso para o ficheiro \033[1;32m %s \033[0m.\n", fileName);
+            printf("\n  \033[7mPressione qualquer tecla para continuar...\033[0m\n");
+            getch();
         }
 
     } while (repeat);

@@ -26,7 +26,8 @@ static const char CURRENCIES[CURRENCIES_SIZE][4] = {"EUR","USD", "JPY", "BGN", "
 
 
 EXCHANGERATE* readExchangeRatesFile(FILE* f, int* numRows);
-EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int numRows, DATE date);
+EXCHANGERATE getExchangeRateByDate(EXCHANGERATE *exchangeRates, int left,int right, DATE date);
+EXCHANGERATE getExchangeRateIndexByDate(EXCHANGERATE *exchangeRates, int left,int right, DATE date,int* index);
 EXCHANGERATE *sortExchangeRatesByCurrencyCode(EXCHANGERATE *exchangeRates, int from,int to,char** sortedCurrencies);
 EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int from,int to, char*** sortedCurrencyNamesByDay);
 EXCHANGERATE sortExchangeRateByCurrencyCode(EXCHANGERATE exchangeRate,char** sortedCurrencies);
@@ -38,5 +39,7 @@ EXCHANGERATE* cloneExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows);
 EXCHANGERATE* clonePartOfExchangeRatesArray(EXCHANGERATE *exchangeRates, int numRows, int start, int end);
 double convertCurrenciesOnSpecificDay(EXCHANGERATE *exchangeRates, int numRows,DATE rateDate, CURRENCY from, double fromValue, CURRENCY to);
 void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows);
+void exportExchangeRatesToFile(EXCHANGERATE* exchangeRates, int numRows);
+
 
 #endif
