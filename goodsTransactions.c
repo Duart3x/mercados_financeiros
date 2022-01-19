@@ -682,7 +682,7 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows) {
 
         if (initialDate.year==0)
         {
-            quitMenu = handleError("Data inicial invalida");
+            quitMenu = !handleError("Data inicial invalida");
             isValid = false;
         }
     } while (!isValid && !quitMenu);
@@ -699,7 +699,7 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows) {
 
         if (endDate.year==0)
         {
-            quitMenu = handleError("Data final invalida");
+            quitMenu = !handleError("Data final invalida");
             isValid = false;
         }
     }
