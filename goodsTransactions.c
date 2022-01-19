@@ -751,39 +751,57 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows)
         }
 
         int op = drawMenu(opcoes, goodIdentifiers.count, "Selecione o bem que pretende consultar");
-
+        identifierOption = op;
         if (op == -1)
             quitMenu = true;
         else
         {
-            for (i = 0; i < goodTransactionsRows; i++)
+            //? Procura na lista de bens transacionados pelo bem selecionado no intervalo de datas selecionado
+            if (compareDates(initialDate, endDate) == 1)
             {
-                if (strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initialDate) >= 0 && compareDates(goodTransactions[i].obsDate, endDate) <= 0)
+                for (i = 0; i < goodTransactionsRows; i++)
                 {
-                    if (goodInStudieCount == 0)
-                        goodInStudie = (GOOD *)malloc(sizeof(GOOD));
-                    else
-                        goodInStudie = (GOOD *)realloc(goodInStudie, (goodInStudieCount + 1) * sizeof(GOOD)); //! Testar isto! Pode não funcionar!!!
+                    if (strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initialDate) <= 0 && compareDates(goodTransactions[i].obsDate, endDate) >= 0)
+                    {
+                        if (goodInStudieCount == 0)
+                            goodInStudie = (GOOD *)malloc(sizeof(GOOD));
+                        else
+                            goodInStudie = (GOOD *)realloc(goodInStudie, (goodInStudieCount + 1) * sizeof(GOOD)); //! Testar isto! Pode não funcionar!!!
 
-                    goodInStudie[goodInStudieCount] = goodTransactions[i];
-                    goodInStudieCount++;
+                        goodInStudie[goodInStudieCount] = goodTransactions[i];
+                        goodInStudieCount++;
+                    }
                 }
             }
+            else
+            {
+                for (i = 0; i < goodTransactionsRows; i++)
+                {
+                    if (strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initialDate) >= 0 && compareDates(goodTransactions[i].obsDate, endDate) <= 0)
+                    {
+                        if (goodInStudieCount == 0)
+                            goodInStudie = (GOOD *)malloc(sizeof(GOOD));
+                        else
+                            goodInStudie = (GOOD *)realloc(goodInStudie, (goodInStudieCount + 1) * sizeof(GOOD)); //! Testar isto! Pode não funcionar!!!
+
+                        goodInStudie[goodInStudieCount] = goodTransactions[i];
+                        goodInStudieCount++;
+                    }
+                }
+            }
+
             if (goodInStudieCount > 0)
                 isValid = true;
-            else 
+            else
             {
                 quitMenu = !handleError("  Nao ha registo de transacoes neste intervalo de datas");
                 isValid = false;
             }
-                
         }
     }
 
-    if(quitMenu) return;
-
-    //? Procura na lista de bens transacionados pelo bem selecionado no intervalo de datas selecionado
-    
+    if (quitMenu)
+        return;
 
     i = 0;
 
@@ -810,15 +828,16 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows)
     desvio = sqrt(desvio / goodInStudieCount);
 
     system("cls");
-    printf("  \n\n\033[4mResultados\033[0m\n");
-    printf("  \033[32m%d/%d/%d - %d/%d/%d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
+    printf("\n  \033[4mResultados\033[0m\n");
+    printf("  \033[32m%02d/%02d/%04d - %02d/%02d/%04d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
     printf("  Valor minimo: %.2f\n", min);
     printf("  Valor maximo: %.2f\n", max);
     printf("  Valor medio: %.2f\n", media);
     printf("  Desvio padrao: %.2f\n", desvio);
 
+    printf("  \n\n\033[7mPressione qualquer tecla para continuar...\033[0m");
+    getch();
 
     free(goodInStudie);
     free(goodIdentifiers.identifiers);
-    
 }

@@ -47,9 +47,9 @@ int main()
     char *listarmoedas[] = {"Listar moedas",
                             "Listar taxas de conversao aplicadas a uma moeda, numa determinada data",
                             "Converter um Montante entre duas Moedas Distintas",
-                            "Registar Valor histórico diario de um bem transacionado",
+                            "Registar Valor historico diario de um bem transacionado",
                             "Listar identificadores de bens transacionaveis",
-                            "Valor Mínimo, Medio, Desvio Padrao e Maximo de fecho de um bem transacionavel",
+                            "Valor Minimo, Medio, Desvio Padrao e Maximo de fecho de um bem transacionavel",
                             "Maior variacao positiva entre o preco de abertura e de fecho de um bem transacionavel num intervalo de datas",
                             "Bem transacionavel que obteve o melhor desempenho num intervalo de datas",
                             "5 bens transacionaveis com o maior volume de transacces num intervalo de datas",
@@ -84,7 +84,10 @@ int main()
                 askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? listGoodsIndentifiers(goodsHistory, numGoodsRows) : listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
                 break;
             case 6:
-                closeValueStatistics(goodsHistory, numGoodsRows);
+
+                askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? closeValueStatistics(goodsHistory, numGoodsRows) : closeValueStatistics(goodTransactions, numGoodTransactionsRows);
+
+                askToContinue = false;
                 break;
             case 7:
                 //fiveGoodsWithMoreTransactions(goodTransactions, &numGoodTransactionsRows);
