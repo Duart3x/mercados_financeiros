@@ -539,6 +539,7 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
 
     strcpy(goodIdentifiers.identifiers[0].name, goodTransactions[0].name);
     goodIdentifiers.identifiers[0].marketType = goodTransactions[0].marketType;
+    goodIdentifiers.identifiers[0].currency = goodTransactions[0].currency;
 
     for (i = 0; i < goodTransactionsRows; i++)
     {
@@ -562,7 +563,7 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
             //insert new good identifier in array sorted by name
             strcpy(goodIdentifiers.identifiers[count-1].name, goodTransactions[i].name);
             goodIdentifiers.identifiers[count-1].marketType = goodTransactions[i].marketType;
-
+            goodIdentifiers.identifiers[count-1].currency = goodTransactions[i].currency;
         }
 
         exists = false;
@@ -769,10 +770,17 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows) {
         {
             //? Procura o valor minimo, maximo e media de fecho
             float min = goodsInStudie.goods[0].closeValue, max = goodsInStudie.goods[0].closeValue, media = 0, desvio = 0;
+            DATE minDate, maxDate;
             for (i = 0; i < goodsInStudie.count; i++)
             {
-                if(goodsInStudie.goods[i].closeValue < min) min = goodsInStudie.goods[i].closeValue;
-                if(goodsInStudie.goods[i].closeValue > max) max = goodsInStudie.goods[i].closeValue;
+                if(goodsInStudie.goods[i].closeValue < min) {
+                    min = goodsInStudie.goods[i].closeValue;
+                    minDate = goodsInStudie.goods[i].obsDate;
+                }
+                if(goodsInStudie.goods[i].closeValue > max) {
+                    max = goodsInStudie.goods[i].closeValue;
+                    maxDate = goodsInStudie.goods[i].obsDate;
+                }
 
                 media += goodsInStudie.goods[i].closeValue;
             }
@@ -787,14 +795,15 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows) {
             }
             desvio = sqrt(desvio / goodsInStudie.count);
 
-            //system("cls");
-            printf("\n\n\033[4mResultados\033[0m\n");
-            printf("\033[32m%d/%d/%d - %d/%d/%d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
-            printf("Valor minimo: %.2f\n", min);
-            printf("Valor maximo: %.2f\n", max);
-            printf("Valor medio: %.2f\n", media);
-            printf("Desvio padrao: %.2f\n", desvio);
-            scanf("%s");
+            system("cls");
+            printf("\n  \033[4mResultados\033[0m\n");
+            printf("  \033[32m%02d/%02d/%02d - %02d/%02d/%02d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
+            printf("  Valor minimo: %.2f %s - %02d/%02d/%02d\n", min, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency], minDate.day, minDate.month, minDate.year);
+            printf("  Valor maximo: %.2f %s - %02d/%02d/%02d\n", max, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency], maxDate.day, maxDate.month, maxDate.year);
+            printf("  Valor medio: %.2f %s\n", media, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency]);
+            printf("  Desvio padrao: %.2f\n", desvio);
+            printf("\n  \033[7mClique em qualquer tecla para voltar ao menu...\033[0m");
+            getch();
         }
         else handleError("O bem não foi transacionado neste intervalo de datas");
 

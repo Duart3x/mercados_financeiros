@@ -29,6 +29,7 @@ typedef struct Good{
 typedef struct goodIdentifier 
 {
     char name[50];
+    CURRENCY currency;
     MARKETTYPE marketType;
 } GOODIDENTIFIER;
 
