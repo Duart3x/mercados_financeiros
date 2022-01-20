@@ -31,6 +31,7 @@ typedef struct goodIdentifier
     char name[50];
     CURRENCY currency;
     MARKETTYPE marketType;
+    unsigned long long int acumulatedVolume;
 } GOODIDENTIFIER;
 
 typedef struct goodIdentifiersArray {
