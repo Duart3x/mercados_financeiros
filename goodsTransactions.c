@@ -650,46 +650,88 @@ void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactions
 
 }
 
+//? Procura na lista de bens transacionados pelo bem selecionado no intervalo de datas selecionado
 GOODSINSTUDIE getGoodBetweenDates(GOOD *goodTransactions, int goodTransactionsRows, DATE initial, DATE end)
 {
     int i = 0, j = 0;
     bool exists = false;
 
     GOODSINSTUDIE goodsInStudie;
-    goodsInStudie.goods = (GOOD *)malloc(1 * sizeof(GOOD));
     goodsInStudie.count = 0;
 
-    for (i = 0; i < goodTransactionsRows; i++)
-    {
-        if(compareDates(goodTransactions[i].obsDate, initial) >= 0 && compareDates(goodTransactions[i].obsDate, end) <= 0)
+    if(compareDates(initial, end) == 1) {
+        for (i = 0; i < goodTransactionsRows; i++)
         {
-            
-            goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
-            goodsInStudie.goods[goodsInStudie.count] = goodTransactions[i];
-            goodsInStudie.count++;
+            if(compareDates(goodTransactions[i].obsDate, initial) <= 0 && compareDates(goodTransactions[i].obsDate, end) >= 0)
+            { 
+                if(goodsInStudie.count == 0) 
+                    goodsInStudie.goods = (GOOD *)malloc(sizeof(GOOD));
+                else 
+                    goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
+
+                goodsInStudie.goods[goodsInStudie.count] = goodTransactions[i];
+                goodsInStudie.count++;
+            }
+        }
+    }
+    else {
+        for (i = 0; i < goodTransactionsRows; i++)
+        {
+            if(compareDates(goodTransactions[i].obsDate, initial) >= 0 && compareDates(goodTransactions[i].obsDate, end) <= 0)
+            {
+                
+                if(goodsInStudie.count == 0) 
+                    goodsInStudie.goods = (GOOD *)malloc(sizeof(GOOD));
+                else 
+                    goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
+
+                goodsInStudie.goods[goodsInStudie.count] = goodTransactions[i];
+                goodsInStudie.count++;
+            }
         }
     }
 
     return goodsInStudie;
 }
 
+//? Procura na lista de bens transacionados pelo bem selecionado no intervalo de datas selecionado
 GOODSINSTUDIE getSpecificGoodBetweenDates(GOOD *goodTransactions, int goodTransactionsRows, DATE initial, DATE end, GOODIDENTIFIERSARRAY goodIdentifiers, int identifierOption)
 {
     int i = 0, j = 0;
     bool exists = false;
 
     GOODSINSTUDIE goodsInStudie;
-    goodsInStudie.goods = (GOOD *)malloc(1 * sizeof(GOOD));
     goodsInStudie.count = 0;
 
-    for (i = 0; i < goodTransactionsRows; i++)
-    {
-        if(strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initial) >= 0 && compareDates(goodTransactions[i].obsDate, end) <= 0)
+    if(compareDates(initial, end) == 1) {
+        for (i = 0; i < goodTransactionsRows; i++)
         {
-            
-            goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
-            goodsInStudie.goods[goodsInStudie.count] = goodTransactions[i];
-            goodsInStudie.count++;
+            if(strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initial) <= 0 && compareDates(goodTransactions[i].obsDate, end) >= 0)
+            { 
+                if(goodsInStudie.count == 0) 
+                    goodsInStudie.goods = (GOOD *)malloc(sizeof(GOOD));
+                else 
+                    goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
+
+                goodsInStudie.goods[goodsInStudie.count] = goodTransactions[i];
+                goodsInStudie.count++;
+            }
+        }
+    }
+    else {
+        for (i = 0; i < goodTransactionsRows; i++)
+        {
+            if(strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initial) >= 0 && compareDates(goodTransactions[i].obsDate, end) <= 0)
+            {
+                
+                if(goodsInStudie.count == 0) 
+                    goodsInStudie.goods = (GOOD *)malloc(sizeof(GOOD));
+                else 
+                    goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
+
+                goodsInStudie.goods[goodsInStudie.count] = goodTransactions[i];
+                goodsInStudie.count++;
+            }
         }
     }
 
@@ -757,57 +799,60 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows) {
         int op = drawMenu(opcoes, goodIdentifiers.count, "Selecione o bem que pretende consultar");
 
         if(op == -1) quitMenu = true;
-        else identifierOption = op;
-    }
+        else {
+            identifierOption = op;
+            goodsInStudie = getSpecificGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate, goodIdentifiers, identifierOption);
 
-    if(!quitMenu) {
-        //? Procura na lista de bens transacionados pelo bem selecionado no intervalo de datas selecionado
-        goodsInStudie = getSpecificGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate, goodIdentifiers, identifierOption);
-
-        i = 0;
-        
-        if(goodsInStudie.count > 0)
-        {
-            //? Procura o valor minimo, maximo e media de fecho
-            float min = goodsInStudie.goods[0].closeValue, max = goodsInStudie.goods[0].closeValue, media = 0, desvio = 0;
-            DATE minDate, maxDate;
-            for (i = 0; i < goodsInStudie.count; i++)
-            {
-                if(goodsInStudie.goods[i].closeValue < min) {
-                    min = goodsInStudie.goods[i].closeValue;
-                    minDate = goodsInStudie.goods[i].obsDate;
-                }
-                if(goodsInStudie.goods[i].closeValue > max) {
-                    max = goodsInStudie.goods[i].closeValue;
-                    maxDate = goodsInStudie.goods[i].obsDate;
-                }
-
-                media += goodsInStudie.goods[i].closeValue;
+            if(goodsInStudie.count > 0) isValid = true;
+            else {
+                quitMenu = !handleError("  Nao ha registo de transacoes deste bem neste intervalo de datas");
+                isValid = false;
             }
-            media /= goodsInStudie.count;
-
-            i = 0;
-            
-            //? Calcula o desvio padrao de fecho
-            for (i = 0; i < goodsInStudie.count; i++)
-            {
-                desvio += pow(goodsInStudie.goods[i].closeValue - media, 2);
-            }
-            desvio = sqrt(desvio / goodsInStudie.count);
-
-            system("cls");
-            printf("\n  \033[4mResultados\033[0m\n");
-            printf("  \033[32m%02d/%02d/%02d - %02d/%02d/%02d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
-            printf("  Valor minimo: %.2f %s - %02d/%02d/%02d\n", min, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency], minDate.day, minDate.month, minDate.year);
-            printf("  Valor maximo: %.2f %s - %02d/%02d/%02d\n", max, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency], maxDate.day, maxDate.month, maxDate.year);
-            printf("  Valor medio: %.2f %s\n", media, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency]);
-            printf("  Desvio padrao: %.2f\n", desvio);
-            printf("\n  \033[7mClique em qualquer tecla para voltar ao menu...\033[0m");
-            getch();
         }
-        else handleError("O bem não foi transacionado neste intervalo de datas");
-
-        free(goodsInStudie.goods);
-        free(goodIdentifiers.identifiers);
     }
+
+    if(quitMenu) 
+        return;
+      
+    i = 0;
+
+    //? Procura o valor minimo, maximo e media de fecho
+    float min = goodsInStudie.goods[0].closeValue, max = goodsInStudie.goods[0].closeValue, media = 0, desvio = 0;
+    DATE minDate, maxDate;
+    for (i = 0; i < goodsInStudie.count; i++)
+    {
+        if(goodsInStudie.goods[i].closeValue < min) {
+            min = goodsInStudie.goods[i].closeValue;
+            minDate = goodsInStudie.goods[i].obsDate;
+        }
+        if(goodsInStudie.goods[i].closeValue > max) {
+            max = goodsInStudie.goods[i].closeValue;
+            maxDate = goodsInStudie.goods[i].obsDate;
+        }
+
+        media += goodsInStudie.goods[i].closeValue;
+    }
+    media /= goodsInStudie.count;
+
+    i = 0;
+    
+    //? Calcula o desvio padrao de fecho
+    for (i = 0; i < goodsInStudie.count; i++)
+    {
+        desvio += pow(goodsInStudie.goods[i].closeValue - media, 2);
+    }
+    desvio = sqrt(desvio / goodsInStudie.count);
+
+    system("cls");
+    printf("\n  \033[4mResultados\033[0m\n");
+    printf("  \033[32m%02d/%02d/%04d - %02d/%02d/%04d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
+    printf("  Valor minimo: %.2f %s - %02d/%02d/%04d\n", min, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency], minDate.day, minDate.month, minDate.year);
+    printf("  Valor maximo: %.2f %s - %02d/%02d/%04d\n", max, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency], maxDate.day, maxDate.month, maxDate.year);
+    printf("  Valor medio: %.2f %s\n", media, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency]);
+    printf("  Desvio padrao: %.2f\n", desvio);
+    printf("\n  \033[7mClique em qualquer tecla para continuar...\033[0m");
+    getch();
+
+    free(goodsInStudie.goods);
+    free(goodIdentifiers.identifiers);
 }
