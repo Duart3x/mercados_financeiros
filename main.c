@@ -138,7 +138,7 @@ int main()
     free(goodTransactions);
 
     system("cls");
-    printf("\n  Obrigado por utilizar o programa!\n\n  \033[4mTrabalho realizado por\033[0m:\n  - Duarte Santos\t22593\n  - Simao Teixeira\t22590\n  - Jose Almeida\t22982\n  - Maria Simoes\tObjeto nao identificado\n");
+    printf("\n  Obrigado por utilizar o programa!\n\n  \033[4mTrabalho realizado por\033[0m:\n  - Duarte Santos\t22593\n  - Simao Teixeira\t22590\n  - Jose Almeida\t22982\n  - Maria Simoes\t22993\n");
 
     printf("\n  \033[7mPressione uma tecla para fechar a consola...\033[0m");
     getch();
