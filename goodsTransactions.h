@@ -26,6 +26,17 @@ typedef struct Good{
     CURRENCY currency;
 } GOOD;
 
+typedef struct goodIdentifier 
+{
+    char name[50];
+    MARKETTYPE marketType;
+} GOODIDENTIFIER;
+
+typedef struct goodIdentifiersArray {
+    GOODIDENTIFIER* identifiers;
+    int count;
+} GOODIDENTIFIERSARRAY;
+
 typedef struct goodsInStudie {
     GOOD *goods;
     int count;

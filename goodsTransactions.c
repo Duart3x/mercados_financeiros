@@ -529,16 +529,6 @@ GOOD *readGoodsTransactionsHistoryFile(FILE *f, int *numRows)
 
     return goodsHistory;
 }
-typedef struct goodIdentifier 
-{
-    char name[50];
-    MARKETTYPE marketType;
-} GOODIDENTIFIER;
-
-typedef struct goodIdentifiersArray {
-    GOODIDENTIFIER* identifiers;
-    int count;
-} GOODIDENTIFIERSARRAY;
 
 GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransactionsRows) {
     int i = 0, j = 0, count = 1;
@@ -670,7 +660,7 @@ GOODSINSTUDIE getGoodBetweenDates(GOOD *goodTransactions, int goodTransactionsRo
 
     for (i = 0; i < goodTransactionsRows; i++)
     {
-        if(compareDates(goodTransactions[i].obsDate, initial) >= 0 || compareDates(goodTransactions[i].obsDate, end) <= 0)
+        if(compareDates(goodTransactions[i].obsDate, initial) >= 0 && compareDates(goodTransactions[i].obsDate, end) <= 0)
         {
             
             goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
@@ -693,7 +683,7 @@ GOODSINSTUDIE getSpecificGoodBetweenDates(GOOD *goodTransactions, int goodTransa
 
     for (i = 0; i < goodTransactionsRows; i++)
     {
-        if(strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initial) >= 0 || compareDates(goodTransactions[i].obsDate, end) <= 0)
+        if(strcmp(goodTransactions[i].name, goodIdentifiers.identifiers[identifierOption - 1].name) == 0 && compareDates(goodTransactions[i].obsDate, initial) >= 0 && compareDates(goodTransactions[i].obsDate, end) <= 0)
         {
             
             goodsInStudie.goods = (GOOD *)realloc(goodsInStudie.goods, (goodsInStudie.count + 1) * sizeof(GOOD));
@@ -797,13 +787,14 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows) {
             }
             desvio = sqrt(desvio / goodsInStudie.count);
 
-            system("cls");
+            //system("cls");
             printf("\n\n\033[4mResultados\033[0m\n");
             printf("\033[32m%d/%d/%d - %d/%d/%d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodIdentifiers.identifiers[identifierOption - 1].name);
             printf("Valor minimo: %.2f\n", min);
             printf("Valor maximo: %.2f\n", max);
             printf("Valor medio: %.2f\n", media);
             printf("Desvio padrao: %.2f\n", desvio);
+            scanf("%s");
         }
         else handleError("O bem não foi transacionado neste intervalo de datas");
 
