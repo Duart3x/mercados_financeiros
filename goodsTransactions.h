@@ -56,5 +56,6 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows);
 void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactionsRows);
 GOODSINSTUDIE getGoodBetweenDates(GOOD *goodTransactions, int goodTransactionsRows, DATE initial, DATE end);
 GOODSINSTUDIE getSpecificGoodBetweenDates(GOOD *goodTransactions, int goodTransactionsRows, DATE initial, DATE end, GOODIDENTIFIERSARRAY goodIdentifiers, int identifierOption);
+void maxPriceVariation(GOOD *goodTransactions, int goodTransactionsRows);
 
 #endif

@@ -49,14 +49,15 @@ int main()
                             "Converter um Montante entre duas Moedas Distintas",
                             "Registar Valor historico diario de um bem transacionado",
                             "Listar identificadores de bens transacionaveis",
-                            "Valor Minimo, Medio, Desvio Padrao e Maximo de fecho de um bem transacionavel",
-                            "Maior variacao positiva entre o preco de abertura e de fecho de um bem transacionavel num intervalo de datas",
+                            "Valor Minimo, Medio, Desvio Padrao e Maximo de fecho de um bem",
+                            "Maior variacao positiva entre o preco de um bem num intervalo de datas",
                             "Bem transacionavel que obteve o melhor desempenho num intervalo de datas",
                             "5 bens transacionaveis com o maior volume de transacces num intervalo de datas",
-                            "Exportar para um ficheiro texto as taxas de conversao aplicaveis a uma moeda num intervalo de datas",
+                            "Exportar para um ficheiro taxas de conversao num intervalo de datas",
                             "\033[31mSAIR\033[0m"};
     bool exitMenu = false;
     bool askToContinue = true;
+    int file = -1;
     do
     {
         askToContinue = true;
@@ -81,16 +82,32 @@ int main()
                 askToContinue = false;
                 break;
             case 5:
-                askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? listGoodsIndentifiers(goodsHistory, numGoodsRows) : listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
+                file = askFileToUse(numGoodTransactionsRows, numGoodsRows);
+                if(file == 1)
+                    listGoodsIndentifiers(goodsHistory, numGoodsRows);
+                else if(file == 2)
+                    listGoodsIndentifiers(goodTransactions, numGoodTransactionsRows);
+                else
+                    askToContinue = false;
+                
                 break;
             case 6:
-
-                askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? closeValueStatistics(goodsHistory, numGoodsRows) : closeValueStatistics(goodTransactions, numGoodTransactionsRows);
+                file = askFileToUse(numGoodTransactionsRows, numGoodsRows);
+                if (file == 1)
+                    closeValueStatistics(goodsHistory, numGoodsRows);
+                else if (file == 2)
+                    closeValueStatistics(goodTransactions, numGoodTransactionsRows);
 
                 askToContinue = false;
                 break;
             case 7:
-                //fiveGoodsWithMoreTransactions(goodTransactions, &numGoodTransactionsRows);
+                file = askFileToUse(numGoodTransactionsRows, numGoodsRows);
+                if(file == 1)
+                    maxPriceVariation(goodsHistory, numGoodsRows);
+                else if(file == 2)
+                    maxPriceVariation(goodTransactions, numGoodTransactionsRows);
+                else
+                    askToContinue = false;
                 break;
             case 8:
                 break;
@@ -109,7 +126,7 @@ int main()
         if(!exitMenu && askToContinue)
         {
             printf("\n\n");
-            printf("\033[7mPressione qualquer tecla para continuar...\033[0m");
+            printf("  \033[7mPressione qualquer tecla para continuar...\033[0m");
             getch();
             system("cls");
         }
@@ -121,17 +138,6 @@ int main()
 
     if(op == 1)
         saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);
-
-
-    //newGoodQuestionaire();
-
-    /*GOOD good = (GOOD){.name = "ETH", .openValue = 3.0, .closeValue = 4.0, .higherValue = 3.0, .lowerValue = 4.0, .volume = 552, .marketType = 0, .currency = 0, .obsDate = (DATE){.day = 1, .month = 1, .year = 2022}};
-
-    //addGoodToFile(good,goodTransactions, &numGoodTransactionsRows);
-    //saveGoodsToFile(goodTransactions, &numGoodTransactionsRows);*/
-
-    //listGoodsIndentifiers(goodsHistory, numGoodsRows);
-    // newGoodQuestionaire(goodTransactions, &numGoodTransactionsRows);
 
     free(exchangeRates);
     free(goodsHistory);

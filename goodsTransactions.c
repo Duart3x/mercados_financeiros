@@ -932,3 +932,105 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows)
     free(goodsInStudie.goods);
     free(goodIdentifiers.identifiers);
 }
+
+void maxPriceVariation(GOOD *goodTransactions, int goodTransactionsRows)
+{
+    DATE initialDate, endDate;
+
+    bool isValid = true, quitMenu = false;
+    char strInitialDate[15];
+    char strEndDate[15];
+    GOODSINSTUDIE goodsInStudie;
+
+    int identifierOption = 0, i = 0;
+    GOODIDENTIFIERSARRAY goodsIdentifiers = getGoodsIdentifiers(goodTransactions, goodTransactionsRows);
+
+    do
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): ");
+        scanf("%s", strInitialDate);
+        fflush(stdin);
+        initialDate = isDateValid(strInitialDate);
+
+        if (initialDate.year == 0)
+        {
+            quitMenu = !handleError("Data inicial invalida");
+            isValid = false;
+        }
+    } while (!isValid && !quitMenu);
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): %02d/%02d/%02d", initialDate.day, initialDate.month, initialDate.year);
+        printf("\n  Data final (dd/MM/aaaa):   ");
+        scanf("%s", strEndDate);
+        fflush(stdin);
+        endDate = isDateValid(strEndDate);
+
+        if (endDate.year == 0)
+        {
+            quitMenu = !handleError("  Data final invalida");
+            isValid = false;
+        }
+    }
+
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        i = 0;
+
+        char **opcoes = (char **)malloc(goodsIdentifiers.count * sizeof(char *));
+
+        for (i = 0; i < goodsIdentifiers.count; i++)
+        {
+            opcoes[i] = (char *)goodsIdentifiers.identifiers[i].name;
+        }
+
+        int op = drawMenu(opcoes, goodsIdentifiers.count, "Selecione o bem que pretende consultar");
+
+        if (op == -1)
+            quitMenu = true;
+        else
+        {
+            identifierOption = op;
+            goodsInStudie = getSpecificGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate, goodsIdentifiers, identifierOption);
+
+            if (goodsInStudie.count > 0)
+                isValid = true;
+            else
+            {
+                quitMenu = !handleError("  Nao ha registo de transacoes deste bem neste intervalo de datas");
+                isValid = false;
+            }
+        }
+    }
+
+    if(quitMenu)
+        return;
+
+    i=0;
+    int maxVariationIndex = 0;
+
+    for (i = 0; i < goodsInStudie.count; i++)
+    {
+        if(goodsInStudie.goods[i].closeValue - goodsInStudie.goods[i].openValue > goodsInStudie.goods[maxVariationIndex].closeValue - goodsInStudie.goods[maxVariationIndex].openValue)
+            maxVariationIndex = i;
+    }
+
+    system("cls");
+    printf("\n  \033[4mResultados\033[0m\n");
+    printf("  \033[32m%02d/%02d/%04d - %02d/%02d/%04d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodsIdentifiers.identifiers[identifierOption - 1].name);
+    printf("  \033[4m%02d/%02d/%04d\033[0m\n", goodsInStudie.goods[maxVariationIndex].obsDate.day, goodsInStudie.goods[maxVariationIndex].obsDate.month, goodsInStudie.goods[maxVariationIndex].obsDate.year);
+    printf("  Valor de abertura:        %.2f %s\n", goodsInStudie.goods[maxVariationIndex].openValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
+    printf("  Valor de fecho:           %.2f %s\n", goodsInStudie.goods[maxVariationIndex].closeValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
+    printf("  Valor maximo de variacao: %.2f %s\n", goodsInStudie.goods[maxVariationIndex].closeValue - goodsInStudie.goods[maxVariationIndex].openValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
+    
+
+    
+}
