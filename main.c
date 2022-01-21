@@ -110,6 +110,13 @@ int main()
                     askToContinue = false;
                 break;
             case 8:
+                file = askFileToUse(numGoodTransactionsRows, numGoodsRows);
+                if (file == 1)
+                    bestPerformanceGood(goodsHistory, numGoodsRows);
+                else if (file == 2)
+                    bestPerformanceGood(goodTransactions, numGoodTransactionsRows);
+
+                askToContinue = false;
                 break;
             case 9:
                 break;

@@ -576,6 +576,8 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
     strcpy(goodIdentifiers.identifiers[0].name, goodTransactions[0].name);
     goodIdentifiers.identifiers[0].marketType = goodTransactions[0].marketType;
     goodIdentifiers.identifiers[0].currency = goodTransactions[0].currency;
+    goodIdentifiers.identifiers[0].valClose = 0;
+    goodIdentifiers.identifiers[0].valOpen = 0;
 
     for (i = 0; i < goodTransactionsRows; i++)
     {
@@ -600,6 +602,8 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
             strcpy(goodIdentifiers.identifiers[count - 1].name, goodTransactions[i].name);
             goodIdentifiers.identifiers[count - 1].marketType = goodTransactions[i].marketType;
             goodIdentifiers.identifiers[count - 1].currency = goodTransactions[i].currency;
+            goodIdentifiers.identifiers[count - 1].valOpen = 0;
+            goodIdentifiers.identifiers[count - 1].valClose = 0;
         }
 
         exists = false;
@@ -830,7 +834,7 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows)
 
         if (initialDate.year == 0)
         {
-            quitMenu = !handleError("Data inicial invalida");
+            quitMenu = !handleError("  Data inicial invalida");
             isValid = false;
         }
     } while (!isValid && !quitMenu);
@@ -1031,6 +1035,99 @@ void maxPriceVariation(GOOD *goodTransactions, int goodTransactionsRows)
     printf("  Valor de fecho:           %.2f %s\n", goodsInStudie.goods[maxVariationIndex].closeValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
     printf("  Valor maximo de variacao: %.2f %s\n", goodsInStudie.goods[maxVariationIndex].closeValue - goodsInStudie.goods[maxVariationIndex].openValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
     
+}
 
-    
+void bestPerformanceGood(GOOD *goodTransactions, int goodTransactionsRows) {
+    DATE initialDate, endDate;
+
+    bool isValid = true, quitMenu = false;
+    char strInitialDate[10];
+    char strEndDate[10];
+
+    GOODSINSTUDIE goodsInStudie;
+    GOODIDENTIFIERSARRAY goodIdentifiers;
+    GOODIDENTIFIER bestPerformanceGood;
+
+    int i = 0, j = 0;
+
+    do
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): ");
+        scanf("%s", strInitialDate);
+        fflush(stdin);
+        initialDate = isDateValid(strInitialDate);
+
+        if (initialDate.year == 0)
+        {
+            quitMenu = !handleError("  Data inicial invalida");
+            isValid = false;
+        }
+    } while (!isValid && !quitMenu);
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): %02d/%02d/%02d", initialDate.day, initialDate.month, initialDate.year);
+        printf("\n  Data final (dd/MM/aaaa):   ");
+        scanf("%s", strEndDate);
+        fflush(stdin);
+        endDate = isDateValid(strEndDate);
+
+        if (endDate.year == 0)
+        {
+            quitMenu = !handleError("  Data final invalida");
+            isValid = false;
+        }
+    }
+
+    if (quitMenu)
+        return;
+
+    goodsInStudie = getGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate);
+    goodIdentifiers = getGoodsIdentifiers(goodsInStudie.goods, goodsInStudie.count);
+
+    for (i = 0; i < goodsInStudie.count; i++)
+    {
+        for (j = 0; j < goodIdentifiers.count; j++)
+        {
+            if(strcmp(goodsInStudie.goods[i].name, goodIdentifiers.identifiers[j].name) == 0)
+            {
+                if(goodIdentifiers.identifiers[j].valOpen == 0) goodIdentifiers.identifiers[j].valOpen = goodsInStudie.goods[i].openValue;
+
+                goodIdentifiers.identifiers[j].valClose = goodsInStudie.goods[i].closeValue;
+                break;
+            }
+        }
+    }
+
+    i = 0;
+
+    //? Calcular o desempenho
+    goodIdentifiers.identifiers[0].performance = goodIdentifiers.identifiers[0].valClose - goodIdentifiers.identifiers[0].valOpen;
+    bestPerformanceGood = goodIdentifiers.identifiers[0];
+
+    for (i = 1; i < goodIdentifiers.count; i++)
+    {
+        goodIdentifiers.identifiers[i].performance = goodIdentifiers.identifiers[i].valClose - goodIdentifiers.identifiers[i].valOpen;
+
+        if(goodIdentifiers.identifiers[i].performance > bestPerformanceGood.performance)
+            bestPerformanceGood = goodIdentifiers.identifiers[i];
+    }
+
+    system("cls");
+    printf("\n  \033[4mBem com melhor performance\033[0m\n");
+    printf("  \033[32m%02d/%02d/%04d - %02d/%02d/%04d\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year);
+    printf("  \033[4m\033[32m%s - %d %s\033[0m\n", bestPerformanceGood.name, bestPerformanceGood.performance, CURRENCIES[bestPerformanceGood.currency]);
+    printf("  Valor inicial de abertura:\t%.2f %s\n", bestPerformanceGood.valOpen, CURRENCIES[bestPerformanceGood.currency]);
+    printf("  Valor final de fecho:\t%.2f %s\n", bestPerformanceGood.valClose, CURRENCIES[bestPerformanceGood.currency]);
+    printf("\n  \033[7mClique em qualquer tecla para continuar...\033[0m");
+    getch();
+
+    free(goodsInStudie.goods);
+    free(goodIdentifiers.identifiers);
 }

@@ -32,6 +32,8 @@ typedef struct goodIdentifier
     CURRENCY currency;
     MARKETTYPE marketType;
     unsigned long long int acumulatedVolume;
+    int performance;
+    double valOpen, valClose;
 } GOODIDENTIFIER;
 
 typedef struct goodIdentifiersArray {
@@ -57,5 +59,6 @@ void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactions
 GOODSINSTUDIE getGoodBetweenDates(GOOD *goodTransactions, int goodTransactionsRows, DATE initial, DATE end);
 GOODSINSTUDIE getSpecificGoodBetweenDates(GOOD *goodTransactions, int goodTransactionsRows, DATE initial, DATE end, GOODIDENTIFIERSARRAY goodIdentifiers, int identifierOption);
 void maxPriceVariation(GOOD *goodTransactions, int goodTransactionsRows);
+void bestPerformanceGood(GOOD *goodTransactions, int goodTransactionsRows);
 
 #endif
