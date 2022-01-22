@@ -30,8 +30,8 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
             system("cls");
 
             isValid = true;
-            printf("\033[4mRegisto de novo bem\033[0m\n");
-            printf("\nData de observacao (dd/MM/aaaa): ");
+            printf("  \033[4mRegisto de novo bem\033[0m\n");
+            printf("\n  Data de observacao (dd/MM/aaaa): ");
             scanf("%s", buffer);
             fflush(stdin);
 
@@ -39,12 +39,12 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
 
             if (length == 0)
             {
-                quitMenu = !handleError("Data Invalida");
+                quitMenu = !handleError("  Data Invalida");
                 isValid = false;
             }
             else if (strcspn(buffer, "/") == length)
             {
-                quitMenu = !handleError("Data Invalida");
+                quitMenu = !handleError("  Data Invalida");
                 isValid = false;
             }
             else
@@ -62,7 +62,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
                         }
                         else
                         {
-                            quitMenu = !handleError("Data Invalida");
+                            quitMenu = !handleError("  Data Invalida");
 
                             isValid = false;
 
@@ -77,7 +77,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
                         }
                         else
                         {
-                            quitMenu = !handleError("Data Invalida");
+                            quitMenu = !handleError("  Data Invalida");
 
                             isValid = false;
                             break;
@@ -91,7 +91,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
                         }
                         else
                         {
-                            quitMenu = !handleError("Data Invalida");
+                            quitMenu = !handleError("  Data Invalida");
 
                             isValid = false;
                             break;
@@ -107,19 +107,19 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
             {
                 if (good.obsDate.day < 1 || good.obsDate.day > 31)
                 {
-                    quitMenu = !handleError("Data Invalida");
+                    quitMenu = !handleError("  Data Invalida");
 
                     isValid = false;
                 }
                 else if (good.obsDate.month < 1 || good.obsDate.month > 12)
                 {
-                    quitMenu = !handleError("Data Invalida");
+                    quitMenu = !handleError("  Data Invalida");
 
                     isValid = false;
                 }
                 else if (good.obsDate.year < 999 || good.obsDate.year > 9999)
                 {
-                    quitMenu = !handleError("Data Invalida");
+                    quitMenu = !handleError("  Data Invalida");
 
                     isValid = false;
                 }
@@ -130,31 +130,31 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
         while (!isValid && !quitMenu)
         {
             system("cls");
-            printf("\033[4mRegisto de novo bem\033[0m\n\n");
-            printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+            printf("  \033[4mRegisto de novo bem\033[0m\n\n");
+            printf("  Data de observacao        : %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
 
             isValid = true;
 
-            printf("Identificacao do bem: ");
+            printf("  Identificacao do bem      : ");
             scanf("%s", buffer);
             fflush(stdin);
 
             if (strlen(buffer) == 0)
             {
-                quitMenu = !handleError("Identificador do bem nao pode ser vazio.");
+                quitMenu = !handleError("  Identificador do bem nao pode ser vazio.");
                 isValid = false;
 
                 isValid = false;
             }
             else if (contaisNumber(buffer) == true)
             {
-                quitMenu = !handleError("Identificador só pode conter letras.");
+                quitMenu = !handleError("  Identificador só pode conter letras.");
 
                 isValid = false;
             }
             else if (strlen(buffer) > 20)
             {
-                quitMenu = !handleError("Identificador do bem nao pode ter mais de 20 caracteres.");
+                quitMenu = !handleError("  Identificador do bem nao pode ter mais de 20 caracteres.");
 
                 isValid = false;
             }
@@ -188,21 +188,21 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
         while (!isValid && !quitMenu)
         {
             system("cls");
-            printf("\033[4mRegisto de novo bem\033[0m\n\n");
-            printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
-            printf("Nome do bem: %s\n", good.name);
-            printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
+            printf("  \033[4mRegisto de novo bem\033[0m\n\n");
+            printf("  Data de observacao        : %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+            printf("  Nome do bem               : %s\n", good.name);
+            printf("  Tipo de mercado           : %s\n", MARKET_TYPE_STRINGS[good.marketType]);
             isValid = true;
 
             double value;
 
-            printf("Valor de abertura: ");
+            printf("  Valor de abertura         : ");
             scanf("%s", buffer);
             fflush(stdin);
 
             if (!isNumber(buffer))
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
             else
@@ -212,7 +212,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
 
             if (value < 0)
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
 
@@ -223,22 +223,22 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
         while (!isValid && !quitMenu)
         {
             system("cls");
-            printf("\033[4mRegisto de novo bem\033[0m\n\n");
-            printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
-            printf("Nome do bem: %s\n", good.name);
-            printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
-            printf("Valor de abertura: %.3f\n", good.openValue);
+            printf("  \033[4mRegisto de novo bem\033[0m\n\n");
+            printf("  Data de observacao        : %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+            printf("  Nome do bem               : %s\n", good.name);
+            printf("  Tipo de mercado           : %s\n", MARKET_TYPE_STRINGS[good.marketType]);
+            printf("  Valor de abertura         : %.3f\n", good.openValue);
             isValid = true;
 
             double value;
 
-            printf("Valor de Fecho: ");
+            printf("  Valor de Fecho            : ");
             scanf("%s", buffer);
             fflush(stdin);
 
             if (!isNumber(buffer))
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
             else
@@ -248,7 +248,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
 
             if (value < 0)
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
 
@@ -259,23 +259,23 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
         while (!isValid && !quitMenu)
         {
             system("cls");
-            printf("\033[4mRegisto de novo bem\033[0m\n\n");
-            printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
-            printf("Nome do bem: %s\n", good.name);
-            printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
-            printf("Valor de abertura: %.3f\n", good.openValue);
-            printf("Valor de fecho: %.3f\n", good.closeValue);
+            printf("  \033[4mRegisto de novo bem\033[0m\n\n");
+            printf("  Data de observacao        : %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+            printf("  Nome do bem               : %s\n", good.name);
+            printf("  Tipo de mercado           : %s\n", MARKET_TYPE_STRINGS[good.marketType]);
+            printf("  Valor de abertura         : %.3f\n", good.openValue);
+            printf("  Valor de fecho            : %.3f\n", good.closeValue);
             isValid = true;
 
             double value;
 
-            printf("Menor valor observado: ");
+            printf("  Menor valor observado     : ");
             scanf("%s", buffer);
             fflush(stdin);
 
             if (!isNumber(buffer))
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
             else
@@ -285,7 +285,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
 
             if (value < 0)
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
 
@@ -296,24 +296,24 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
         while (!isValid && !quitMenu)
         {
             system("cls");
-            printf("\033[4mRegisto de novo bem\033[0m\n\n");
-            printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
-            printf("Nome do bem: %s\n", good.name);
-            printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
-            printf("Valor de abertura: %.3f\n", good.openValue);
-            printf("Valor de fecho: %.3f\n", good.closeValue);
-            printf("Menor valor observado: %.3f\n", good.lowerValue);
+            printf("  \033[4mRegisto de novo bem\033[0m\n\n");
+            printf("  Data de observacao        : %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+            printf("  Nome do bem               : %s\n", good.name);
+            printf("  Tipo de mercado           : %s\n", MARKET_TYPE_STRINGS[good.marketType]);
+            printf("  Valor de abertura         : %.3f\n", good.openValue);
+            printf("  Valor de fecho            : %.3f\n", good.closeValue);
+            printf("  Menor valor observado     : %.3f\n", good.lowerValue);
             isValid = true;
 
             double value;
 
-            printf("Maior valor observado: ");
+            printf("  Maior valor observado     : ");
             scanf("%s", buffer);
             fflush(stdin);
 
             if (!isNumber(buffer))
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
             else
@@ -323,7 +323,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
 
             if (value < 0)
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
 
@@ -354,26 +354,26 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
         while (!isValid && !quitMenu)
         {
             system("cls");
-            printf("\033[4mRegisto de novo bem\033[0m\n\n");
-            printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
-            printf("Nome do bem: %s\n", good.name);
-            printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
-            printf("Valor de abertura: %.3f\n", good.openValue);
-            printf("Valor de fecho: %.3f\n", good.closeValue);
-            printf("Menor valor observado: %.3f\n", good.lowerValue);
-            printf("Maior valor observado: %.3f\n", good.higherValue);
-            printf("Unidade de moeda: %s\n", CURRENCIES[good.currency]);
+            printf("  \033[4mRegisto de novo bem\033[0m\n\n");
+            printf("  Data de observacao        : %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+            printf("  Nome do bem               : %s\n", good.name);
+            printf("  Tipo de mercado           : %s\n", MARKET_TYPE_STRINGS[good.marketType]);
+            printf("  Valor de abertura         : %.3f\n", good.openValue);
+            printf("  Valor de fecho            : %.3f\n", good.closeValue);
+            printf("  Menor valor observado     : %.3f\n", good.lowerValue);
+            printf("  Maior valor observado     : %.3f\n", good.higherValue);
+            printf("  Unidade de moeda          : %s\n", CURRENCIES[good.currency]);
             isValid = true;
 
             int vol;
 
-            printf("Volume total transacionado: ");
+            printf("  Volume total transacionado: ");
             scanf("%s", buffer);
             fflush(stdin);
 
             if (!isNumber(buffer))
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
             else
@@ -383,7 +383,7 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
 
             if (vol < 0)
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
                 isValid = false;
             }
 
@@ -395,26 +395,25 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
             return goodTransactions;
 
         system("cls");
-
-        printf("\033[4mRegisto de novo bem\033[0m\n\n");
-        printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
-        printf("Nome do bem: %s\n", good.name);
-        printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
-        printf("Valor de abertura: %.3f\n", good.openValue);
-        printf("Valor de fecho: %.3f\n", good.closeValue);
-        printf("Menor valor observado: %.3f\n", good.lowerValue);
-        printf("Maior valor observado: %.3f\n", good.higherValue);
-        printf("Unidade de moeda: %s\n", CURRENCIES[good.currency]);
-        printf("Volume total transacionado: %d\n\n", good.volume);
-
-        printf("Deseja confirmar os dados? (S/N): ");
+        printf("  \033[4mRegisto de novo bem\033[0m\n\n");
+        printf("  Data de observacao        : %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
+        printf("  Nome do bem               : %s\n", good.name);
+        printf("  Tipo de mercado           : %s\n", MARKET_TYPE_STRINGS[good.marketType]);
+        printf("  Valor de abertura         : %.3f\n", good.openValue);
+        printf("  Valor de fecho            : %.3f\n", good.closeValue);
+        printf("  Menor valor observado     : %.3f\n", good.lowerValue);
+        printf("  Maior valor observado     : %.3f\n", good.higherValue);
+        printf("  Unidade de moeda          : %s\n", CURRENCIES[good.currency]);
+        printf("  Volume total transacionado: %d\n\n", good.volume);
+        printf("  Deseja confirmar os dados? (S/N): ");
         scanf("%s", buffer);
         fflush(stdin);
 
         //Fazer as validacces do buffer e verificar se é S ou N
         if (buffer[0] != 'N' || buffer[0] != 'n')
             goodTransactions = addGoodToArray(good, goodTransactions, goodTransactionsRows);
-
+        printf("\n\n  \033[7mPressione qualquer tecla para continuar...\033[0m");
+        getch();
         int sn = 0;
         char *opcao[] = {"Sim", "Nao"};
 
@@ -476,11 +475,11 @@ GOOD *addGoodToArray(GOOD good, GOOD *goodTransactions, int *goodTransactionsRow
 
         goodTransactions[*goodTransactionsRows - 1] = good;
 
-        printColoredText("\rDados do bem guardados com sucesso.\n", GREEN);
+        printColoredText("\r  Dados do bem guardados com sucesso.\n", GREEN);
     }
     else
     {
-        printColoredText("\rDados do bem atualizados com sucesso.\n", GREEN);
+        printColoredText("\r  Dados do bem atualizados com sucesso.\n", GREEN);
     }
 
     return goodTransactions;
@@ -577,6 +576,9 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
     goodIdentifiers.identifiers[0].marketType = goodTransactions[0].marketType;
     goodIdentifiers.identifiers[0].currency = goodTransactions[0].currency;
     goodIdentifiers.identifiers[0].acumulatedVolume=0;
+    goodIdentifiers.identifiers[0].valClose = 0;
+    goodIdentifiers.identifiers[0].valOpen = 0;
+
     for (i = 0; i < goodTransactionsRows; i++)
     {
         j = 0;
@@ -602,6 +604,8 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
             goodIdentifiers.identifiers[count - 1].currency = goodTransactions[i].currency;
             goodIdentifiers.identifiers[count - 1].acumulatedVolume = 0;
 
+            goodIdentifiers.identifiers[count - 1].valOpen = 0;
+            goodIdentifiers.identifiers[count - 1].valClose = 0;
         }
 
         exists = false;
@@ -854,7 +858,7 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows)
 
         if (initialDate.year == 0)
         {
-            quitMenu = !handleError("Data inicial invalida");
+            quitMenu = !handleError("  Data inicial invalida");
             isValid = false;
         }
     } while (!isValid && !quitMenu);
@@ -950,6 +954,201 @@ void closeValueStatistics(GOOD *goodTransactions, int goodTransactionsRows)
     printf("  Valor maximo:  %.2f %s - %02d/%02d/%04d\n", max, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency], maxDate.day, maxDate.month, maxDate.year);
     printf("  Valor medio:   %.2f %s\n", media, CURRENCIES[goodIdentifiers.identifiers[identifierOption - 1].currency]);
     printf("  Desvio padrao: %.2f\n", desvio);
+    printf("\n  \033[7mClique em qualquer tecla para continuar...\033[0m");
+    getch();
+
+    free(goodsInStudie.goods);
+    free(goodIdentifiers.identifiers);
+}
+
+void maxPriceVariation(GOOD *goodTransactions, int goodTransactionsRows)
+{
+    DATE initialDate, endDate;
+
+    bool isValid = true, quitMenu = false;
+    char strInitialDate[15];
+    char strEndDate[15];
+    GOODSINSTUDIE goodsInStudie;
+
+    int identifierOption = 0, i = 0;
+    GOODIDENTIFIERSARRAY goodsIdentifiers = getGoodsIdentifiers(goodTransactions, goodTransactionsRows);
+
+    do
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): ");
+        scanf("%s", strInitialDate);
+        fflush(stdin);
+        initialDate = isDateValid(strInitialDate);
+
+        if (initialDate.year == 0)
+        {
+            quitMenu = !handleError("Data inicial invalida");
+            isValid = false;
+        }
+    } while (!isValid && !quitMenu);
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): %02d/%02d/%02d", initialDate.day, initialDate.month, initialDate.year);
+        printf("\n  Data final (dd/MM/aaaa):   ");
+        scanf("%s", strEndDate);
+        fflush(stdin);
+        endDate = isDateValid(strEndDate);
+
+        if (endDate.year == 0)
+        {
+            quitMenu = !handleError("  Data final invalida");
+            isValid = false;
+        }
+    }
+
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        i = 0;
+
+        char **opcoes = (char **)malloc(goodsIdentifiers.count * sizeof(char *));
+
+        for (i = 0; i < goodsIdentifiers.count; i++)
+        {
+            opcoes[i] = (char *)goodsIdentifiers.identifiers[i].name;
+        }
+
+        int op = drawMenu(opcoes, goodsIdentifiers.count, "Selecione o bem que pretende consultar");
+
+        if (op == -1)
+            quitMenu = true;
+        else
+        {
+            identifierOption = op;
+            goodsInStudie = getSpecificGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate, goodsIdentifiers, identifierOption);
+
+            if (goodsInStudie.count > 0)
+                isValid = true;
+            else
+            {
+                quitMenu = !handleError("  Nao ha registo de transacoes deste bem neste intervalo de datas");
+                isValid = false;
+            }
+        }
+    }
+
+    if(quitMenu)
+        return;
+
+    i=0;
+    int maxVariationIndex = 0;
+
+    for (i = 0; i < goodsInStudie.count; i++)
+    {
+        if(goodsInStudie.goods[i].closeValue - goodsInStudie.goods[i].openValue > goodsInStudie.goods[maxVariationIndex].closeValue - goodsInStudie.goods[maxVariationIndex].openValue)
+            maxVariationIndex = i;
+    }
+
+    system("cls");
+    printf("\n  \033[4mResultados\033[0m\n");
+    printf("  \033[32m%02d/%02d/%04d - %02d/%02d/%04d (%s)\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year, goodsIdentifiers.identifiers[identifierOption - 1].name);
+    printf("  \033[4m%02d/%02d/%04d\033[0m\n", goodsInStudie.goods[maxVariationIndex].obsDate.day, goodsInStudie.goods[maxVariationIndex].obsDate.month, goodsInStudie.goods[maxVariationIndex].obsDate.year);
+    printf("  Valor de abertura:        %.2f %s\n", goodsInStudie.goods[maxVariationIndex].openValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
+    printf("  Valor de fecho:           %.2f %s\n", goodsInStudie.goods[maxVariationIndex].closeValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
+    printf("  Valor maximo de variacao: %.2f %s\n", goodsInStudie.goods[maxVariationIndex].closeValue - goodsInStudie.goods[maxVariationIndex].openValue, CURRENCIES[goodsIdentifiers.identifiers[identifierOption - 1].currency]);
+    
+}
+
+void bestPerformanceGood(GOOD *goodTransactions, int goodTransactionsRows) {
+    DATE initialDate, endDate;
+
+    bool isValid = true, quitMenu = false;
+    char strInitialDate[10];
+    char strEndDate[10];
+
+    GOODSINSTUDIE goodsInStudie;
+    GOODIDENTIFIERSARRAY goodIdentifiers;
+    GOODIDENTIFIER bestPerformanceGood;
+
+    int i = 0, j = 0;
+
+    do
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): ");
+        scanf("%s", strInitialDate);
+        fflush(stdin);
+        initialDate = isDateValid(strInitialDate);
+
+        if (initialDate.year == 0)
+        {
+            quitMenu = !handleError("  Data inicial invalida");
+            isValid = false;
+        }
+    } while (!isValid && !quitMenu);
+    isValid = false;
+    while (!isValid && !quitMenu)
+    {
+        system("cls");
+        isValid = true;
+        printf("  \033[4mIndique um intervalo de datas a estudar\033[0m\n\n");
+        printf("  Data inicial (dd/MM/aaaa): %02d/%02d/%02d", initialDate.day, initialDate.month, initialDate.year);
+        printf("\n  Data final (dd/MM/aaaa):   ");
+        scanf("%s", strEndDate);
+        fflush(stdin);
+        endDate = isDateValid(strEndDate);
+
+        if (endDate.year == 0)
+        {
+            quitMenu = !handleError("  Data final invalida");
+            isValid = false;
+        }
+    }
+
+    if (quitMenu)
+        return;
+
+    goodsInStudie = getGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate);
+    goodIdentifiers = getGoodsIdentifiers(goodsInStudie.goods, goodsInStudie.count);
+
+    for (i = 0; i < goodsInStudie.count; i++)
+    {
+        for (j = 0; j < goodIdentifiers.count; j++)
+        {
+            if(strcmp(goodsInStudie.goods[i].name, goodIdentifiers.identifiers[j].name) == 0)
+            {
+                if(goodIdentifiers.identifiers[j].valOpen == 0) goodIdentifiers.identifiers[j].valOpen = goodsInStudie.goods[i].openValue;
+
+                goodIdentifiers.identifiers[j].valClose = goodsInStudie.goods[i].closeValue;
+                break;
+            }
+        }
+    }
+
+    i = 0;
+
+    //? Calcular o desempenho
+    goodIdentifiers.identifiers[0].performance = goodIdentifiers.identifiers[0].valClose - goodIdentifiers.identifiers[0].valOpen;
+    bestPerformanceGood = goodIdentifiers.identifiers[0];
+
+    for (i = 1; i < goodIdentifiers.count; i++)
+    {
+        goodIdentifiers.identifiers[i].performance = goodIdentifiers.identifiers[i].valClose - goodIdentifiers.identifiers[i].valOpen;
+
+        if(goodIdentifiers.identifiers[i].performance > bestPerformanceGood.performance)
+            bestPerformanceGood = goodIdentifiers.identifiers[i];
+    }
+
+    system("cls");
+    printf("\n  \033[4mBem com melhor performance\033[0m\n");
+    printf("  \033[32m%02d/%02d/%04d - %02d/%02d/%04d\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year);
+    printf("  \033[4m\033[32m%s - %.2lf %s\033[0m\n", bestPerformanceGood.name, bestPerformanceGood.performance, CURRENCIES[bestPerformanceGood.currency]);
+    printf("  Valor inicial de abertura: %.2lf %s\n", bestPerformanceGood.valOpen, CURRENCIES[bestPerformanceGood.currency]);
+    printf("  Valor final de fecho:      %.2lf %s\n", bestPerformanceGood.valClose, CURRENCIES[bestPerformanceGood.currency]);
     printf("\n  \033[7mClique em qualquer tecla para continuar...\033[0m");
     getch();
 

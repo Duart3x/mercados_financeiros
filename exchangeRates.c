@@ -209,29 +209,6 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int f
     return result;
 }
 
-EXCHANGERATE sortExchangeRatesByValueInEurosQuickSort(EXCHANGERATE exchangeRate, char **sortedCurrencyNamesByDay)
-{
-    EXCHANGERATE result;
-    int i = 0, j = 0;
-    double temp = 0;
-    int k = 0;
-
-    for (i = 0; i < CURRENCIES_SIZE; i++)
-    {
-        for (j = i + 1; j < CURRENCIES_SIZE; j++)
-        {
-            if (exchangeRate.currencies[i] < exchangeRate.currencies[j])
-            {
-                temp = exchangeRate.currencies[i];
-                exchangeRate.currencies[i] = exchangeRate.currencies[j];
-                exchangeRate.currencies[j] = temp;
-                strcpy(sortedCurrencyNamesByDay[i], CURRENCIES[j]);
-            }
-        }
-    }
-
-    return result;
-}
 /**
  * @brief 
  * 
