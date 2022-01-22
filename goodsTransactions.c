@@ -400,11 +400,11 @@ GOOD *newGoodQuestionaire(GOOD *goodTransactions, int *goodTransactionsRows)
         printf("Data de observacao: %d/%d/%d\n", good.obsDate.day, good.obsDate.month, good.obsDate.year);
         printf("Nome do bem: %s\n", good.name);
         printf("Tipo de mercado: %s\n", MARKET_TYPE_STRINGS[good.marketType]);
-        printf("Valor de abertura: %.3f\n", good.openValue);
-        printf("Valor de fecho: %.3f\n", good.closeValue);
-        printf("Menor valor observado: %.3f\n", good.lowerValue);
-        printf("Maior valor observado: %.3f\n", good.higherValue);
-        printf("Unidade de moeda: %s\n", CURRENCIES[good.currency]);
+        printf("Valor de abertura     : %.3f\n", good.openValue);
+        printf("Valor de fecho            : %.3f\n", good.closeValue);
+        printf("Menor valor observado     : %.3f\n", good.lowerValue);
+        printf("Maior valor observado     : %.3f\n", good.higherValue);
+        printf("Unidade de moeda          : %s\n", CURRENCIES[good.currency]);
         printf("Volume total transacionado: %d\n\n", good.volume);
 
         printf("Deseja confirmar os dados? (S/N): ");
@@ -1122,9 +1122,9 @@ void bestPerformanceGood(GOOD *goodTransactions, int goodTransactionsRows) {
     system("cls");
     printf("\n  \033[4mBem com melhor performance\033[0m\n");
     printf("  \033[32m%02d/%02d/%04d - %02d/%02d/%04d\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year);
-    printf("  \033[4m\033[32m%s - %d %s\033[0m\n", bestPerformanceGood.name, bestPerformanceGood.performance, CURRENCIES[bestPerformanceGood.currency]);
-    printf("  Valor inicial de abertura:\t%.2f %s\n", bestPerformanceGood.valOpen, CURRENCIES[bestPerformanceGood.currency]);
-    printf("  Valor final de fecho:\t%.2f %s\n", bestPerformanceGood.valClose, CURRENCIES[bestPerformanceGood.currency]);
+    printf("  \033[4m\033[32m%s - %.2lf %s\033[0m\n", bestPerformanceGood.name, bestPerformanceGood.performance, CURRENCIES[bestPerformanceGood.currency]);
+    printf("  Valor inicial de abertura: %.2lf %s\n", bestPerformanceGood.valOpen, CURRENCIES[bestPerformanceGood.currency]);
+    printf("  Valor final de fecho:      %.2lf %s\n", bestPerformanceGood.valClose, CURRENCIES[bestPerformanceGood.currency]);
     printf("\n  \033[7mClique em qualquer tecla para continuar...\033[0m");
     getch();
 

@@ -32,7 +32,7 @@ typedef struct goodIdentifier
     CURRENCY currency;
     MARKETTYPE marketType;
     unsigned long long int acumulatedVolume;
-    int performance;
+    double performance;
     double valOpen, valClose;
 } GOODIDENTIFIER;
 
