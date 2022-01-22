@@ -570,6 +570,11 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
     bool exists = false;
 
     GOODIDENTIFIERSARRAY goodIdentifiers;
+    if(goodTransactionsRows == 0)
+    {
+        goodIdentifiers.count = 0;
+        return goodIdentifiers;
+    }
     goodIdentifiers.identifiers = (GOODIDENTIFIER *)malloc(1 * sizeof(GOODIDENTIFIER));
 
     strcpy(goodIdentifiers.identifiers[0].name, goodTransactions[0].name);
@@ -732,6 +737,8 @@ void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int goodTransactionsR
             }
         }        
     }
+
+    printf("\n  \033[4mOs 5 bens com mais transacoes entre %02d/%02d/%02d e %02d/%02d/%02d sao:\033[0m\n\n", initialDate.day, initialDate.month, initialDate.year, endDate.day, endDate.month, endDate.year);
     for (int i = 0; i < 5; i++)
     {
         printf("  %s -> %llu  \n",finalArray.identifiers[i].name,finalArray.identifiers[i].acumulatedVolume);
