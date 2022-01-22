@@ -1122,6 +1122,12 @@ void bestPerformanceGood(GOOD *goodTransactions, int goodTransactionsRows) {
     goodsInStudie = getGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate);
     goodIdentifiers = getGoodsIdentifiers(goodsInStudie.goods, goodsInStudie.count);
 
+    if(goodIdentifiers.count == 0)
+    {
+        quitMenu = !handleError("  Nao ha registo de transacoes deste bem neste intervalo de datas");
+        return;
+    }
+
     for (i = 0; i < goodsInStudie.count; i++)
     {
         for (j = 0; j < goodIdentifiers.count; j++)
