@@ -47,12 +47,12 @@ int main()
     char *listarmoedas[] = {"Listar moedas",
                             "Listar taxas de conversao aplicadas a uma moeda, numa determinada data",
                             "Converter um Montante entre duas Moedas Distintas",
-                            "Registar Valor historico diario de um bem transacionado",
+                            "Registar um novo bem",
                             "Listar identificadores de bens transacionaveis",
                             "Valor Minimo, Medio, Desvio Padrao e Maximo de fecho de um bem",
                             "Maior variacao positiva entre o preco de um bem num intervalo de datas",
                             "Bem transacionavel que obteve o melhor desempenho num intervalo de datas",
-                            "5 bens transacionaveis com o maior volume de transacces num intervalo de datas",
+                            "5 bens transacionaveis com o maior volume de transacoes num intervalo de datas",
                             "Exportar para um ficheiro taxas de conversao num intervalo de datas",
                             "\033[31mSAIR\033[0m"};
     bool exitMenu = false;
