@@ -90,7 +90,7 @@ int main()
                 askToContinue = false;
                 break;
             case 7:
-                //fiveGoodsWithMoreTransactions(goodTransactions, &numGoodTransactionsRows);
+                askFileToUse(numGoodTransactionsRows, numGoodsRows) == 1 ? fiveGoodsWithMoreTransactions(goodsHistory, numGoodsRows) : fiveGoodsWithMoreTransactions(goodTransactions, numGoodTransactionsRows);
                 break;
             case 8:
                 break;

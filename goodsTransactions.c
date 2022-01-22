@@ -576,7 +576,7 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
     strcpy(goodIdentifiers.identifiers[0].name, goodTransactions[0].name);
     goodIdentifiers.identifiers[0].marketType = goodTransactions[0].marketType;
     goodIdentifiers.identifiers[0].currency = goodTransactions[0].currency;
-
+    goodIdentifiers.identifiers[0].acumulatedVolume=0;
     for (i = 0; i < goodTransactionsRows; i++)
     {
         j = 0;
@@ -600,6 +600,8 @@ GOODIDENTIFIERSARRAY getGoodsIdentifiers(GOOD *goodTransactions, int goodTransac
             strcpy(goodIdentifiers.identifiers[count - 1].name, goodTransactions[i].name);
             goodIdentifiers.identifiers[count - 1].marketType = goodTransactions[i].marketType;
             goodIdentifiers.identifiers[count - 1].currency = goodTransactions[i].currency;
+            goodIdentifiers.identifiers[count - 1].acumulatedVolume = 0;
+
         }
 
         exists = false;
@@ -645,7 +647,7 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
     free(goodIdentifiers.identifiers);
 }
 
-void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactionsRows)
+void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int goodTransactionsRows)
 {
 
     GOOD interval;
@@ -695,11 +697,13 @@ void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactions
     }
     isValid = false;
 
-    GOODSINSTUDIE goodsList = getGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate);
-    GOODIDENTIFIERSARRAY finalArray = getGoodsIdentifiers(goodsList.goods, goodsList.count);
+    GOODSINSTUDIE goodsList;
+    goodsList= getGoodBetweenDates(goodTransactions, goodTransactionsRows, initialDate, endDate);
+    GOODIDENTIFIERSARRAY finalArray;
+    GOODIDENTIFIER aux;
+    finalArray = getGoodsIdentifiers(goodsList.goods, goodsList.count);
 
     system("cls");
-
     for (int i = 0; i < goodsList.count; i++)
     {
         for (int j = 0; j < finalArray.count; j++)
@@ -711,6 +715,26 @@ void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int *goodTransactions
             }
         }
     }
+    i=0;
+    int j=0;
+    for (i = 0; i < finalArray.count; i++)
+    {
+        for ( j = i+1; j < finalArray.count; j++)
+        {
+            if (finalArray.identifiers[i].acumulatedVolume<finalArray.identifiers[j].acumulatedVolume){
+                aux=finalArray.identifiers[i];
+                finalArray.identifiers[i]=finalArray.identifiers[j];
+                finalArray.identifiers[j]=aux;
+            }
+        }        
+    }
+    for (int i = 0; i < 5; i++)
+    {
+        printf("  %s -> %llu  \n",finalArray.identifiers[i].name,finalArray.identifiers[i].acumulatedVolume);
+
+    }
+    free(goodsList.goods);
+    free(finalArray.identifiers);
 
 }
 
