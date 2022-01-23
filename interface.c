@@ -277,13 +277,6 @@ int drawMenu(char *opcoes[], int numOpcoes, char *title)
         key = getch();
         fflush(stdin);
 
-        /*printf("\n   ******** Menu Principal ********\n");
-        printf("   *                              *\n");
-        printf("   * %s Opcao 1                   *\n", (option == 1) ? "->": "  ");
-        printf("   * %s Opcao 2                   *\n", (option == 2) ? "->": "  ");
-        printf("   *                              *\n");
-        printf("   ********************************\n");*/
-
         if (key == KEY_ESC)
             return -1;
 

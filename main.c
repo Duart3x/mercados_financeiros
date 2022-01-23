@@ -18,8 +18,6 @@ int main()
     if (res == NULL)
         puts("setlocale failed");
 
-    printf("a ô í è ª º");
-
     EXCHANGERATE *exchangeRates;
     GOOD *goodsHistory;
     GOOD *goodTransactions;
