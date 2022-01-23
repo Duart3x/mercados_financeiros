@@ -33,7 +33,7 @@ gcc -fdiagnostics-color=always -g *.c -o "bin/main.exe"
 ## Screenshots
 
 #### Menu principal
-![Menu principal] (https://prnt.sc/26hmbqr)
+![Menu principal](https://i.imgur.com/tNMPvLR.png)
 
 ## Autores
 
