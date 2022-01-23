@@ -21,7 +21,7 @@ void drawExchangeRates(EXCHANGERATE *exchangeRates, int numRows)
 void drawExchangeRate(EXCHANGERATE exchangeRate, char **currenciesText)
 {
     int middle = ceil(CURRENCIES_SIZE / 3.0);
-    printf("\n[%02d-%02d-%04d]\n", exchangeRate.conversionDate.day, exchangeRate.conversionDate.month, exchangeRate.conversionDate.year);
+    printf("\n  [%02d-%02d-%04d]\n", exchangeRate.conversionDate.day, exchangeRate.conversionDate.month, exchangeRate.conversionDate.year);
 
     float value1, value2, value3;
     char *strVal1 = malloc(sizeof(char) * 4);
@@ -102,7 +102,7 @@ void drawExchangeRatesPagination(EXCHANGERATE *exchangeRates, int numRows, int p
     {
         if (i < numRows)
         {
-            printf("-----------------------------------------------------\n");
+            printf("  -----------------------------------------------------\n");
             drawExchangeRate(exchangeRates[i], sortedCurrencies);
         }
     }
@@ -117,7 +117,7 @@ void drawExchangeRatesPaginationSortedByValue(EXCHANGERATE *exchangeRates, int n
     {
         if (i < numRows)
         {
-            printf("-----------------------------------------------------\n");
+            printf("  -----------------------------------------------------\n");
             drawExchangeRate(exchangeRates[i], sortedCurrencyNamesByDay[i]);
         }
     }
@@ -429,7 +429,7 @@ bool handleError(char *msg)
     setTextRed();
     printf("\n%s.\n", msg);
     resetText();
-    printf("\nClica em qualquer [ENTER] para continuar ou [ESC] para cancelar.");
+    printf("\n  Clica em qualquer [ENTER] para continuar ou [ESC] para cancelar.");
     key = getch();
 
     if (key == KEY_ESC)
@@ -475,7 +475,7 @@ void printExchangeRateByDateAndCurrency(EXCHANGERATE *exchangeRates, int numRows
         {
             isValid = true;
             system("cls");
-            printf("\n  \033[4mConsultar Taxa de Cambio\033[0m\n");
+            printf("\n  \033[4mConsultar Taxa de Cambio\033[0m\n\n");
             printf("  Data a consultar (dd/mm/yyyy): ");
             scanf("%s", dateStr);
 
@@ -595,7 +595,7 @@ void printExchangeRateByDateAndCurrency(EXCHANGERATE *exchangeRates, int numRows
         free(strVal2);
         free(strVal3);
 
-        printf("\n \033[7mPressione qualquer tecla para continuar...\033[0m");
+        printf("\n  \033[7mPressione qualquer tecla para continuar...\033[0m");
         getch();
 
         sn = drawMenu(SNOptions, 2, "Deseja tentar uma outra data?");

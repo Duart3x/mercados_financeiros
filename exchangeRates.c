@@ -162,7 +162,7 @@ EXCHANGERATE *sortExchangeRatesByValueInEuros(EXCHANGERATE *exchangeRates, int f
 
     if (!result)
     {
-        handleError("Nao foi possivel ordernar o array.");
+        handleError("  Nao foi possivel ordernar o array.");
         return exchangeRates;
     }
 
@@ -418,7 +418,7 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
             op2 = drawCurrenciesMenu("Selecione a moeda pretendida", selectedCurrencies, 1);
             if (op2 == op)
             {
-                quitMenu = !handleError("Nao pode selecionar a mesma moeda");
+                quitMenu = !handleError("  Nao pode selecionar a mesma moeda");
             }
 
         } while (op2 == op && !quitMenu);
@@ -430,15 +430,16 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
         while (!quitMenu)
         {
             system("cls");
-            printf("Moeda origem: %s\n", CURRENCIES[currencyFrom]);
-            printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
-            printf("Valor que prentende converter: ");
+            printf("  \033[4mConversao de moedas\033[0m\n\n");
+            printf("  Moeda origem: %s\n", CURRENCIES[currencyFrom]);
+            printf("  Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
+            printf("  Valor que prentende converter: ");
             fflush(stdin);
             scanf("%s", value);
             fflush(stdin);
             if (!isNumber(value))
             {
-                quitMenu = !handleError("Valor introduzido invalido");
+                quitMenu = !handleError("  Valor introduzido invalido");
             }
             else
             {
@@ -453,22 +454,23 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
         {
             isValid = true;
             system("cls");
-            printf("Valor a converter: %.02lf %s \n", fromValue, CURRENCIES[currencyFrom]);
-            printf("Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
-            printf("Identificacao da data de observacao (dd/MM/aaaa): ");
+            printf("  \033[4mConversao de moedas\033[0m\n\n");
+            printf("  Valor a converter: %.02lf %s \n", fromValue, CURRENCIES[currencyFrom]);
+            printf("  Moeda pretendida: %s\n", CURRENCIES[currencyTo]);
+            printf("  Identificacao da data de observacao (dd/MM/aaaa): ");
             fflush(stdin);
             scanf("%s", strData);
             fflush(stdin);
             strLenData = strlen(strData);
             if (strLenData == 0 || strLenData > 10)
             {
-                quitMenu = !handleError("Data Invalida");
+                quitMenu = !handleError("  Data Invalida");
 
                 isValid = false;
             }
             else if (strcspn(strData, "/") == strLenData)
             {
-                isValid = !handleError("Data Invalida");
+                isValid = !handleError("  Data Invalida");
             }
             else
             {
@@ -486,7 +488,7 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
                         }
                         else
                         {
-                            quitMenu = !handleError("Data Invalida");
+                            quitMenu = !handleError("  Data Invalida");
 
                             isValid = false;
                             break;
@@ -500,7 +502,7 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
                         }
                         else
                         {
-                            quitMenu = !handleError("Data Invalida");
+                            quitMenu = !handleError("  Data Invalida");
 
                             isValid = false;
                             break;
@@ -514,7 +516,7 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
                         }
                         else
                         {
-                            quitMenu = !handleError("Data Invalida");
+                            quitMenu = !handleError("  Data Invalida");
 
                             isValid = false;
                             break;
@@ -530,19 +532,19 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
             {
                 if (data.day < 1 || data.day > 31)
                 {
-                    quitMenu = !handleError("Data Invalida");
+                    quitMenu = !handleError("  Data Invalida");
 
                     isValid = false;
                 }
                 else if (data.month < 1 || data.month > 12)
                 {
-                    quitMenu = !handleError("Data Invalida");
+                    quitMenu = !handleError("  Data Invalida");
 
                     isValid = false;
                 }
                 else if (data.year < 999 || data.year > 9999)
                 {
-                    quitMenu = !handleError("Data Invalida");
+                    quitMenu = !handleError("  Data Invalida");
 
                     isValid = false;
                 }
@@ -554,24 +556,24 @@ void chooseCurrenciesToConvert(EXCHANGERATE *exchangeRates, int numRows)
         convertedValue = convertCurrenciesOnSpecificDay(exchangeRates, numRows, data, currencyFrom, fromValue, currencyTo);
         if (convertedValue == -1)
         {
-            quitMenu = !handleError("Nao existe taxa de conversao para a moeda de origem");
+            quitMenu = !handleError("  Nao existe taxa de conversao para a moeda de origem");
         }
         else if (convertedValue == -2)
         {
-            quitMenu = !handleError("Nao existe taxa de conversao para a moeda pretendida");
+            quitMenu = !handleError("  Nao existe taxa de conversao para a moeda pretendida");
         }
         else if (convertedValue == -3)
         {
-            quitMenu = !handleError("Nao existe taxa de conversao na data especificada");
+            quitMenu = !handleError("  Nao existe taxa de conversao na data especificada");
         }
         else
         {
             system("cls");
-            printf("\n \033[4mConversao\033[0m\n %.02lf %s -> %.02lf %s\n", fromValue, CURRENCIES[currencyFrom], convertedValue, CURRENCIES[currencyTo]);
-            printf("\n \033[4mTaxas de Conversao\033[0m\n");
-            printf(" 1 %s = %.04f %s\n", CURRENCIES[currencyFrom], (convertedValue / fromValue), CURRENCIES[currencyTo]);
-            printf(" 1 %s = %.04f %s\n", CURRENCIES[currencyTo], (fromValue / convertedValue), CURRENCIES[currencyFrom]);
-            printf("\n \033[7mPressione qualquer tecla para continuar...\033[0m");
+            printf("\n  \033[4mConversao\033[0m\n\n %.02lf %s -> %.02lf %s\n", fromValue, CURRENCIES[currencyFrom], convertedValue, CURRENCIES[currencyTo]);
+            printf("\n  \033[4mTaxas de Conversao\033[0m\n\n");
+            printf("  1 %s = %.04f %s\n", CURRENCIES[currencyFrom], (convertedValue / fromValue), CURRENCIES[currencyTo]);
+            printf("  1 %s = %.04f %s\n", CURRENCIES[currencyTo], (fromValue / convertedValue), CURRENCIES[currencyFrom]);
+            printf("\n  \033[7mPressione qualquer tecla para continuar...\033[0m");
             getch();
         }
 
@@ -618,7 +620,7 @@ void exportExchangeRatesToFile(EXCHANGERATE *exchangeRates, int numRows)
         while (!isValid && !quitMenu)
         {
             system("cls");
-            printf("\n  \033[4mExportar Dados\033[0m\n");
+            printf("\n  \033[4mExportar Dados\033[0m\n\n");
             printf("  Data Inicio (dd/mm/yyyy): ");
             scanf("%s", strDateFrom);
             fflush(stdin);

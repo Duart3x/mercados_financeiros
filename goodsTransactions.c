@@ -646,7 +646,7 @@ void listGoodsIndentifiers(GOOD *goodTransactions, int goodTransactionsRows)
 
     system("cls");
 
-    printf("\n  \033[4mBens disponiveis (Ordenados por ordem crescente do nome)\033[0m\n");
+    printf("\n  \033[4mBens disponiveis (Ordenados por ordem crescente do nome)\033[0m\n\n");
 
     for (i = 0; i < goodIdentifiers.count; i++)
     {
@@ -680,7 +680,7 @@ void fiveGoodsWithMoreTransactions(GOOD *goodTransactions, int goodTransactionsR
 
         if (initialDate.year == 0)
         {
-            quitMenu = !handleError("Data inicial invalida");
+            quitMenu = !handleError("  Data inicial invalida");
             isValid = false;
         }
     } while (!isValid && !quitMenu);
@@ -992,7 +992,7 @@ void maxPriceVariation(GOOD *goodTransactions, int goodTransactionsRows)
 
         if (initialDate.year == 0)
         {
-            quitMenu = !handleError("Data inicial invalida");
+            quitMenu = !handleError("  Data inicial invalida");
             isValid = false;
         }
     } while (!isValid && !quitMenu);

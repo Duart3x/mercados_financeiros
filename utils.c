@@ -127,7 +127,6 @@ char *strToUpper(char *str)
 
 DATE isDateValid(char data[])
 {
-
     int strLenData = strlen(data);
     int i = 0;
     bool isvalid = true;
@@ -150,17 +149,14 @@ DATE isDateValid(char data[])
         {
             if (i == 0)
             {
-
                 newdata.day = atoi(aux);
             }
             else if (i == 1)
             {
-
                 newdata.month = atoi(aux);
             }
             else if (i == 2)
             {
-
                 newdata.year = atoi(aux);
             }
 
